@@ -1,0 +1,963 @@
+2020-03-19 22:11:09.137 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:11:09.137 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:09.683 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:11:09.683 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:09.791 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:11:09.804 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:11:09.822 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:11:09.839 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:11:09.857 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:11:09.925 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:11:09.925 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:10.018 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:11:10.032 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:11:10.049 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:11:10.065 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:11:10.065 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:10.262 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:11:10.280 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:11:10.296 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:11:13.991 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:11:13.992 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:13.992 INFO  [undefined] >>> {} 
+2020-03-19 22:11:16.809 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:11:16.809 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:16.810 INFO  [undefined] >>> undefined 
+2020-03-19 22:11:16.864 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:16.879 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:16.898 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:16.925 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:16.954 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:16.971 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:11:59.277 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:11:59.277 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:11:59.277 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:11:59.277 INFO  [undefined] >>> undefined 
+2020-03-19 22:11:59.364 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:11:59.387 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:11:59.404 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:11:59.422 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:12:02.409 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:12:02.409 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:12:02.409 INFO  [undefined] >>> Length4 
+2020-03-19 22:12:02.409 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:12:02.481 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:12:02.499 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:12:02.630 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:12:02.630 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:12:02.630 INFO  [undefined] >>> {} 
+2020-03-19 22:15:47.152 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:15:47.152 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:47.590 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:15:47.590 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:47.671 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:15:47.697 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:15:47.714 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:15:47.747 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:15:47.747 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:47.758 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:15:47.783 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:15:47.812 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:15:47.812 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:47.853 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:15:47.880 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:15:47.907 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:15:47.939 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:15:47.999 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:15:47.999 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:47.999 INFO  [undefined] >>> {} 
+2020-03-19 22:15:48.000 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:15:48.016 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:15:51.098 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:15:51.098 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:51.100 INFO  [undefined] >>> undefined 
+2020-03-19 22:15:51.137 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:51.153 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:51.170 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:51.190 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:51.205 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:51.226 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:15:59.468 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:15:59.468 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:15:59.468 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:15:59.468 INFO  [undefined] >>> undefined 
+2020-03-19 22:15:59.534 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:15:59.558 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:15:59.591 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:15:59.608 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:16:00.799 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:16:00.799 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:16:00.799 INFO  [undefined] >>> Length4 
+2020-03-19 22:16:00.799 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:16:00.862 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:16:00.880 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:16:00.986 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:16:00.986 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:16:00.986 INFO  [undefined] >>> {} 
+2020-03-19 22:38:26.510 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:38:26.510 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:27.136 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:38:27.136 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:27.274 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:38:27.294 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:38:27.294 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:27.307 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:38:27.317 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:38:27.335 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:38:27.346 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:38:27.346 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:27.373 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:38:27.472 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:38:27.495 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:38:27.520 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:38:27.540 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:38:27.540 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:27.540 INFO  [undefined] >>> {} 
+2020-03-19 22:38:27.589 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:38:27.624 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:38:27.641 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:38:30.417 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:38:30.417 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:30.419 INFO  [undefined] >>> undefined 
+2020-03-19 22:38:30.464 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:30.480 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:30.498 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:30.516 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:30.534 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:30.551 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:38:36.719 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:38:36.719 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:36.719 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:38:36.720 INFO  [undefined] >>> undefined 
+2020-03-19 22:38:36.812 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:38:36.826 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:38:36.844 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:38:36.861 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:38:38.075 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:38:38.075 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:38.075 INFO  [undefined] >>> Length4 
+2020-03-19 22:38:38.076 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:38:38.102 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:38:38.102 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: - 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2018-04-01 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2014-10-01 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2017-04-01 
+2020-03-19 22:38:38.103 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:38:38.150 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:38:38.167 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:38:38.290 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:38:38.290 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:38:38.290 INFO  [undefined] >>> {} 
+2020-03-19 22:40:42.975 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:40:42.975 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:43.517 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:40:43.517 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:43.592 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:40:43.617 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:40:43.643 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:40:43.669 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:40:43.684 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:40:43.684 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:43.692 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:40:43.735 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:40:43.735 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:43.786 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:40:43.802 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:40:43.817 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:40:43.843 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:40:43.895 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:40:43.912 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:40:44.158 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:40:44.158 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:44.158 INFO  [undefined] >>> {} 
+2020-03-19 22:40:47.155 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:40:47.155 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:47.158 INFO  [undefined] >>> undefined 
+2020-03-19 22:40:47.204 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:47.220 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:47.238 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:47.255 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:47.272 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:47.292 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:40:53.108 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:40:53.108 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:53.108 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:40:53.108 INFO  [undefined] >>> undefined 
+2020-03-19 22:40:53.201 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:40:53.214 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:40:53.222 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:40:53.239 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:40:54.758 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:40:54.758 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:54.758 INFO  [undefined] >>> Length4 
+2020-03-19 22:40:54.758 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:40:54.777 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2014-10-01 
+2020-03-19 22:40:54.777 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:40:54.777 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:40:54.777 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: - 
+2020-03-19 22:40:54.778 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2017-04-01 
+2020-03-19 22:40:54.778 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:40:54.778 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:40:54.778 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2018-04-01 
+2020-03-19 22:40:54.820 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:40:54.836 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:40:54.954 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:40:54.954 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:40:54.954 INFO  [undefined] >>> {} 
+2020-03-19 22:45:58.060 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:45:58.060 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:45:58.589 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:45:58.589 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:45:58.670 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:45:58.688 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:45:58.718 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:45:58.749 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:45:58.753 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:45:58.753 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:45:58.769 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:45:58.804 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:45:58.804 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:45:58.854 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:45:58.871 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:45:58.898 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:45:58.921 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:45:58.993 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:45:59.003 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:45:59.003 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:45:59.003 INFO  [undefined] >>> {} 
+2020-03-19 22:45:59.011 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:46:01.993 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:46:01.993 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:46:01.995 INFO  [undefined] >>> undefined 
+2020-03-19 22:46:02.061 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:02.080 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:02.099 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:02.115 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:02.133 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:02.156 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:46:08.283 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:46:08.283 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:46:08.283 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:46:08.284 INFO  [undefined] >>> undefined 
+2020-03-19 22:46:08.370 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:46:08.386 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:46:08.443 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:46:08.443 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:46:10.154 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:46:10.154 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:46:10.154 INFO  [undefined] >>> Length4 
+2020-03-19 22:46:10.154 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2017-04-01 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: 2014-10-01 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2014-04-01 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: 2018-04-01 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Penilai TMT Golongan: - 
+2020-03-19 22:46:10.173 INFO  [undefined] Result [Sync SKP] : Atasan Penilai TMT Golongan: - 
+2020-03-19 22:46:10.212 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:46:10.230 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:46:10.247 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:46:10.342 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:46:10.342 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:46:10.342 INFO  [undefined] >>> {} 
+2020-03-19 22:47:02.254 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:47:02.254 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:02.772 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:47:02.772 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:02.854 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:47:02.871 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:47:02.897 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:47:02.916 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:47:02.921 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:47:02.921 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:02.941 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:47:02.971 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:47:02.971 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:03.020 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:47:03.046 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:47:03.075 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:47:03.152 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:47:03.152 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:03.152 INFO  [undefined] >>> {} 
+2020-03-19 22:47:03.176 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:47:03.193 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:47:03.211 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:47:05.887 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:47:05.887 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:05.889 INFO  [undefined] >>> undefined 
+2020-03-19 22:47:05.932 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:05.950 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:05.967 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:05.986 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:06.002 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:06.019 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:47:12.138 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:47:12.138 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:12.138 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:47:12.138 INFO  [undefined] >>> undefined 
+2020-03-19 22:47:12.188 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:47:12.217 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:47:12.231 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:47:12.248 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:47:13.667 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:47:13.667 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:13.667 INFO  [undefined] >>> Length4 
+2020-03-19 22:47:13.667 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:47:13.756 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:47:13.773 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:47:13.898 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:47:13.898 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:47:13.898 INFO  [undefined] >>> {} 
+2020-03-19 22:49:00.276 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:49:00.276 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:00.895 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:49:00.895 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:01.081 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:49:01.081 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:01.106 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:49:01.110 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:49:01.139 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:49:01.151 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:49:01.151 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:01.161 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:49:01.195 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:49:01.274 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:49:01.292 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:49:01.323 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:49:01.352 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:49:01.352 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:01.352 INFO  [undefined] >>> {} 
+2020-03-19 22:49:01.411 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:49:01.439 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:49:01.454 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:49:04.165 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:49:04.165 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:04.167 INFO  [undefined] >>> undefined 
+2020-03-19 22:49:04.225 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:04.242 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:04.259 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:04.277 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:04.294 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:04.311 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:49:10.400 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:49:10.400 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:10.400 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:49:10.401 INFO  [undefined] >>> undefined 
+2020-03-19 22:49:10.491 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:49:10.516 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:49:10.533 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:49:10.550 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:49:11.954 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:49:11.954 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:11.954 INFO  [undefined] >>> Length4 
+2020-03-19 22:49:11.954 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:49:12.010 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:49:12.027 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:49:12.149 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:49:12.149 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:49:12.149 INFO  [undefined] >>> {} 
+2020-03-19 22:51:17.195 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:51:17.195 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:17.803 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:51:17.803 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:17.888 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:51:17.913 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:51:17.931 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:51:17.955 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:51:17.955 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:17.961 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:51:17.974 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:51:18.002 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:51:18.002 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:18.061 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:51:18.088 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:51:18.112 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:51:18.184 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:51:18.184 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:18.184 INFO  [undefined] >>> {} 
+2020-03-19 22:51:18.192 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:51:18.216 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:51:18.233 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:51:21.103 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:51:21.103 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:21.104 INFO  [undefined] >>> undefined 
+2020-03-19 22:51:21.148 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:21.165 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:21.182 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:21.202 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:21.216 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:21.233 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:51:27.162 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:51:27.162 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:27.162 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:51:27.162 INFO  [undefined] >>> undefined 
+2020-03-19 22:51:27.240 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:51:27.247 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:51:27.263 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:51:27.280 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:51:28.722 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:51:28.722 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:28.722 INFO  [undefined] >>> Length4 
+2020-03-19 22:51:28.722 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:51:28.791 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:51:28.808 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:51:28.976 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:51:28.976 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:51:28.976 INFO  [undefined] >>> {} 
+2020-03-19 22:52:11.023 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:52:11.023 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:11.633 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:52:11.633 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:11.734 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:52:11.759 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:52:11.777 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:52:11.793 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:52:11.793 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:11.800 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:52:11.820 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:52:11.843 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:52:11.843 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:11.901 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:52:11.927 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:52:11.946 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:52:12.058 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:52:12.058 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:12.058 INFO  [undefined] >>> {} 
+2020-03-19 22:52:12.240 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:52:12.256 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:52:12.274 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:52:14.760 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:52:14.760 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:14.761 INFO  [undefined] >>> undefined 
+2020-03-19 22:52:14.811 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:14.828 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:14.845 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:14.863 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:14.879 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:14.897 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:52:21.251 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:52:21.251 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:21.251 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:52:21.251 INFO  [undefined] >>> undefined 
+2020-03-19 22:52:21.317 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:52:21.342 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:52:21.362 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:52:21.433 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:52:22.763 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:52:22.763 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:22.763 INFO  [undefined] >>> Length4 
+2020-03-19 22:52:22.763 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:52:22.807 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:52:22.817 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:52:22.835 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:52:22.970 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:52:22.970 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:52:22.970 INFO  [undefined] >>> {} 
+2020-03-19 22:53:51.990 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:53:51.990 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:52.600 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:53:52.600 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:52.700 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:53:52.733 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:53:52.756 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:53:52.762 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:53:52.762 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:52.775 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:53:52.799 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:53:52.812 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:53:52.812 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:52.882 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:53:52.896 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:53:52.930 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:53:52.974 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:53:53.007 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:53:53.007 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:53.007 INFO  [undefined] >>> {} 
+2020-03-19 22:53:53.071 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:53:53.089 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:53:55.952 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:53:55.952 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:53:55.957 INFO  [undefined] >>> undefined 
+2020-03-19 22:53:56.011 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:53:56.027 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:53:56.045 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:53:56.062 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:53:56.079 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:53:56.096 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:54:02.008 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:54:02.008 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:54:02.008 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:54:02.010 INFO  [undefined] >>> undefined 
+2020-03-19 22:54:02.098 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:54:02.139 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:54:02.173 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:54:02.201 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:54:03.359 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:54:03.359 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:54:03.359 INFO  [undefined] >>> Length4 
+2020-03-19 22:54:03.359 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:54:03.418 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:54:03.442 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:54:03.562 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:54:03.562 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:54:03.562 INFO  [undefined] >>> {} 
+2020-03-19 22:55:58.556 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:55:58.556 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:55:59.154 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:55:59.154 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:55:59.294 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:55:59.309 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:55:59.316 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:55:59.316 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:55:59.330 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:55:59.346 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:55:59.360 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:55:59.374 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:55:59.374 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:55:59.461 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:55:59.476 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:55:59.505 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:55:59.569 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:55:59.569 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:55:59.569 INFO  [undefined] >>> {} 
+2020-03-19 22:55:59.619 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:55:59.644 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:55:59.661 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:56:02.236 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:56:02.236 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:56:02.237 INFO  [undefined] >>> undefined 
+2020-03-19 22:56:02.292 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:02.310 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:02.327 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:02.345 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:02.362 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:02.381 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:56:08.571 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 22:56:08.571 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:56:08.571 INFO  [undefined] >>> Length : 4 
+2020-03-19 22:56:08.572 INFO  [undefined] >>> undefined 
+2020-03-19 22:56:08.643 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:56:08.657 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:56:08.675 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:56:08.691 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 22:56:09.958 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 22:56:09.958 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:56:09.958 INFO  [undefined] >>> Length4 
+2020-03-19 22:56:09.958 INFO  [undefined] >>> There is Data... 
+2020-03-19 22:56:10.031 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:56:10.046 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 22:56:10.163 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:56:10.163 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:56:10.163 INFO  [undefined] >>> {} 
+2020-03-19 22:59:50.883 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 22:59:50.883 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:51.465 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 22:59:51.465 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:51.583 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:59:51.595 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:59:51.612 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 22:59:51.612 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:51.621 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:59:51.638 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:59:51.648 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 22:59:51.668 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 22:59:51.668 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:51.736 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:59:51.751 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:59:51.768 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 22:59:51.820 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:59:51.851 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 22:59:51.851 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:51.851 INFO  [undefined] >>> {} 
+2020-03-19 22:59:51.862 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:59:51.879 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 22:59:54.577 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 22:59:54.577 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 22:59:54.583 INFO  [undefined] >>> undefined 
+2020-03-19 22:59:54.666 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:59:54.680 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:59:54.698 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:59:54.715 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:59:54.733 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 22:59:54.750 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:00:00.824 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:00:00.824 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:00:00.824 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:00:00.824 INFO  [undefined] >>> undefined 
+2020-03-19 23:00:00.882 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:00:00.901 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:00:00.917 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:00:00.934 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:00:02.198 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:00:02.198 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:00:02.198 INFO  [undefined] >>> Length4 
+2020-03-19 23:00:02.198 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:00:02.251 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:00:02.273 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:00:02.377 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:00:02.377 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:00:02.377 INFO  [undefined] >>> {} 
+2020-03-19 23:02:03.581 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:02:03.581 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:04.411 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:02:04.411 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:04.549 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:02:04.571 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:02:04.571 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:04.591 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:02:04.607 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:02:04.646 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:02:04.646 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:04.661 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:02:04.673 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:02:04.740 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:02:04.767 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:02:04.783 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:02:04.829 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:02:04.829 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:04.829 INFO  [undefined] >>> {} 
+2020-03-19 23:02:04.878 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:02:04.895 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:02:04.913 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:02:08.017 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:02:08.017 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:08.021 INFO  [undefined] >>> undefined 
+2020-03-19 23:02:08.073 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:08.091 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:08.107 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:08.124 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:08.142 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:08.159 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:02:14.373 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:02:14.373 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:14.373 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:02:14.374 INFO  [undefined] >>> undefined 
+2020-03-19 23:02:14.445 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:02:14.463 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:02:14.483 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:02:14.501 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:02:15.732 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:02:15.732 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:15.732 INFO  [undefined] >>> Length4 
+2020-03-19 23:02:15.733 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:02:15.802 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:02:15.820 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:02:15.937 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:02:15.937 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:02:15.937 INFO  [undefined] >>> {} 
+2020-03-19 23:08:49.055 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:08:49.055 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:49.667 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:08:49.667 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:49.813 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:08:49.829 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:08:49.841 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:08:49.841 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:49.849 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:08:49.872 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:08:49.884 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:08:49.884 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:49.911 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:08:49.952 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:08:49.967 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:08:49.994 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:08:50.004 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:08:50.056 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:08:50.058 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:08:50.058 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:50.058 INFO  [undefined] >>> {} 
+2020-03-19 23:08:50.073 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:08:53.048 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:08:53.048 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:53.050 INFO  [undefined] >>> undefined 
+2020-03-19 23:08:53.113 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:53.128 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:53.145 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:53.162 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:53.179 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:53.197 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:08:59.060 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:08:59.060 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:08:59.060 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:08:59.061 INFO  [undefined] >>> undefined 
+2020-03-19 23:08:59.109 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:08:59.139 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:08:59.161 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:08:59.178 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:09:00.468 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:09:00.468 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:00.468 INFO  [undefined] >>> Length4 
+2020-03-19 23:09:00.468 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:09:00.510 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:09:00.527 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:09:00.641 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:09:00.641 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:00.641 INFO  [undefined] >>> {} 
+2020-03-19 23:09:57.705 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:09:57.705 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:58.203 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:09:58.203 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:58.311 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:09:58.344 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:09:58.360 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:09:58.360 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:58.378 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:09:58.401 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:09:58.406 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:09:58.406 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:58.421 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:09:58.479 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:09:58.506 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:09:58.531 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:09:58.557 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:09:58.595 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:09:58.596 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:09:58.596 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:09:58.596 INFO  [undefined] >>> {} 
+2020-03-19 23:09:58.621 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:10:01.320 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:10:01.320 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:10:01.325 INFO  [undefined] >>> undefined 
+2020-03-19 23:10:01.374 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:01.391 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:01.408 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:01.417 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:01.435 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:01.452 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:10:07.483 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:10:07.483 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:10:07.483 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:10:07.484 INFO  [undefined] >>> undefined 
+2020-03-19 23:10:07.555 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:10:07.570 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:10:07.587 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:10:07.605 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:10:08.825 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:10:08.825 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:10:08.825 INFO  [undefined] >>> Length4 
+2020-03-19 23:10:08.826 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:10:08.890 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:10:08.907 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:10:08.925 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:10:08.942 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:10:09.032 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:10:09.032 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:10:09.032 INFO  [undefined] >>> {} 
+2020-03-19 23:13:01.076 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:13:01.076 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:01.693 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:13:01.693 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:01.840 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:13:01.855 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:13:01.855 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:01.865 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:13:01.875 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:13:01.901 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:13:01.918 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:13:01.918 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:01.934 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:13:01.987 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:13:02.000 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:13:02.015 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:13:02.120 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:13:02.120 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:02.120 INFO  [undefined] >>> {} 
+2020-03-19 23:13:02.155 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:13:02.185 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:13:02.215 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:13:04.763 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:13:04.763 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:04.764 INFO  [undefined] >>> undefined 
+2020-03-19 23:13:04.817 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:04.832 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:04.849 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:04.874 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:04.892 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:04.909 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:13:10.700 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:13:10.700 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:13:10.700 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:13:10.701 INFO  [undefined] >>> undefined 
+2020-03-19 23:13:10.772 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:13:10.788 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:13:10.805 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:13:10.823 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:14:18.152 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:14:18.152 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:18.704 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:14:18.704 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:18.808 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:14:18.863 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:14:18.864 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:14:18.864 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:18.902 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:14:18.922 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:14:18.922 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:18.961 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:14:19.000 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:14:19.053 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:14:19.078 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:14:19.114 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:14:19.117 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:14:19.117 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:19.117 INFO  [undefined] >>> {} 
+2020-03-19 23:14:19.155 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:14:19.181 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:14:19.199 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:14:21.904 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:14:21.904 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:21.905 INFO  [undefined] >>> undefined 
+2020-03-19 23:14:21.953 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:21.969 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:21.987 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:22.004 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:22.021 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:22.038 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:14:27.988 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:14:27.988 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:27.988 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:14:27.988 INFO  [undefined] >>> undefined 
+2020-03-19 23:14:28.078 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:14:28.124 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:14:28.157 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:14:28.187 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:14:29.439 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:14:29.439 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:29.439 INFO  [undefined] >>> Length4 
+2020-03-19 23:14:29.440 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:14:29.480 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:14:29.499 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:14:29.524 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:14:29.542 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:14:29.630 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:14:29.630 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:14:29.630 INFO  [undefined] >>> {} 
+2020-03-19 23:26:41.874 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:26:41.874 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:42.451 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:26:42.451 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:42.567 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:26:42.583 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:26:42.601 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:26:42.601 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:42.609 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:26:42.628 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:26:42.658 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:26:42.665 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:26:42.665 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:42.715 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:26:42.738 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:26:42.755 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:26:42.834 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:26:42.870 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:26:42.870 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:42.870 INFO  [undefined] >>> {} 
+2020-03-19 23:26:42.877 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:26:42.895 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:26:45.737 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:26:45.737 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:26:45.739 INFO  [undefined] >>> undefined 
+2020-03-19 23:26:45.790 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:26:45.808 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:26:45.825 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:26:45.843 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:26:45.861 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:26:45.877 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:40:29.535 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:40:29.535 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:40:32.292 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:40:32.292 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:40:32.404 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:40:32.431 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:40:32.455 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:40:32.472 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:40:32.490 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:03.856 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:52:03.856 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:04.440 INFO  [syncuser] --- Start Sync Pendidikan Umum --- 
+2020-03-19 23:52:04.440 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:04.571 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:04.596 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:04.602 INFO  [syncuser] --- Start Sync Riwayat Pangkat --- 
+2020-03-19 23:52:04.603 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:04.626 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:04.647 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:04.650 INFO  [syncuser] --- Start Sync Riwayat Jabatan --- 
+2020-03-19 23:52:04.650 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:04.678 INFO  [undefined] Result [Sync Pendidikan Umum] : {"status_code":"00","status_msg":"Pendidikan Umum successfully updated"} 
+2020-03-19 23:52:04.722 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:52:04.740 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:52:04.755 INFO  [undefined] Result [Sync Riwayat Pangkat] : {"status_code":"00","status_msg":"Riwayat Pangkat successfully updated"} 
+2020-03-19 23:52:04.836 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:52:04.879 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:52:04.897 INFO  [undefined] Result [Sync Riwayat Jabatan] : {"status_code":"00","status_msg":"Riwayat Jabatan successfully updated"} 
+2020-03-19 23:52:05.342 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:52:05.342 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:05.342 INFO  [undefined] >>> {} 
+2020-03-19 23:52:08.259 INFO  [synckursus] --- Start Sync Master Data --- 
+2020-03-19 23:52:08.259 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:08.261 INFO  [undefined] >>> undefined 
+2020-03-19 23:52:08.309 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:08.326 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:08.343 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:08.362 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:08.378 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:08.395 INFO  [undefined] Result [Sync Kursus] : {"status_code":"00","status_msg":"Kursus successfully updated"} 
+2020-03-19 23:52:14.320 INFO  [syncpnsunor] --- Start Sync Master Data --- 
+2020-03-19 23:52:14.320 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:14.320 INFO  [undefined] >>> Length : 4 
+2020-03-19 23:52:14.320 INFO  [undefined] >>> undefined 
+2020-03-19 23:52:14.396 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:52:14.409 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:52:14.434 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:52:14.451 INFO  [undefined] Result [Sync PNSUnor] : {"status_code":"00","status_msg":"PNS Unor successfully updated"} 
+2020-03-19 23:52:15.734 INFO  [Sync SKP] --- Start Sync Master Data --- 
+2020-03-19 23:52:15.734 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:15.734 INFO  [undefined] >>> Length4 
+2020-03-19 23:52:15.734 INFO  [undefined] >>> There is Data... 
+2020-03-19 23:52:15.774 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:52:15.791 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:52:15.809 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:52:15.826 INFO  [undefined] Result [Sync SKP] : 198711192010121001 --> Sync SKP successfully Updated 
+2020-03-19 23:52:15.922 INFO  [syncpmk] --- Start Sync Master Data --- 
+2020-03-19 23:52:15.922 INFO  [undefined] >>> NIP : 198711192010121001 
+2020-03-19 23:52:15.922 INFO  [undefined] >>> {} 
+2020-03-19 23:59:04.298 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:04.298 INFO  [undefined] >>> NIP : 195907021987031001 
+2020-03-19 23:59:04.298 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:04.360 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:04.361 INFO  [undefined] >>> NIP : 195909211982031004 
+2020-03-19 23:59:04.954 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:04.954 INFO  [undefined] >>> NIP : 196110241983021001 
+2020-03-19 23:59:04.954 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:04.995 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:04.995 INFO  [undefined] >>> NIP : 196112131983111001 
+2020-03-19 23:59:04.995 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:05.029 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:05.029 INFO  [undefined] >>> NIP : 196112211992031006 
+2020-03-19 23:59:05.029 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:05.074 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:05.074 INFO  [undefined] >>> NIP : 196205161985031002 
+2020-03-19 23:59:05.717 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:05.717 INFO  [undefined] >>> NIP : 196207301991031001 
+2020-03-19 23:59:05.717 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:05.864 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:05.864 INFO  [undefined] >>> NIP : 196403081994031005 
+2020-03-19 23:59:06.322 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:06.322 INFO  [undefined] >>> NIP : 196501181992032008 
+2020-03-19 23:59:06.678 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:06.678 INFO  [undefined] >>> NIP : 196502271998031001 
+2020-03-19 23:59:06.978 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:06.978 INFO  [undefined] >>> NIP : 196512271989031005 
+2020-03-19 23:59:06.979 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:07.018 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:07.018 INFO  [undefined] >>> NIP : 196606121995031002 
+2020-03-19 23:59:07.018 INFO  [undefined] >>> {"status_code":"-99","status_msg":"NIP not found at BKN"} 
+2020-03-19 23:59:07.061 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:07.061 INFO  [undefined] >>> NIP : 196802212007121001 
+2020-03-19 23:59:07.472 INFO  [syncuser] --- Start Sync Master Data --- 
+2020-03-19 23:59:07.472 INFO  [undefined] >>> NIP : 196805151989121001 
+

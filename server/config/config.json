@@ -1,0 +1,35 @@
+{
+  "development": {
+    "username": "odoo13",
+    "password": "P455uu0rd^^ok",
+    "database": "procurementdb",
+    "host": "127.0.0.1",
+    "port":5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "dateStrings": true,
+      "typeCast": true
+    },
+    "timezone": "Asia/Jakarta"
+  },  
+  
+  "token_expire":"7",
+  "token_expire_unit":"day",
+  "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
+  
+  "cryptoKey":{
+    "md5Key": "4B1C9E44D769C429",
+    "hashKey": "51beba089ef1612152be4933ea6a9a48"
+  },
+
+  "frontParam":{
+    "separatorData": "Þ"
+  },  
+
+  "dialectOptions": {
+    "useUTC": false,
+    "charset": "utf8mb4_unicode_ci"
+  },
+  "timezone": "+07:00"
+  
+}
