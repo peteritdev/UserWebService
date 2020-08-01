@@ -11,4 +11,6 @@ module.exports = (app) => {
   app.post(rootAPIPath + 'user/register', userController.register);  
   app.post(rootAPIPath + 'user/generatePassword', userController.generatePassword);  
 
+  app.get(rootAPIPath + 'user/read', userController.readMsgFile);
+
 };

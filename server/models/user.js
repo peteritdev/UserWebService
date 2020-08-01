@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     type: DataTypes.INTEGER,
     email: DataTypes.STRING,
-    
+    status: DataTypes.INTEGER,
     is_first_login: DataTypes.INTEGER,
     createdAt:{
     	type: DataTypes.DATE,

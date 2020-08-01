@@ -9,7 +9,7 @@ const userValidationInstance = new UserValidation();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
-module.exports = { register, generatePassword};
+module.exports = { register, generatePassword, readMsgFile};
 
 async function register( req, res ){
     var joResult;
@@ -47,4 +47,8 @@ async function generatePassword( req, res ){
         });
     } );
 
+}
+
+async function readMsgFile(){
+    userServiceInstance.readMsgFile();
 }
