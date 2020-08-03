@@ -2,6 +2,8 @@ const crypto = require('crypto');
 var config = require('../config/config.json');
 const encKey = config.cryptoKey.hashKey
 const dateTime = require('node-datetime');
+const axios = require('axios');
+const IV_LENGTH = 16;
 
 class GlobalUtility{
 
@@ -14,25 +16,50 @@ class GlobalUtility{
     async encrypt( pVal ){
         let iv = crypto.randomBytes(IV_LENGTH);
         let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encKey), iv);
-        let encrypted = cipher.update(data);
+        let encrypted = cipher.update(pVal);
         encrypted = Buffer.concat([encrypted, cipher.final()]);
         return ( iv.toString('hex') + ':' + encrypted.toString('hex') );
     }
 
     async decrypt( pVal ){
-        if( data != '' ){
-            let textParts = data.split(':');
-            let iv = Buffer.from(textParts.shift(), 'hex');
-            let encryptedText = Buffer.from(textParts.join(':'), 'hex');
-            let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encKey), iv);
-            let decrypted = decipher.update(encryptedText);
+        if( pVal != '' ){
 
-            decrypted = Buffer.concat([decrypted, decipher.final()]);
-
-            return decrypted.toString();
+            try{
+                let textParts = pVal.split(':');
+                let iv = Buffer.from(textParts.shift(), 'hex');
+                let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+                let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encKey), iv);
+                let decrypted = decipher.update(encryptedText);
+    
+                decrypted = Buffer.concat([decrypted, decipher.final()]);
+    
+                return {
+                    status_code: "00",
+                    status_msg: "OK",
+                    decrypted: decrypted.toString()
+                };
+            }catch( err ){
+                return {
+                    status_code: "-99",
+                    status_msg: "OK",
+                    decrypted: err
+                };
+            }
+            
         }else{
-            return "";
+            return {
+                status_code: "-99",
+                status_msg: "Value that want to decrypt not provided"
+            };
         }
+    }
+
+    async axiosRequest( pUrl, pMethod, pBody ){
+        var config = {};
+            
+        let response = await axios.post(pUrl, pBody);
+
+        return response.data;
     }
 
 }

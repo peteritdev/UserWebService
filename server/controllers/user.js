@@ -9,7 +9,7 @@ const userValidationInstance = new UserValidation();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
-module.exports = { register, generatePassword, readMsgFile};
+module.exports = { register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword};
 
 async function register( req, res ){
     var joResult;
@@ -49,6 +49,78 @@ async function generatePassword( req, res ){
 
 }
 
-async function readMsgFile(){
-    userServiceInstance.readMsgFile();
+async function verifyAccount(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = await userValidationInstance.verifyAccount(req);
+    if( errors ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doVerifyAccount(req.body);
+    }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function login(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = await userValidationInstance.login(req);
+    if( errors ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doLogin(req.body);
+    }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function forgotPassword(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = await userValidationInstance.forgotPassword(req);
+    if( errors ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doForgotPassword(req.body);
+    }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function verifyForgotPassword(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = await userValidationInstance.verifyAccount(req);
+    if( errors ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doVerifyForgotPasswordCode(req.body);
+    }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
 }

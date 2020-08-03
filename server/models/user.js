@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     status: DataTypes.INTEGER,
     is_first_login: DataTypes.INTEGER,
+    verified_at: DataTypes.DATE,
+    forgot_password_at: DataTypes.DATE,
     createdAt:{
     	type: DataTypes.DATE,
     	defaultValue: sequelize.literal('NOW()'),

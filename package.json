@@ -1,7 +1,6 @@
 {
   "name": "WebService",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon ./bin/www",
@@ -16,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@kenjiuno/msgreader": "^1.2.6",
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.6",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -45,5 +45,14 @@
   "devDependencies": {
     "nodemon": "^1.19.4",
     "treeify-js": "^1.0.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peteritdev/UserWebService.git"
+  },
+  "bugs": {
+    "url": "https://github.com/peteritdev/UserWebService/issues"
+  },
+  "homepage": "https://github.com/peteritdev/UserWebService#readme",
+  "description": ""
 }

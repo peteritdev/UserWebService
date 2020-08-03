@@ -9,8 +9,10 @@ module.exports = (app) => {
   }));
   
   app.post(rootAPIPath + 'user/register', userController.register);  
-  app.post(rootAPIPath + 'user/generatePassword', userController.generatePassword);  
-
-  app.get(rootAPIPath + 'user/read', userController.readMsgFile);
+  app.post(rootAPIPath + 'user/generate_password', userController.generatePassword);  
+  app.post(rootAPIPath + 'user/verify_account', userController.verifyAccount);
+  app.post(rootAPIPath + 'user/login', userController.login);
+  app.post(rootAPIPath + 'user/forgot_password', userController.forgotPassword);  
+  app.post(rootAPIPath + 'user/verify_forgot_password', userController.verifyForgotPassword);  
 
 };

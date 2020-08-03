@@ -23,8 +23,20 @@
   },
 
   "frontParam":{
-    "separatorData": "Þ"
+    "separatorData": "Þ",
+    "forgotPasswordLink": "http://localhost:8080/procurement/u/forgot_password/#VERIFICATION_CODE#"
   },  
+
+  "api":{
+    "notification": {
+      "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
+      "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
+    }
+  },
+
+  "login":{
+    "expireToken": "24h"
+  },
 
   "dialectOptions": {
     "useUTC": false,
