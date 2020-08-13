@@ -18,10 +18,11 @@ const userRepoInstance = new UserRepository();
 
 // Utility
 const Util = require('../utils/globalutility.js');
-const user = require('../controllers/user');
 const utilInstance = new Util();
 const UtilSecurity = require('../utils/security.js');
 const utilSecureInstance = new UtilSecurity();
+const GoogleUtil = require('../utils/googleutil.js');
+const googleUtilInstance = new GoogleUtil();
 
 class UserService {
 
@@ -37,15 +38,19 @@ class UserService {
             joResult = await userRepoInstance.registerUser( param );
 
             if( joResult.status_code == "00" ){
-                //Prepare to send notification
-                var notifyParam = {
-                    "email": param.email,
-                    "id": joResult.created_id,
-                    "name": param.name
-                }
 
-                var resultNotify = await utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
-                //console.log(">>> Result Notify : " + resultNotify);
+                var resultNotify = null;
+                
+                //Prepare to send notification if registration method using conventional
+                if( param.method == 'conventional' ){
+                    var notifyParam = {
+                        "email": param.email,
+                        "id": joResult.created_id,
+                        "name": param.name
+                    }
+    
+                    resultNotify = await utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
+                }
 
                 return JSON.stringify({
                     "status_code":"00",
@@ -126,11 +131,101 @@ class UserService {
         }
     }
 
+    async doLogin_GoogleID( param ){
+        /*var validateEmail = await userRepoInstance.isEmailExists( param.email );
+        if( validateEmail != null ){
+            var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
+            if( validatePassword ){
+
+                //Generate JWT Token
+                let token = jwt.sign({email:param.email,id:validateEmail.id},config.secret,{expiresIn:config.login.expireToken});
+
+                return JSON.stringify({
+                    "status_code": "00",
+                    "status_msg": "Login successfully",
+                    "token": token
+                });
+            }else{
+                return JSON.stringify({
+                    "status_code": "-99",
+                    "status_msg": "Email or password not valid"
+                });
+            }
+        }else{
+            return JSON.stringify({
+                "status_code": "-99",
+                "status_msg": "Email or password not valid"
+            });
+        }*/
+        var urlGoogle = await googleUtilInstance.urlGoogle();
+        return JSON.stringify({
+            "status_code": "00",
+            "status_msg": "OK",
+            "url": urlGoogle
+        });
+    }
+
+    async doParseQueryString_Google( param ){
+
+        var joResult = {};
+        try{
+
+            // Get Token for access the account
+            var joQuery = await utilInstance.parseQueryString(param.code);
+            var joToken = await googleUtilInstance.getToken(joQuery.code);     
+            
+            // Get user detail using token
+            var paramReq = {
+                url: 'https://www.googleapis.com/oauth2/v2/userinfo',
+                method: 'get',
+                headers:{
+                    //'Authorization': `Bearer ya29.a0AfH6SMCJ9FSMIHY3vjSVlBH9v7_g5F-yjQUcNcnxCuqZAouo0Yt-B-8PtkNPs0cNtRt3zgw56e6M4yphprh0D5u1sts9iFIOzbUOeDc_Kz1hpILAJXRcsYeSwEdyIXQIydD5sp_HdT8hDeQ6CUgn7bMOWBZKuUN3M98`,
+                    'Authorization': `Bearer ` + joToken.access_token
+                }
+            }
+            
+            var joResultAccountInfo = await utilInstance.axiosRequest(config.login.oAuth2.google.urlUserInfo, paramReq); 
+            var paramRegister = {
+                "name": joResultAccountInfo.name,
+                "email": joResultAccountInfo.email,
+                "password": "",
+                "method":"google",
+                "google_token": joToken.access_token,
+                "google_token_expire": joToken.expiry_date,
+                "google_token_id": joToken.id_token
+            };
+
+            var joResultRegister = await this.doRegister(paramRegister);
+
+            if( joResultRegister.status_code == "00" ){
+                joResult = joResultRegister;
+            }else{
+                var joResultUpdateToken = await userRepoInstance.updateGoogleToken(joResultAccountInfo.email, joToken.access_token, joToken.id_token, joToken.expiry_date);
+                joResult = joResultUpdateToken;
+            }
+            
+
+        }catch( err ){
+            joResult = {
+                "status_code": "-99",
+                "status_msg": "Error parse ",
+                "err_msg": err.response.data
+            }
+        }
+        
+        return joResult;
+    }  
+
+
     async doForgotPassword( param ){
         var validateEmail = await userRepoInstance.isEmailExists( param.email );
         if( validateEmail != null ){
-            var forgotPasswordCode = "FORGOTPASSWORD" + config.frontParam.separatorData + param.email + config.frontParam.separatorData + validateEmail.id;
-            forgotPasswordCode = await utilInstance.encrypt(forgotPasswordCode);
+
+            //Using JWT
+            let token = jwt.sign({email:param.email,id:validateEmail.id,phrase:"FORGOTPASSWORD"},config.secret,{expiresIn:config.login.expireToken});
+            var forgotPasswordCode = token;
+            //var forgotPasswordCode = "FORGOTPASSWORD" + config.frontParam.separatorData + param.email + config.frontParam.separatorData + validateEmail.id + config.frontParam.separatorData + token;
+            //forgotPasswordCode = await utilInstance.encrypt(forgotPasswordCode);
             var verificationLink = config.frontParam.forgotPasswordLink;
             verificationLink = verificationLink.replace("#VERIFICATION_CODE#", forgotPasswordCode);
 
@@ -182,13 +277,11 @@ class UserService {
                         "status_msg": "Code verification not valid"
                     });
                 }else{
-                    var verifyResult = await userRepoInstance.activateUser( id );
-                    if( verifyResult.status_code == "00" ){
-                        return JSON.stringify({
-                            "status_code": "00",
-                            "status_msg": "Please input your new password"
-                        });
-                    }
+                    return JSON.stringify({
+                        "status_code": "00",
+                        "status_msg": "Please input your new password",
+                        "id": await utilInstance.encrypt(id)
+                    });
                 }
             }else{
                 return JSON.stringify({
@@ -204,6 +297,85 @@ class UserService {
                 "err_msg": decryptedVerificationCode.status_msg
             });
         }
+    }
+
+    async doVerifyForgotPasswordCode_JWT(param){
+        var response = await utilSecureInstance.verifyToken(param.code);        
+        if( response.status_code == "00" ){
+            var prefix = response.decoded.phrase;
+            var email = response.decoded.email;
+            var id = response.decoded.id;
+            var verify = await userRepoInstance.verifyVerificationCode( email, id );
+
+            if( prefix == "FORGOTPASSWORD" ){
+                if( verify == null ){
+                    return JSON.stringify({
+                        "status_code": "-99",
+                        "status_msg": "Code verification not valid"
+                    });
+                }else{
+                    return JSON.stringify({
+                        "status_code": "00",
+                        "status_msg": "Please input your new password",
+                        "id": await utilInstance.encrypt(id)
+                    });
+                }
+            }else{
+                return JSON.stringify({
+                    "status_code": "-99",
+                    "status_msg": "Invalid formula of code verification", 
+                });
+            }
+            
+        }else{
+            return JSON.stringify({
+                "status_code": "-99",
+                "status_msg": "Invalid formula of code verification",
+                "err_msg": response.status_msg
+            });
+        }
+    }
+
+    async doChangePassword( param ){
+
+        //Verification Code first
+        var result = await this.doVerifyForgotPasswordCode_JWT(param);
+        if( JSON.parse(result).status_code == "00" ){
+
+            //Decrypt id from verify code
+            var rsDecrypted = await utilInstance.decrypt( JSON.parse(result).id );
+
+            //Encrypt the new password
+            var encryptedNewPassword = await utilSecureInstance.generateEncryptedPassword(param.new_password);
+
+            //Update to database
+            var resultUpdate = await userRepoInstance.changePassword(encryptedNewPassword, param.email, rsDecrypted.decrypted);
+            console.log(">>> Result : " + resultUpdate.status_code);
+            if( resultUpdate.status_code == "00" ){
+                return JSON.stringify({
+                    "status_code": "00",
+                    "status_msg": "You've successfully change your password. Please relogin again"
+                });
+            }else{
+                return JSON.stringify({
+                    "status_code": "-99",
+                    "status_msg": "Change password failed. Please try again or contact to our customer service.",
+                    "err_msg": resultUpdate.err_msg
+                });
+            }
+            
+        }else{
+            return result;
+        }
+
+    }
+
+    async verifyToken( param ){
+
+        if( param.method == 'conventional' ){
+            
+        }
+
     }
 
 };

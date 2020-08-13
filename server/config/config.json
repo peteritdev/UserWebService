@@ -35,7 +35,15 @@
   },
 
   "login":{
-    "expireToken": "24h"
+    "expireToken": "24h",
+    "oAuth2":{
+      "google":{
+        "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
+        "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
+        "redirect": "http://sanquawater.co.id",
+        "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo"
+      }
+    }
   },
 
   "dialectOptions": {

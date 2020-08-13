@@ -4,6 +4,7 @@ const encKey = config.cryptoKey.hashKey
 const dateTime = require('node-datetime');
 const axios = require('axios');
 const IV_LENGTH = 16;
+const urlQueryParser = require('query-string');
 
 class GlobalUtility{
 
@@ -41,8 +42,8 @@ class GlobalUtility{
             }catch( err ){
                 return {
                     status_code: "-99",
-                    status_msg: "OK",
-                    decrypted: err
+                    status_msg: "Error",
+                    err_msg: err
                 };
             }
             
@@ -54,12 +55,21 @@ class GlobalUtility{
         }
     }
 
-    async axiosRequest( pUrl, pMethod, pBody ){
-        var config = {};
-            
+    async axiosRequestPost( pUrl, pMethod, pBody ){
+        var config = {};            
         let response = await axios.post(pUrl, pBody);
-
         return response.data;
+    }
+
+    async axiosRequest( pUrl, pConfig ){
+        const res = await axios.get(pUrl, pConfig);
+        //console.log(pConfig);
+        console.log(JSON.stringify(">>> LOG : " + res.data));
+        return res.data;
+    }
+
+    async parseQueryString( pString ){
+        return urlQueryParser.parse(pString);
     }
 
 }

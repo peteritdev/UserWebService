@@ -28,6 +28,21 @@ class UserValidation {
         var errors = req.validationErrors();
         return errors;
     }
+
+    async changePassword(req){        
+
+        req.checkBody('new_password','New password is required');
+
+        if( req.body.source == "FORGOT_PASSWORD" ){
+            req.checkBody('code','Verification code is required');
+        }else if( req.body.source == "CHANGE_PASSWORD" ){
+            req.checkBody('email','Email is required');
+            req.checkBody('old_password','Old password');
+        }
+        
+        var errors = req.validationErrors();
+        return errors;
+    }
 }
 
 module.exports = UserValidation;

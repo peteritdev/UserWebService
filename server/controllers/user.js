@@ -9,7 +9,7 @@ const userValidationInstance = new UserValidation();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
-module.exports = { register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword};
+module.exports = { register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, loginGoogle, parseQueryGoogle};
 
 async function register( req, res ){
     var joResult;
@@ -87,6 +87,24 @@ async function login(req, res){
     res.status(200).send(joResult);
 }
 
+async function loginGoogle(req, res){
+    var joResult;
+
+    joResult = await userServiceInstance.doLogin_GoogleID(req.body); 
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function parseQueryGoogle( req, res ){
+    var joResult;
+
+    joResult = await userServiceInstance.doParseQueryString_Google(req.body); 
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
 async function forgotPassword(req, res){
     var joResult;
 
@@ -118,7 +136,26 @@ async function verifyForgotPassword(req, res){
             "error_msg": errors
         });
     }else{
-        joResult = await userServiceInstance.doVerifyForgotPasswordCode(req.body);
+        joResult = await userServiceInstance.doVerifyForgotPasswordCode_JWT(req.body);
+    }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function changePassword(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = await userValidationInstance.changePassword(req);
+    if( errors ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doChangePassword(req.body);
     }    
 
     res.setHeader('Content-Type','application/json');

@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     is_first_login: DataTypes.INTEGER,
     verified_at: DataTypes.DATE,
     forgot_password_at: DataTypes.DATE,
+    google_token: DataTypes.STRING,
+    google_token_expire: DataTypes.BIGINT,
+    google_token_id: DataTypes.STRING,
+    register_with: DataTypes.STRING,
     createdAt:{
     	type: DataTypes.DATE,
     	defaultValue: sequelize.literal('NOW()'),
