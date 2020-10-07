@@ -2,8 +2,8 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
-
 const cors = require('cors');
+const _ = require('lodash');
 
 // Set up the express app
 const app = express();
@@ -14,8 +14,6 @@ app.use( logger('dev') );
 // parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-app.use(expressValidator());
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 require('./server/routes')(app);

@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "P455uu0rd^^ok",
-    "database": "procurementdb",
+    "database": "sanqua_oauthdb",
     "host": "127.0.0.1",
     "port":5432,
     "dialect": "postgres",
@@ -32,6 +32,8 @@
       "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
       "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
     }
+
+    
   },
 
   "login":{
@@ -41,7 +43,8 @@
         "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
         "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
         "redirect": "http://sanquawater.co.id",
-        "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo"
+        "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo",
+        "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
       }
     }
   },

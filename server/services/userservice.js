@@ -23,15 +23,58 @@ const UtilSecurity = require('../utils/security.js');
 const utilSecureInstance = new UtilSecurity();
 const GoogleUtil = require('../utils/googleutil.js');
 const googleUtilInstance = new GoogleUtil();
+const JwtUtil = require('../utils/jwtutil.js');
+const jwtUtilInstance = new JwtUtil();
 
 class UserService {
 
     constructor(){}
 
+    async list(param){
+        var joResult = {};
+        var joArrData = [];       
+
+        var xResultList = await userRepoInstance.list(param);
+
+        if( xResultList.data.count > 0 ){
+            joResult.status_code = "00";
+            joResult.status_msg = "OK";
+            joResult.recordsTotal = xResultList.count;
+            joResult.recordsFiltered = xResultList.count;
+            joResult.draw = param.draw;
+
+            var xRows = xResultList.data.rows;
+
+            for(var index in xRows){
+                joArrData.push({
+                    id: await utilInstance.encrypt((xRows[index].id).toString()),
+                    name: xRows[index].name,
+                    email: xRows[index].email,
+                    company_id: ( xRows[index].company != null ? xRows[index].company.id : null ),
+                    company_name: ( xRows[index].company != null ? xRows[index].company.name : '' ),
+                    status: xRows[index].status
+                });
+            }
+
+            joResult.data = joArrData;
+        }else{
+            joResult.status_code = "00";
+            joResult.status_msg = "OK";
+            joResult.recordsTotal = xResultList.count;
+            joResult.recordsFiltered = xResultList.count;
+            joResult.draw = param.draw;
+            joResult.data = joArrData;
+        }
+
+        return (joResult);
+    }
+
     async doRegister(param){
 
         var joResult;
         var result = await userRepoInstance.isEmailExists( param.email );
+
+        
 
         if( result == null ){
 
@@ -42,23 +85,28 @@ class UserService {
                 var resultNotify = null;
                 
                 //Prepare to send notification if registration method using conventional
-                if( param.method == 'conventional' ){
-                    var notifyParam = {
-                        "email": param.email,
-                        "id": joResult.created_id,
-                        "name": param.name
+                if( param.method == 'conventional' ){  
+                    
+                    if( param.type == 1 ){
+                        param.status = 1;
+                    }else if( param.type == 2 ){    
+                        var notifyParam = {
+                            "email": param.email,
+                            "id": joResult.created_id,
+                            "name": param.name
+                        }
+                        resultNotify = await utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
                     }
-    
-                    resultNotify = await utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
+                    
                 }
 
                 return JSON.stringify({
                     "status_code":"00",
-                    "status_msg":"OK",
+                    "status_msg":joResult.status_msg,
                     "data": param,
                     "result_check_email": result,
                     "result_add": joResult,
-                    "result_send_email_verification": resultNotify
+                    "result_send_email_verification": ( resultNotify !== null ? resultNotify.data : null )
                 });
             }           
             
@@ -71,6 +119,65 @@ class UserService {
         }
 
         
+    }
+
+    async save(param){
+        var joResult;
+        var checkDuplicateResult = await userRepoInstance.isEmailExists(param.email);
+        var flagProcess = true;
+        var flagExistEmail = true;
+        var xDec = null;
+        var xCheckEmail = null;
+
+        if( ( param.act == "add" && checkDuplicateResult == null ) || param.act == "update" ){
+
+            if( param.act == "update" ){
+                xDec = await utilInstance.decrypt(param.id);
+                param.id = xDec.decrypted;
+
+                // Check existing email
+                xCheckEmail = await userRepoInstance.isEmailExists( param.email );
+                if( xCheckEmail != null ){
+                    if( xCheckEmail.id != param.id ){
+                        flagExistEmail = false;
+                    }
+                }
+
+            }
+
+            if( ( param.act == "update" && xDec.status_code == "00" ) || ( param.act == "add" ) ){  
+                
+                if( param.act == "update" && !flagExistEmail ){
+                    flagProcess = false;
+                    joResult = {
+                        status_code: "-99",
+                        status_msg: "Email already exists"
+                    };
+                }else{
+                    var xDecUserId = await utilInstance.decrypt(param.user_id);
+                    if( xDecUserId.status_code == "00" ){
+                        param.user_id = xDecUserId.decrypted;                    
+                    }else{
+                        flagProcess = false;
+                        joResult = xDecUserId;
+                    }   
+                }               
+                                 
+            }else{
+                flagProcess = false;
+                joResult = xDec; 
+            }       
+
+            if( flagProcess )joResult = await userRepoInstance.save( param );
+
+        }else{
+            joResult = {
+                status_code: "01",
+                status_msg: "Data already exist in database"
+            }
+        }
+
+        return (joResult);
     }
 
     async doVerifyAccount(param){
@@ -115,7 +222,13 @@ class UserService {
                 return JSON.stringify({
                     "status_code": "00",
                     "status_msg": "Login successfully",
-                    "token": token
+                    "token": token,
+                    "user_id": ( await utilInstance.encrypt(validateEmail.id.toString()) ),
+                    "vendor_id": (validateEmail.vendor_id != null ? ( await utilInstance.encrypt(validateEmail.vendor_id.toString()) ) : 0 ),
+                    "user_type": validateEmail.type,
+                    "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),
+                    "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
+                    "username": validateEmail.name
                 });
             }else{
                 return JSON.stringify({
@@ -186,8 +299,8 @@ class UserService {
             
             var joResultAccountInfo = await utilInstance.axiosRequest(config.login.oAuth2.google.urlUserInfo, paramReq); 
             var paramRegister = {
-                "name": joResultAccountInfo.name,
-                "email": joResultAccountInfo.email,
+                "name": joResultAccountInfo.data.name,
+                "email": joResultAccountInfo.data.email,
                 "password": "",
                 "method":"google",
                 "google_token": joToken.access_token,
@@ -200,7 +313,7 @@ class UserService {
             if( joResultRegister.status_code == "00" ){
                 joResult = joResultRegister;
             }else{
-                var joResultUpdateToken = await userRepoInstance.updateGoogleToken(joResultAccountInfo.email, joToken.access_token, joToken.id_token, joToken.expiry_date);
+                var joResultUpdateToken = await userRepoInstance.updateGoogleToken(joResultAccountInfo.data.email, joToken.access_token, joToken.id_token, joToken.expiry_date);
                 joResult = joResultUpdateToken;
             }
             
@@ -209,7 +322,7 @@ class UserService {
             joResult = {
                 "status_code": "-99",
                 "status_msg": "Error parse ",
-                "err_msg": err.response.data
+                "err_msg": err.response
             }
         }
         
@@ -236,7 +349,7 @@ class UserService {
                 "verification_link": verificationLink
 
             }
-            var resultNotify = await utilInstance.axiosRequest(config.api.notification.forgotPassword, "POST", notifyParam);
+            var resultNotify = await utilInstance.axiosRequestPost(config.api.notification.forgotPassword, notifyParam);
 
             if( resultNotify.status_code == "00" ){
                 //Update status in database
@@ -246,13 +359,13 @@ class UserService {
                     return JSON.stringify({
                         "status_code": "00",
                         "status_msg": "OK",
-                        "result_send_email_verification": resultNotify
+                        "result_send_email_verification": resultNotify.data
                     });
                 }else{
                     return JSON.stringify({
                         "status_code": "-99",
                         "status_msg": "Update status forgot password failed",
-                        "result_send_email_verification": resultNotify
+                        "result_send_email_verification": resultNotify.data
                     });
                 }
                 
@@ -372,10 +485,60 @@ class UserService {
 
     async verifyToken( param ){
 
+        var joResult = {};
+
         if( param.method == 'conventional' ){
-            
+            joResult = await jwtUtilInstance.verifyJWT(param.token);
+        }else if( param.method == 'google' ){
+            joResult = await utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
         }
 
+        return JSON.stringify(joResult);
+
+    }
+
+    async addVendorId(param){
+        
+        var joResult = {}
+        var flagProcess = true;
+
+        //Decrypt id
+        var xDecVendorId = await utilInstance.decrypt( param.vendor_id );
+        if( xDecVendorId.status_code == "00" ){
+            param.vendor_id = xDecVendorId.decrypted;
+            var xDecUserId = await utilInstance.decrypt(param.user_id);
+            if( xDecUserId.status_code == "00" ){
+                param.user_id = xDecUserId.decrypted;
+            }else{
+                flagProcess = false;
+                joResult = xDecUserId;
+            }
+        }else{
+            flagProcess = false;
+            joResult = xDecVendorId;
+        }
+
+        if( flagProcess )joResult = await userRepoInstance.updateVendorID( param.user_id, param.vendor_id );
+        
+        return JSON.stringify(joResult);
+        
+    }
+
+    async deleteUser(param){
+        var joResult = {}
+        var flagProcess = true;
+
+        var xDecId = await utilInstance.decrypt( param.id );
+        if( xDecId.status_code == "00" ){
+            param.id = xDecId.decrypted;
+        }else{
+            flagProcess = false;
+            joResult = xDecId;
+        }
+
+        if( flagProcess ) joResult = await userRepoInstance.delete( param );
+
+        return joResult;
     }
 
 };

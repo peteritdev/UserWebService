@@ -3,9 +3,11 @@ var configEnv = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
 const { hash } = require('bcryptjs');
+const Op = sequelize.Op;
 
 //Model
 const modelUser = require('../models').ms_users;
+const modelCompany = require('../models').ms_companies;
 
 //Utils
 const UtilSecurity = require('../utils/security.js');
@@ -20,10 +22,64 @@ class UserRepository {
         var data = await modelUser.findOne({
             where:{
                 email: pEmail
-            }
+            },
+            include:[
+                {
+                    model: modelCompany,
+                    as: 'company'
+                },
+            ],
         });
         
         return data;
+    }
+
+    async list( param ){
+
+        var jWhereCompany = {};
+
+        if( param.company_id != "" && param.company_id != null ){
+            jWhereCompany = {
+                "$company.id$": param.company_id
+            }
+        }
+
+        var data = await modelUser.findAndCountAll({
+            where: {
+                [Op.or]:[
+                    {
+                        name:{
+                            [Op.like]: '%' + param.keyword + '%'
+                        }
+                    },
+                    {
+                        email:{
+                            [Op.like]: '%' + param.keyword + '%'
+                        }
+                    }
+                ],
+                [Op.and]:[
+                    {
+                        type: 1
+                    },jWhereCompany
+                ]
+
+            },
+            include:[
+                {
+                    model: modelCompany,
+                    as: 'company'
+                },
+            ],
+            limit: param.limit,
+            offset: param.offset
+        });
+
+        return {
+            "status_code": "00",
+            "status_msg": "OK",
+            "data": data
+        };
     }
 
     async verifyVerificationCode( pEmail, pId ){
@@ -54,8 +110,10 @@ class UserRepository {
                     email: param.email,
                     password: hashedPassword,
                     is_first_login: 1,
-                    status: 0,
-                    register_with: param.method
+                    status: param.status,
+                    register_with: param.method,
+                    type: param.type,
+                    sanqua_company_id: param.company_id
                 },{transaction});
             }else if( param.method == 'google' ){
                 created = await modelUser.create({
@@ -63,7 +121,7 @@ class UserRepository {
                     email: param.email,
                     password: hashedPassword,
                     is_first_login: 1,
-                    status: 0,
+                    status: 1,
                     google_token: param.google_token,
                     google_token_expire: param.google_token_expire,
                     google_token_id: param.google_token_id,
@@ -90,6 +148,61 @@ class UserRepository {
                 "status_msg": "Failed add user to database",
                 "err_msg": err
             });
+            return joResult;
+        }
+
+        
+    }
+
+    async save( param ){
+        let transaction;
+        var joResult = {};
+        var hashedPassword = '';
+
+        console.log(">>> Param Update : ");
+        console.log(JSON.stringify(param));
+
+        try{
+            transaction = await sequelize.transaction();  
+            
+            if( param.act == "update" ){
+                var joDataUpdate = {
+                    name: param.name,
+                    email: param.email,
+                    status: param.status,
+                    sanqua_company_id: param.company_id,
+                    updated_by: param.user_id
+                };
+                if( param.password != "" ){
+                    hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
+                    joDataUpdate.password = hashedPassword;
+                }               
+    
+                var saved = null;
+                saved = await modelUser.update(joDataUpdate,
+                                               {
+                                                   where: {
+                                                       id: param.id
+                                                   }
+                                               },
+                                               {transaction});
+            }       
+                       
+            await transaction.commit();
+
+            joResult = {
+                status_code: "00",
+                status_msg: "User successfully update to database",
+            };
+            return joResult;
+        }catch(err){
+            console.log("ERROR [UserRepository.SaveUser] " + err);
+            if( transaction ) await transaction.rollback();
+            joResult = {
+                "status_code": "-99",
+                "status_msg": "Failed update user to database",
+                "err_msg": err
+            };
             return joResult;
         }
 
@@ -188,10 +301,18 @@ class UserRepository {
 
             await transaction.commit();
 
-            joResult = {
-                status_code: "00",
-                status_msg: "You've successfully change password"
-            };
+            if( updated == 0 ){
+                joResult = {
+                    status_code: "-98",
+                    err_msg: "Verification Code and Id doesn't match. Please check again"
+                };
+            }else{
+                joResult = {
+                    status_code: "00",
+                    status_msg: "You've successfully change password."
+                };
+            }
+            
             return joResult;
         }catch(err){
             console.log("ERROR [UserRepository.ChangePassword] " + err);
@@ -244,6 +365,73 @@ class UserRepository {
             };
             return joResult;
         }
+    }
+
+    async updateVendorID(pId, pVendorId){
+        let transaction;
+        var joResult = {};
+        var currDateTime = await utilInstance.getCurrDateTime();
+
+        try{
+            transaction = await sequelize.transaction();
+            
+            var updated = await modelUser.update({
+                vendor_id: pVendorId,
+            },{
+                where:{
+                    id: pId
+                }
+            },{transaction});
+
+            await transaction.commit();
+
+            joResult = {
+                status_code: "00",
+                status_msg: "User successfully with Vendor ID",
+            };
+            return joResult;
+        }catch(err){
+            console.log("ERROR [UserRepository.UpdateVendorID] " + err);
+            if( transaction ) await transaction.rollback();
+            joResult = {
+                status_code: "-99",
+                status_msg: "Failed to update user with Vendor ID",
+                err_msg: err
+            };
+            return joResult;
+        }
+    }
+
+    async delete( param ){
+        let transaction;
+        var joResult = {};
+
+        try{
+		
+			var saved = null;
+            transaction = await sequelize.transaction();
+            saved = await modelUser.destroy({
+                where: {
+                    id: param.id
+                }
+            });
+
+            await transaction.commit();
+
+            joResult = {
+                status_code: "00",
+                status_msg: "Data successfully deleted"
+            }
+        }catch(e){
+            if( transaction ) await transaction.rollback();
+            joResult = {
+                status_code: "-99",
+                status_msg: "Failed delete data",
+                err_msg: e
+            }
+        }
+
+        return joResult;
     }
 };
 

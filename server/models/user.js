@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     google_token_expire: DataTypes.BIGINT,
     google_token_id: DataTypes.STRING,
     register_with: DataTypes.STRING,
+    vendor_id: DataTypes.INTEGER,
+    sanqua_company_id: DataTypes.INTEGER,
     createdAt:{
     	type: DataTypes.DATE,
     	defaultValue: sequelize.literal('NOW()'),
@@ -37,5 +39,14 @@ module.exports = (sequelize, DataTypes) => {
     	field: 'updated_by'
     }
   });
+
+  User.associate = function( models ){
+    User.belongsTo( models.ms_companies, {
+      foreignKey: 'sanqua_company_id',
+      onDelete: 'CASCADE',
+      as: 'company'
+    } );
+  }
+
   return User;
 };

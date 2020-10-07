@@ -1,3 +1,5 @@
+const { timingSafeEqual } = require("crypto");
+
 class UserValidation {
 
     constructor(){}
@@ -43,6 +45,13 @@ class UserValidation {
         var errors = req.validationErrors();
         return errors;
     }
+
+    /*async verifyToken(req){
+        req.checkHeaders('X-API-TOKEN').not().isEmpty().withMessage("Token is required");
+        req.checkHeaders('X-LOGIN-METHOD').not().isEmpty.withMessage("Method is required");
+        var errors = req.validationErrors();
+        return errors;
+    }*/
 }
 
 module.exports = UserValidation;

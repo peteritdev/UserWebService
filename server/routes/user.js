@@ -1,21 +1,94 @@
 const userController = require('../controllers').user;
 
-var rootAPIPath = '/api/procurement/v1/';
+const { check, validationResult } = require('express-validator');
+
+var rootAPIPath = '/api/oauth/v1/';
 
 module.exports = (app) => { 
 
   app.get(rootAPIPath, (req, res) => res.status(200).send({
     message: 'Welcome to the Todos API!',
   }));
+
+  app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-method, x-token");
+    next();
+  });
   
-  app.post(rootAPIPath + 'user/register', userController.register);  
+  var arrValidateRegister = [
+    check('name').not().isEmpty().withMessage("Name is required"),
+    check('email','Email is required').isEmail(),
+    check('password', 'Password is required or format is invalid').isLength({min:6}),
+  ];
+  app.post(rootAPIPath + 'user/register', arrValidateRegister, userController.register);  
+
   app.post(rootAPIPath + 'user/generate_password', userController.generatePassword);  
-  app.post(rootAPIPath + 'user/verify_account', userController.verifyAccount);
-  app.post(rootAPIPath + 'user/login', userController.login);
+  
+  var arrValidateVerify = [
+    check("code").not().isEmpty().withMessage("Code is required")
+  ];
+  app.post(rootAPIPath + 'user/verify_account', arrValidateVerify, userController.verifyAccount);
+
+  var arrValidateLogin = [
+    check("email").isEmail().withMessage("Invalid email format"),
+    check("password").not().isEmpty().withMessage("Password is required")
+  ];
+  app.post(rootAPIPath + 'user/login', arrValidateLogin, userController.login);
+
   app.post(rootAPIPath + 'user/login_google', userController.loginGoogle);
-  app.post(rootAPIPath + 'user/parse_google_code', userController.parseQueryGoogle);
-  app.post(rootAPIPath + 'user/forgot_password', userController.forgotPassword);  
-  app.post(rootAPIPath + 'user/verify_forgot_password', userController.verifyForgotPassword);  
-  app.post(rootAPIPath + 'user/change_password', userController.changePassword);  
+
+  var arrValidateParseQueryGoogle = [
+    check("code").not().isEmpty().withMessage("Code is required")
+  ];
+  app.post(rootAPIPath + 'user/parse_google_code', arrValidateParseQueryGoogle, userController.parseQueryGoogle);
+
+  var arrValidateVerifyToken = [
+    check("token").not().isEmpty().withMessage("Token is required"),
+    check("method").not().isEmpty().withMessage("Method is required")
+  ];
+  app.get(rootAPIPath + 'user/verify_token', arrValidateVerifyToken, userController.verifyToken);
+
+  var arrValidateForgotPassword = [
+    check("email").isEmail().withMessage("Invalid email format")
+  ];
+  app.post(rootAPIPath + 'user/forgot_password', arrValidateForgotPassword, userController.forgotPassword);  
+
+  var arrValidateVerifyForgotPassword = [
+    check("code").not().isEmpty().withMessage("Code is required")
+  ];
+  app.post(rootAPIPath + 'user/verify_forgot_password', arrValidateVerifyForgotPassword, userController.verifyForgotPassword);  
+
+  var arrValidateChangePassword = [
+    check("code").not().isEmpty().withMessage("Code is required"),
+    check("email").isEmail().withMessage("Invalid email format"),
+    check('new_password', 'Password is required or format is invalid').isLength({min:6})
+  ];
+  app.post(rootAPIPath + 'user/change_password', arrValidateChangePassword, userController.changePassword);  
+
+  var arrValidateAddVendorId = [
+    check("vendor_id").not().isEmpty().withMessage("Vendor Id is required"),
+    check("user_id").not().isEmpty().withMessage("User Id is required")
+  ];
+  app.post(rootAPIPath + "user/update_vendor_id", arrValidateAddVendorId, userController.addVendorId);
+
+
+  // Admin Site
+  var arrValidateUserList = [];
+  app.get(rootAPIPath + 'user/list', arrValidateUserList, userController.list);
+
+  var arrValidateUserSave = [
+    check("name").not().isEmpty().withMessage("Name is required"),
+    check("email").isEmail().withMessage("Invalid email format"),
+    // check("password").isEmpty().withMessage("Password is required"),
+    check("status","Status must be a number").not().isEmpty().isInt(),
+    check("company_id","Company Id must be a number").not().isEmpty().isInt(),
+  ];
+  app.post( rootAPIPath + 'user/save', arrValidateUserSave, userController.save );
+
+  var arrValidateUserDelete = [
+    check("id").not().isEmpty().withMessage("Id is required"),
+  ];
+  app.post(rootAPIPath + "user/delete", arrValidateUserDelete, userController.deleteUser);
 
 };

@@ -55,17 +55,30 @@ class GlobalUtility{
         }
     }
 
-    async axiosRequestPost( pUrl, pMethod, pBody ){
+    async axiosRequestPost( pUrl, pBody ){
         var config = {};            
         let response = await axios.post(pUrl, pBody);
         return response.data;
     }
 
     async axiosRequest( pUrl, pConfig ){
-        const res = await axios.get(pUrl, pConfig);
-        //console.log(pConfig);
-        console.log(JSON.stringify(">>> LOG : " + res.data));
-        return res.data;
+        
+        try{
+            const res = await axios.get(pUrl, pConfig);
+            return {
+                "status_code": "00",
+                "status_msg":"OK",
+                "data": res.data
+            };
+        }catch(e){
+            console.log(">>> e:" + e);
+            return {
+                "status_code": "-99",
+                "status_msg": "Failed request",
+                "err_msg": e.message
+            };
+        }
+        
     }
 
     async parseQueryString( pString ){

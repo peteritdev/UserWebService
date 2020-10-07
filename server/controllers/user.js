@@ -9,14 +9,45 @@ const userValidationInstance = new UserValidation();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
-module.exports = { register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, loginGoogle, parseQueryGoogle};
+// Validation Parameter
+const { check, validationResult } = require('express-validator');
+
+module.exports = { list, save, deleteUser,
+                   register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, 
+                   loginGoogle, parseQueryGoogle, verifyToken, addVendorId};
+
+async function list( req, res ){
+    var joResult;
+    var errors = null;
+
+    /*var oAuthResult = await userServiceInstance.verifyToken({
+                                                                token: req.headers['x-token'],
+                                                                method: req.headers['x-method']
+                                                            });
+    if( JSON.parse(oAuthResult).status_code == "00" ){
+        joResult = await userServiceInstance.list(req.query);        
+            joResult.token_data = oAuthResult.token_data;
+            joResult = JSON.stringify(joResult);
+    }else{
+        joResult = (oAuthResult);
+    }    */
+
+    joResult = await userServiceInstance.list(req.query);        
+            //joResult.token_data = oAuthResult.token_data;
+            joResult = JSON.stringify(joResult);
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
 
 async function register( req, res ){
     var joResult;
 
+    console.log(JSON.stringify(req.body));
+
     // Validate first
-    var errors = await userValidationInstance.register(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter value has problem",
@@ -25,6 +56,78 @@ async function register( req, res ){
     }else{
         joResult = await userServiceInstance.doRegister(req.body);
     }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function save(req, res){
+    var joResult;
+    var errors = null;
+
+    var oAuthResult = await userServiceInstance.verifyToken({
+        token: req.headers['x-token'],
+        method: req.headers['x-method']
+    });
+
+    if( JSON.parse(oAuthResult).status_code == "00" ){
+
+        //Validate first
+        var errors = validationResult(req).array();  
+        
+        if( errors.length != 0 ){
+            joResult = JSON.stringify({
+                "status_code": "-99",
+                "status_msg":"Parameter value has problem",
+                "error_msg": errors
+            });
+            
+        }else{          
+            
+            req.body.user_id = JSON.parse(oAuthResult).result_verify.id;
+            joResult = await userServiceInstance.save(req.body);
+            joResult = JSON.stringify(joResult);
+        }
+
+    }else{
+        joResult = (oAuthResult);
+    }  
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function deleteUser(req, res){
+    var joResult;
+    var errors = null;
+
+    var oAuthResult = await userServiceInstance.verifyToken({
+        token: req.headers['x-token'],
+        method: req.headers['x-method']
+    });
+
+    if( JSON.parse(oAuthResult).status_code == "00" ){
+
+        //Validate first
+        var errors = validationResult(req).array();  
+        
+        if( errors.length != 0 ){
+            joResult = JSON.stringify({
+                "status_code": "-99",
+                "status_msg":"Parameter value has problem",
+                "error_msg": errors
+            });
+        }else{          
+            
+            joResult = await userServiceInstance.deleteUser(req.body);
+            joResult = JSON.stringify(joResult);
+        }
+
+    }else{
+        joResult = (oAuthResult);
+    }  
+
+    console.log(req.body);
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
@@ -53,8 +156,8 @@ async function verifyAccount(req, res){
     var joResult;
 
     // Validate first
-    var errors = await userValidationInstance.verifyAccount(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter has problem",
@@ -72,8 +175,8 @@ async function login(req, res){
     var joResult;
 
     // Validate first
-    var errors = await userValidationInstance.login(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter has problem",
@@ -82,7 +185,7 @@ async function login(req, res){
     }else{
         joResult = await userServiceInstance.doLogin(req.body);
     }    
-
+    
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
 }
@@ -99,7 +202,17 @@ async function loginGoogle(req, res){
 async function parseQueryGoogle( req, res ){
     var joResult;
 
-    joResult = await userServiceInstance.doParseQueryString_Google(req.body); 
+    // Validate first
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter value has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.doParseQueryString_Google(req.body); 
+    }
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
@@ -109,8 +222,8 @@ async function forgotPassword(req, res){
     var joResult;
 
     // Validate first
-    var errors = await userValidationInstance.forgotPassword(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter has problem",
@@ -128,8 +241,8 @@ async function verifyForgotPassword(req, res){
     var joResult;
 
     // Validate first
-    var errors = await userValidationInstance.verifyAccount(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter has problem",
@@ -147,8 +260,8 @@ async function changePassword(req, res){
     var joResult;
 
     // Validate first
-    var errors = await userValidationInstance.changePassword(req);
-    if( errors ){
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
         joResult = JSON.stringify({
             "status_code": "-99",
             "status_msg":"Parameter has problem",
@@ -157,6 +270,57 @@ async function changePassword(req, res){
     }else{
         joResult = await userServiceInstance.doChangePassword(req.body);
     }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function verifyToken(req, res){
+    var joResult;
+
+    // Validate first
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        if( req.query.token != "" && req.query.method != "" ){
+            joResult = await userServiceInstance.verifyToken({
+                token: req.query.token,
+                method: req.query.method
+        });
+        console.log(">>> HERE 1");
+        }else{
+            console.log(">>> HERE 2");
+            joResult = JSON.stringify({
+                "status_code": "-99",
+                "status_msg": "Invalid parameter token and method"
+            });
+        }
+    }
+    
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function addVendorId( req, res ){
+    
+    var joResult;
+
+    // Validate first
+    var errors = validationResult(req).array(); 
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await userServiceInstance.addVendorId(req.body);
+    }
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
