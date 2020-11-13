@@ -31,8 +31,11 @@
     "notification": {
       "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
       "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
-    }
+    },
 
+    "employeeService":{
+      "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+    }
     
   },
 

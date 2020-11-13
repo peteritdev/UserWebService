@@ -18,6 +18,16 @@ const utilInstance = new Util();
 class UserRepository {
     constructor(){}
 
+    async getUserByEmployeeId( pId ){
+        var data = await modelUser.findOne({
+            where: {
+                employee_id: pId,
+            }
+        });
+
+        return data;
+    }
+
     async isEmailExists( pEmail ){
         var data = await modelUser.findOne({
             where:{
@@ -113,7 +123,8 @@ class UserRepository {
                     status: param.status,
                     register_with: param.method,
                     type: param.type,
-                    sanqua_company_id: param.company_id
+                    sanqua_company_id: param.company_id,
+                    employee_id: param.employee_id,
                 },{transaction});
             }else if( param.method == 'google' ){
                 created = await modelUser.create({
@@ -159,13 +170,10 @@ class UserRepository {
         var joResult = {};
         var hashedPassword = '';
 
-        console.log(">>> Param Update : ");
-        console.log(JSON.stringify(param));
-
         try{
             transaction = await sequelize.transaction();  
             
-            if( param.act == "update" ){
+            if( param.act == "update" || param.act == "update_from_employee" ){
                 var joDataUpdate = {
                     name: param.name,
                     email: param.email,
@@ -179,13 +187,26 @@ class UserRepository {
                 }               
     
                 var saved = null;
+                var xWhere = {};
+
+                if( param.act == "update" ){
+                    xWhere = {
+                        id: param.id,
+                    };
+                }else if(  param.act == "update_from_employee" ){
+                    xWhere = {
+                        employee_id: param.id,
+                    }
+                }
+                
                 saved = await modelUser.update(joDataUpdate,
-                                               {
-                                                   where: {
-                                                       id: param.id
-                                                   }
-                                               },
-                                               {transaction});
+                    {
+                        where: xWhere,
+                    },
+                    {transaction});
+
+                console.log(">>> HEre");
+                
             }       
                        
             await transaction.commit();

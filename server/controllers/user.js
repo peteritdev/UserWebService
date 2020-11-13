@@ -14,7 +14,8 @@ const { check, validationResult } = require('express-validator');
 
 module.exports = { list, save, deleteUser,
                    register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, 
-                   loginGoogle, parseQueryGoogle, verifyToken, addVendorId};
+                   loginGoogle, parseQueryGoogle, verifyToken, addVendorId,
+                   getUserByEmployeeId,};
 
 async function list( req, res ){
     var joResult;
@@ -65,33 +66,36 @@ async function save(req, res){
     var joResult;
     var errors = null;
 
-    var oAuthResult = await userServiceInstance.verifyToken({
-        token: req.headers['x-token'],
-        method: req.headers['x-method']
-    });
+    // No need authenticate first
+    // var oAuthResult = await userServiceInstance.verifyToken({
+    //     token: req.headers['x-token'],
+    //     method: req.headers['x-method']
+    // });
 
-    if( JSON.parse(oAuthResult).status_code == "00" ){
+    // if( JSON.parse(oAuthResult).status_code == "00" ){
 
-        //Validate first
-        var errors = validationResult(req).array();  
         
-        if( errors.length != 0 ){
-            joResult = JSON.stringify({
-                "status_code": "-99",
-                "status_msg":"Parameter value has problem",
-                "error_msg": errors
-            });
-            
-        }else{          
-            
-            req.body.user_id = JSON.parse(oAuthResult).result_verify.id;
-            joResult = await userServiceInstance.save(req.body);
-            joResult = JSON.stringify(joResult);
-        }
 
-    }else{
-        joResult = (oAuthResult);
-    }  
+    // }else{
+    //     joResult = (oAuthResult);
+    // }  
+
+    //Validate first
+    var errors = validationResult(req).array();  
+        
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter value has problem",
+            "error_msg": errors
+        });
+        
+    }else{         
+        
+        //req.body.user_id = JSON.parse(oAuthResult).result_verify.id;
+        joResult = await userServiceInstance.save(req.body);
+        joResult = JSON.stringify(joResult);
+    }
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
@@ -292,9 +296,7 @@ async function verifyToken(req, res){
                 token: req.query.token,
                 method: req.query.method
         });
-        console.log(">>> HERE 1");
         }else{
-            console.log(">>> HERE 2");
             joResult = JSON.stringify({
                 "status_code": "-99",
                 "status_msg": "Invalid parameter token and method"
@@ -321,6 +323,25 @@ async function addVendorId( req, res ){
     }else{
         joResult = await userServiceInstance.addVendorId(req.body);
     }
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function getUserByEmployeeId( req, res ){
+    var joResult;
+    var errors = null;
+
+    var oAuthResult = await userServiceInstance.verifyToken({
+                                                                token: req.headers['x-token'],
+                                                                method: req.headers['x-method']
+                                                            });
+    if( JSON.parse(oAuthResult).status_code == "00" ){
+        joResult = await userServiceInstance.getUserByEmployeeId(req.params.employeeId);        
+        joResult = JSON.stringify(joResult);
+    }else{
+        joResult = (oAuthResult);
+    }        
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);

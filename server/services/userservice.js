@@ -129,10 +129,16 @@ class UserService {
         var xDec = null;
         var xCheckEmail = null;
 
-        if( ( param.act == "add" && checkDuplicateResult == null ) || param.act == "update" ){
+        if( ( param.act == "add" && checkDuplicateResult == null ) || param.act == "update" || param.act == "update_from_employee" ){
 
-            if( param.act == "update" ){
-                xDec = await utilInstance.decrypt(param.id);
+            if( param.act == "update" || param.act == "update_from_employee" ){
+
+                if( param.act == "update" ){
+                    xDec = await utilInstance.decrypt(param.id);
+                }else if( param.act == "update_from_employee" ){
+                    xDec = await utilInstance.decrypt(param.employee_id);
+                }
+
                 param.id = xDec.decrypted;
 
                 // Check existing email
@@ -144,8 +150,8 @@ class UserService {
                 }
 
             }
-
-            if( ( param.act == "update" && xDec.status_code == "00" ) || ( param.act == "add" ) ){  
+            
+            if( ( (param.act == "update" || param.act == "update_from_employee") && xDec.status_code == "00" ) || ( param.act == "add" ) ){  
                 
                 if( param.act == "update" && !flagExistEmail ){
                     flagProcess = false;
@@ -154,20 +160,24 @@ class UserService {
                         status_msg: "Email already exists"
                     };
                 }else{
-                    var xDecUserId = await utilInstance.decrypt(param.user_id);
-                    if( xDecUserId.status_code == "00" ){
-                        param.user_id = xDecUserId.decrypted;                    
-                    }else{
-                        flagProcess = false;
-                        joResult = xDecUserId;
-                    }   
+                    
+                    if( param.hasOwnProperty("user_id") ){
+                        var xDecUserId = await utilInstance.decrypt(param.user_id);
+                        if( xDecUserId.status_code == "00" ){
+                            param.user_id = xDecUserId.decrypted;                    
+                        }else{
+                            flagProcess = false;
+                            joResult = xDecUserId;
+                        }
+                    }
+                       
                 }               
                                  
             }else{
                 flagProcess = false;
                 joResult = xDec; 
             }       
-
+            
             if( flagProcess )joResult = await userRepoInstance.save( param );
 
         }else{
@@ -216,19 +226,27 @@ class UserService {
             var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
             if( validatePassword ){
 
-                //Generate JWT Token
+                // Generate JWT Token
                 let token = jwt.sign({email:param.email,id:validateEmail.id},config.secret,{expiresIn:config.login.expireToken});
+
+                // Get Employee Info
+                var xEmployeeId = (validateEmail.employee_id != null ? ( await utilInstance.encrypt(validateEmail.employee_id.toString()) ) : 0 );
+                var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+                var xUrlQuery = "/" + xEmployeeId;
+                var xEmployeeInfo = await utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
 
                 return JSON.stringify({
                     "status_code": "00",
                     "status_msg": "Login successfully",
                     "token": token,
-                    "user_id": ( await utilInstance.encrypt(validateEmail.id.toString()) ),
+                    "user_id": (validateEmail.id != null ? ( await utilInstance.encrypt(validateEmail.id.toString()) ) : 0 ),
                     "vendor_id": (validateEmail.vendor_id != null ? ( await utilInstance.encrypt(validateEmail.vendor_id.toString()) ) : 0 ),
                     "user_type": validateEmail.type,
                     "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),
                     "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
-                    "username": validateEmail.name
+                    "username": validateEmail.name,
+                    "employee_id": xEmployeeId,
+                    "employee": ( xEmployeeInfo.data.status_code == "00" ? xEmployeeInfo.data.data : null ),
                 });
             }else{
                 return JSON.stringify({
@@ -539,6 +557,27 @@ class UserService {
         if( flagProcess ) joResult = await userRepoInstance.delete( param );
 
         return joResult;
+    }
+
+    async getUserByEmployeeId(pId){
+
+        var xJoResult = {};
+        var xResult = await userRepoInstance.getUserByEmployeeId( pId );
+
+        if( xResult !== null ){
+            xJoResult = {
+                "status_code": "00",
+                "status_msg": "OK",
+                "data": xResult,
+            }
+        }else{
+            xJoResult = {
+                "status_code": "-99",
+                "status_msg": "Data not found",
+            }
+        }
+
+        return xJoResult;
     }
 
 };

@@ -91,4 +91,6 @@ module.exports = (app) => {
   ];
   app.post(rootAPIPath + "user/delete", arrValidateUserDelete, userController.deleteUser);
 
+  app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
+
 };
