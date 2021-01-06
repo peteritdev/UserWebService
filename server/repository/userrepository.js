@@ -28,10 +28,32 @@ class UserRepository {
         return data;
     }
 
+    async getUserById( pId ){
+        var data = await modelUser.findOne({
+            where: {
+                id: pId,
+            },
+            /*include: [
+                {
+                    model: _modelUserLevel,
+                    as: 'level',
+                },
+                {
+                    model: _modelUnitKerja,
+                    as: 'unit_kerja',
+                }
+            ]*/
+        });
+
+        return data;
+    }
+
     async isEmailExists( pEmail ){
         var data = await modelUser.findOne({
             where:{
-                email: pEmail
+                email: {
+                    [Op.like]: pEmail
+                }
             },
             include:[
                 {
@@ -173,13 +195,14 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();  
             
-            if( param.act == "update" || param.act == "update_from_employee" ){
+            if( param.act == "update" || param.act == "update_from_employee" || param.act == "add_from_employee" ){
                 var joDataUpdate = {
                     name: param.name,
                     email: param.email,
                     status: param.status,
                     sanqua_company_id: param.company_id,
-                    updated_by: param.user_id
+                    updated_by: param.user_id,
+                    employee_id: param.id,
                 };
                 if( param.password != "" ){
                     hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
@@ -199,13 +222,17 @@ class UserRepository {
                     }
                 }
                 
-                saved = await modelUser.update(joDataUpdate,
-                    {
-                        where: xWhere,
-                    },
-                    {transaction});
-
-                console.log(">>> HEre");
+                if( param.act == "update" || param.act == "update_from_employee"  ){
+                    saved = await modelUser.update(joDataUpdate,
+                        {
+                            where: xWhere,
+                        },
+                        {transaction});
+                }else if( param.act == "add_from_employee" ){
+                    saved = await modelUser.create(joDataUpdate,
+                        {transaction});
+                }
+                
                 
             }       
                        

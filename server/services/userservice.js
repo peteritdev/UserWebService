@@ -143,33 +143,51 @@ class UserService {
 
                 // Check existing email
                 xCheckEmail = await userRepoInstance.isEmailExists( param.email );
-                if( xCheckEmail != null ){
-                    if( xCheckEmail.id != param.id ){
-                        flagExistEmail = false;
-                    }
+    
+                console.log(">>> FLAG HERE : " + JSON.stringify(xCheckEmail));
+
+                if( param.act == "update" ){
+                    if( xCheckEmail != null ){ // Jika ditemukan email yng sama
+                        if( xCheckEmail.id != param.id ){ // Jika user yang melakukan update tidak sama dengan pemilik email
+                            flagExistEmail = false;
+                        }
+                    }                  
+                }else if( param.act == "update_from_employee" ){
+
+                    if( xCheckEmail != null ){ // Jika ditemukan email yng sama
+                        if( xCheckEmail.employee_id != param.id ){ // Jika user yang melakukan update tidak sama dengan pemilik email
+                            flagExistEmail = false;
+                        }
+                    }    
                 }
 
             }
+
+            
             
             if( ( (param.act == "update" || param.act == "update_from_employee") && xDec.status_code == "00" ) || ( param.act == "add" ) ){  
                 
-                if( param.act == "update" && !flagExistEmail ){
+                if( !flagExistEmail ){
                     flagProcess = false;
                     joResult = {
                         status_code: "-99",
                         status_msg: "Email already exists"
                     };
                 }else{
-                    
-                    if( param.hasOwnProperty("user_id") ){
-                        var xDecUserId = await utilInstance.decrypt(param.user_id);
-                        if( xDecUserId.status_code == "00" ){
-                            param.user_id = xDecUserId.decrypted;                    
-                        }else{
-                            flagProcess = false;
-                            joResult = xDecUserId;
+
+                    if( param.act == "update_from_employee" && xCheckEmail == null ){ // Jika ada update employee di attendance system dan di oAuth tidak ada maka insert manual
+                        param.act = "add_from_employee";
+                    }else{
+                        if( param.hasOwnProperty("user_id") ){
+                            var xDecUserId = await utilInstance.decrypt(param.user_id);
+                            if( xDecUserId.status_code == "00" ){
+                                param.user_id = xDecUserId.decrypted;                    
+                            }else{
+                                flagProcess = false;
+                                joResult = xDecUserId;
+                            }
                         }
-                    }
+                    }                  
                        
                 }               
                                  
@@ -232,7 +250,7 @@ class UserService {
                 // Get Employee Info
                 var xEmployeeId = (validateEmail.employee_id != null ? ( await utilInstance.encrypt(validateEmail.employee_id.toString()) ) : 0 );
                 var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-                var xUrlQuery = "/" + xEmployeeId;
+                var xUrlQuery = "/" + xEmployeeId;  
                 var xEmployeeInfo = await utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
 
                 return JSON.stringify({
@@ -507,6 +525,19 @@ class UserService {
 
         if( param.method == 'conventional' ){
             joResult = await jwtUtilInstance.verifyJWT(param.token);
+
+            if( joResult.status_code == "00" ){
+                //Get User Detail by ID
+                var xDecId = await utilInstance.decrypt(joResult.result_verify.id);
+                if( xDecId.status_code == '00' ){
+                    var xUserId = xDecId.decrypted;
+                    var xObjUser = await userRepoInstance.getUserById( xUserId );
+                    if( xObjUser != null ){
+                        joResult.result_verify.name = xObjUser.name;
+                        joResult.result_verify.user_level_id = xObjUser.level_id;
+                    }
+                }
+            }
         }else if( param.method == 'google' ){
             joResult = await utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
         }
