@@ -28,7 +28,7 @@ class UserRepository {
         return data;
     }
 
-    async getUserById( pId ){
+    async getById( pId ){
         var data = await modelUser.findOne({
             where: {
                 id: pId,

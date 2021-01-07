@@ -531,7 +531,7 @@ class UserService {
                 var xDecId = await utilInstance.decrypt(joResult.result_verify.id);
                 if( xDecId.status_code == '00' ){
                     var xUserId = xDecId.decrypted;
-                    var xObjUser = await userRepoInstance.getUserById( xUserId );
+                    var xObjUser = await userRepoInstance.getById( xUserId );
                     if( xObjUser != null ){
                         joResult.result_verify.name = xObjUser.name;
                         joResult.result_verify.user_level_id = xObjUser.level_id;
