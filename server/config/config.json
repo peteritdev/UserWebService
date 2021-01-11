@@ -24,7 +24,7 @@
 
   "frontParam":{
     "separatorData": "Þ",
-    "forgotPasswordLink": "http://localhost:8080/procurement/u/forgot_password/#VERIFICATION_CODE#"
+    "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
   },  
 
   "api":{
