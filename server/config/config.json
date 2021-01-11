@@ -23,7 +23,7 @@
   },
 
   "frontParam":{
-    "separatorData": "Þ",
+    "separatorData": "Þ", 
     "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
   },  
 
