@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     register_with: DataTypes.STRING,
     vendor_id: DataTypes.INTEGER,
     sanqua_company_id: DataTypes.INTEGER,
+    user_level_id: DataTypes.INTEGER,
     createdAt:{
     	type: DataTypes.DATE,
     	defaultValue: sequelize.literal('NOW()'),
@@ -46,6 +47,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'sanqua_company_id',
       onDelete: 'CASCADE',
       as: 'company'
+    } );
+
+    User.belongsTo( models.ms_userlevels, {
+      foreignKey: 'user_level_id',
+      onDelete: 'CASCADE',
+      as: 'user_level',
     } );
   }
 

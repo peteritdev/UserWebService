@@ -258,6 +258,7 @@ class UserService {
                     "status_msg": "Login successfully",
                     "token": token,
                     "user_id": (validateEmail.id != null ? ( await utilInstance.encrypt(validateEmail.id.toString()) ) : 0 ),
+                    "level": ( validateEmail.user_level ),
                     "vendor_id": (validateEmail.vendor_id != null ? ( await utilInstance.encrypt(validateEmail.vendor_id.toString()) ) : 0 ),
                     "user_type": validateEmail.type,
                     "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),

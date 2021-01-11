@@ -8,6 +8,7 @@ const Op = sequelize.Op;
 //Model
 const modelUser = require('../models').ms_users;
 const modelCompany = require('../models').ms_companies;
+const modelUserLevel = require('../models').ms_userlevels;  
 
 //Utils
 const UtilSecurity = require('../utils/security.js');
@@ -60,6 +61,10 @@ class UserRepository {
                     model: modelCompany,
                     as: 'company'
                 },
+                {
+                    model: modelUserLevel,
+                    as: 'user_level', 
+                }
             ],
         });
         
@@ -203,6 +208,7 @@ class UserRepository {
                     sanqua_company_id: param.company_id,
                     updated_by: param.user_id,
                     employee_id: param.id,
+                    user_level_id: param.user_level_id,
                 };
                 if( param.password != "" ){
                     hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
@@ -221,6 +227,9 @@ class UserRepository {
                         employee_id: param.id,
                     }
                 }
+
+                console.log(">>> DATA : ");
+                console.log(JSON.stringify(joDataUpdate));
                 
                 if( param.act == "update" || param.act == "update_from_employee"  ){
                     saved = await modelUser.update(joDataUpdate,

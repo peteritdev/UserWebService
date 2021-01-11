@@ -34,6 +34,12 @@ module.exports = (app) => {
     ];
     app.get( rootAPIPath + 'user_level_access/list', arrValidate, userLevelAccessController.list );
 
+    arrValidate = [
+        check('menu_id','Parameter menu_id is required and must be numeric').not().isEmpty().isInt(),
+        check('level_id','Parameter level_id is required and must be numeric').not().isEmpty().isInt(),
+    ];
+    app.get( rootAPIPath + 'user_level_access/get_access', arrValidate, userLevelAccessController.getByMenuIdAndLevelId );
+
     arrValidate = [];
     arrValidate = [
         check('id').not().isEmpty().withMessage('Parameter id is required'),

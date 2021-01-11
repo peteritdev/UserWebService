@@ -26,6 +26,20 @@ class UserLevelRepository {
         return xData;
     }
 
+    async getByMenuIdAndLevelId( pParam ){
+        var xData = _modelDb.findOne({
+            where: {
+                menu_id: pParam.menu_id,
+                level_id: pParam.level_id,
+            }
+        });
+
+        console.log(">>> Here : ");
+        console.log(JSON.stringify(xData));
+
+        return xData;
+    }
+
     async getUserLevelAccessByLevelIdAndApp( pParam ){
         var xData = _modelDb.findOne({
             where: {

@@ -37,6 +37,15 @@ class UserLevelAccessService{
         return xJoResult;
     }
 
+    async getByMenuIdAndLevelId(pParam){
+        var xJoResult = {};
+        var xFlagProcess = true;
+
+        if( xFlagProcess )xJoResult = await _userLevelAccessRepository.getByMenuIdAndLevelId(pParam);
+
+        return xJoResult;
+    }
+
     async list(pParam){
         var xJoResult = {};
         var xJoArrData = [];       
