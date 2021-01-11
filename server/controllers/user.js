@@ -123,7 +123,7 @@ async function deleteUser(req, res){
             });
         }else{          
             
-            joResult = await userServiceInstance.deleteUser(req.body);
+            joResult = await userServiceInstance.deleteUser(req.params);
             joResult = JSON.stringify(joResult);
         }
 
