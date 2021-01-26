@@ -197,6 +197,9 @@ class UserRepository {
         var joResult = {};
         var hashedPassword = '';
 
+        // console.log(">>> Update from user : ");
+        // console.log(JSON.stringify(param));
+
         try{
             transaction = await sequelize.transaction();  
             
@@ -210,7 +213,12 @@ class UserRepository {
                     employee_id: param.id,
                     user_level_id: param.user_level_id,
                 };
-                if( param.password != "" ){
+
+                console.log(">>> Update REpo Param : ");
+                console.log(">>> param.act : " + JSON.stringify(param));
+                console.log(JSON.stringify(joDataUpdate));
+
+                if( param.password != '' && param.hasOwnProperty('password') ){
                     hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
                     joDataUpdate.password = hashedPassword;
                 }               
@@ -227,9 +235,6 @@ class UserRepository {
                         employee_id: param.id,
                     }
                 }
-
-                console.log(">>> DATA : ");
-                console.log(JSON.stringify(joDataUpdate));
                 
                 if( param.act == "update" || param.act == "update_from_employee"  ){
                     saved = await modelUser.update(joDataUpdate,
@@ -238,10 +243,8 @@ class UserRepository {
                         },
                         {transaction});
                 }else if( param.act == "add_from_employee" ){
-                    saved = await modelUser.create(joDataUpdate,
-                        {transaction});
-                }
-                
+                    saved = await modelUser.create(joDataUpdate,{transaction});
+                }              
                 
             }       
                        

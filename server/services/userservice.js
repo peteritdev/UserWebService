@@ -128,6 +128,7 @@ class UserService {
         var flagExistEmail = true;
         var xDec = null;
         var xCheckEmail = null;
+        var xCheckEmployeeId = null;
 
         if( ( param.act == "add" && checkDuplicateResult == null ) || param.act == "update" || param.act == "update_from_employee" ){
 
@@ -139,12 +140,15 @@ class UserService {
                     xDec = await utilInstance.decrypt(param.employee_id);
                 }
 
-                param.id = xDec.decrypted;
+                param.id = parseInt(xDec.decrypted);
 
                 // Check existing email
                 xCheckEmail = await userRepoInstance.isEmailExists( param.email );
-    
-                console.log(">>> FLAG HERE : " + JSON.stringify(xCheckEmail));
+
+                // Check existing employee
+                if( param.act == 'update_from_employee' ){
+                    xCheckEmployeeId = await userRepoInstance.getUserByEmployeeId( xDec.decrypted );
+                }                
 
                 if( param.act == "update" ){
                     if( xCheckEmail != null ){ // Jika ditemukan email yng sama
@@ -175,7 +179,7 @@ class UserService {
                     };
                 }else{
 
-                    if( param.act == "update_from_employee" && xCheckEmail == null ){ // Jika ada update employee di attendance system dan di oAuth tidak ada maka insert manual
+                    if( param.act == "update_from_employee" && xCheckEmployeeId == null ){ // Jika ada update employee di attendance system dan di oAuth tidak ada maka insert manual
                         param.act = "add_from_employee";
                     }else{
                         if( param.hasOwnProperty("user_id") ){
@@ -524,24 +528,31 @@ class UserService {
 
         var joResult = {};
 
-        if( param.method == 'conventional' ){
-            joResult = await jwtUtilInstance.verifyJWT(param.token);
-
-            if( joResult.status_code == "00" ){
-                //Get User Detail by ID
-                var xDecId = await utilInstance.decrypt(joResult.result_verify.id);
-                if( xDecId.status_code == '00' ){
-                    var xUserId = xDecId.decrypted;
-                    var xObjUser = await userRepoInstance.getById( xUserId );
-                    if( xObjUser != null ){
-                        joResult.result_verify.name = xObjUser.name;
-                        joResult.result_verify.user_level_id = xObjUser.level_id;
+        if( param.hasOwnProperty('method') && param.hasOwnProperty('token') && param.method != '' && param.token != '' && param.token != 'undefined' && param.method != 'undefined' ){
+            if( param.method == 'conventional' ){
+                joResult = await jwtUtilInstance.verifyJWT(param.token);
+    
+                if( joResult.status_code == "00" ){
+                    //Get User Detail by ID
+                    var xDecId = await utilInstance.decrypt(joResult.result_verify.id);
+                    if( xDecId.status_code == '00' ){
+                        var xUserId = xDecId.decrypted;
+                        var xObjUser = await userRepoInstance.getById( xUserId );
+                        if( xObjUser != null ){
+                            joResult.result_verify.name = xObjUser.name;
+                            joResult.result_verify.user_level_id = xObjUser.level_id;
+                        }
                     }
                 }
+            }else if( param.method == 'google' ){
+                joResult = await utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
             }
-        }else if( param.method == 'google' ){
-            joResult = await utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
-        }
+        }else{
+            joResult = {
+                status_code: '-99',
+                status_msg: 'You need to suply parameter method and token'
+            }
+        }       
 
         return JSON.stringify(joResult);
 
