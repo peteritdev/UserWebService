@@ -572,7 +572,7 @@ class UserService {
                 param.user_id = xDecUserId.decrypted;
             }else{
                 flagProcess = false;
-                joResult = xDecUserId;
+                joResult = xDecUserId; 
             }
         }else{
             flagProcess = false;

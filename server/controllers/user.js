@@ -292,7 +292,7 @@ async function verifyToken(req, res){
         });
     }else{
         if( req.query.token != "" && req.query.method != "" ){
-            joResult = await userServiceInstance.verifyToken({
+            joResult = await userServiceInstance.verifyToken({ 
                 token: req.query.token,
                 method: req.query.method
         });

@@ -60,7 +60,7 @@ module.exports = (app) => {
   app.post(rootAPIPath + 'user/verify_forgot_password', arrValidateVerifyForgotPassword, userController.verifyForgotPassword);  
 
   var arrValidateChangePassword = [
-    check("code").not().isEmpty().withMessage("Code is required"),
+    check("code").not().isEmpty().withMessage("Code is required"), 
     check("email").isEmail().withMessage("Invalid email format"),
     check('new_password', 'Password is required or format is invalid').isLength({min:6})
   ];
