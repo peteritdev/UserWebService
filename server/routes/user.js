@@ -66,6 +66,13 @@ module.exports = (app) => {
   ];
   app.post(rootAPIPath + 'user/change_password', arrValidateChangePassword, userController.changePassword);  
 
+  var arrValidateChangePassword = [
+    check("email").isEmail().withMessage("Invalid email format"),
+    check('new_password', 'Password is required or format is invalid').isLength({min:6}),
+    check('old_password', 'Password is required or format is invalid').isLength({min:6})
+  ];
+  app.post(rootAPIPath + 'user/logged_change_password', arrValidateChangePassword, userController.loggedChangePassword);  
+
   var arrValidateAddVendorId = [
     check("vendor_id").not().isEmpty().withMessage("Vendor Id is required"),
     check("user_id").not().isEmpty().withMessage("User Id is required")

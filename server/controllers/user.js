@@ -13,7 +13,7 @@ const bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator');
 
 module.exports = { list, save, deleteUser,
-                   register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, 
+                   register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, loggedChangePassword, 
                    loginGoogle, parseQueryGoogle, verifyToken, addVendorId,
                    getUserByEmployeeId,};
 
@@ -274,6 +274,40 @@ async function changePassword(req, res){
     }else{
         joResult = await userServiceInstance.doChangePassword(req.body);
     }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function loggedChangePassword(req, res){
+    var joResult;
+
+    var oAuthResult = await userServiceInstance.verifyToken({
+        token: req.headers['x-token'],
+        method: req.headers['x-method']
+    });
+
+    oAuthResult = JSON.parse(oAuthResult);
+
+    if( oAuthResult.status_code == "00" ){
+
+        // Validate first
+        var errors = validationResult(req).array(); 
+        if( errors.length != 0 ){
+            joResult = JSON.stringify({
+                "status_code": "-99",
+                "status_msg":"Parameter has problem",
+                "error_msg": errors
+            });
+        }else{
+            req.body.email = oAuthResult.result_verify.email;
+            req.body.user_id = oAuthResult.result_verify.id;
+            req.body.user_name = oAuthResult.result_verify.name;
+            joResult = await userServiceInstance.doLoggedChangePassword(req.body);
+        }    
+    }else{
+        joResult = (oAuthResult);
+    }
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);

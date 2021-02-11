@@ -18,14 +18,14 @@ const UserRepository = require('../repository/userrepository.js');
 const userRepoInstance = new UserRepository();
 
 // Utility
-const Util = require('../utils/globalutility.js');
-const utilInstance = new Util();
+const Util = require('peters-globallib');
+const _utilInstance = new Util();
 const UtilSecurity = require('../utils/security.js');
 const utilSecureInstance = new UtilSecurity();
 const GoogleUtil = require('../utils/googleutil.js');
-const googleUtilInstance = new GoogleUtil();
+const google_utilInstance = new GoogleUtil();
 const JwtUtil = require('../utils/jwtutil.js');
-const jwtUtilInstance = new JwtUtil();
+const jwt_utilInstance = new JwtUtil();
 
 class UserService {
 
@@ -48,7 +48,7 @@ class UserService {
 
             for(var index in xRows){
                 joArrData.push({
-                    id: await utilInstance.encrypt((xRows[index].id).toString()),
+                    id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
                     email: xRows[index].email,
                     company_id: ( xRows[index].company != null ? xRows[index].company.id : null ),
@@ -96,7 +96,7 @@ class UserService {
                             "id": joResult.created_id,
                             "name": param.name
                         }
-                        resultNotify = await utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
+                        resultNotify = await _utilInstance.axiosRequest(config.api.notification.emailVerification, "POST", notifyParam);
                     }
                     
                 }
@@ -136,9 +136,9 @@ class UserService {
             if( param.act == "update" || param.act == "update_from_employee" ){
 
                 if( param.act == "update" ){
-                    xDec = await utilInstance.decrypt(param.id);
+                    xDec = await _utilInstance.decrypt(param.id);
                 }else if( param.act == "update_from_employee" ){
-                    xDec = await utilInstance.decrypt(param.employee_id);
+                    xDec = await _utilInstance.decrypt(param.employee_id);
                 }
 
                 param.id = parseInt(xDec.decrypted);
@@ -184,7 +184,7 @@ class UserService {
                         param.act = "add_from_employee";
                     }else{
                         if( param.hasOwnProperty("user_id") ){
-                            var xDecUserId = await utilInstance.decrypt(param.user_id);
+                            var xDecUserId = await _utilInstance.decrypt(param.user_id);
                             if( xDecUserId.status_code == "00" ){
                                 param.user_id = xDecUserId.decrypted;                    
                             }else{
@@ -214,7 +214,7 @@ class UserService {
     }
 
     async doVerifyAccount(param){
-        var decryptedVerificationCode = await utilInstance.decrypt( param.code );
+        var decryptedVerificationCode = await _utilInstance.decrypt( param.code );
         if( decryptedVerificationCode.status_code == "00" ){
             var splittedDecryptedCode = decryptedVerificationCode.decrypted.split(config.frontParam.separatorData);
             var email = splittedDecryptedCode[0];
@@ -253,18 +253,18 @@ class UserService {
                 let token = jwt.sign({email:param.email,id:validateEmail.id},config.secret,{expiresIn:config.login.expireToken});
 
                 // Get Employee Info
-                var xEmployeeId = (validateEmail.employee_id != null ? ( await utilInstance.encrypt(validateEmail.employee_id.toString()) ) : 0 );
+                var xEmployeeId = (validateEmail.employee_id != null ? ( await _utilInstance.encrypt(validateEmail.employee_id.toString(), config.cryptoKey.hashKey) ) : 0 );
                 var xUrlAPI = config.api.employeeService.getEmployeeInfo;
                 var xUrlQuery = "/" + xEmployeeId;  
-                var xEmployeeInfo = await utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
+                var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
 
                 return JSON.stringify({
                     "status_code": "00",
                     "status_msg": "Login successfully",
                     "token": token,
-                    "user_id": (validateEmail.id != null ? ( await utilInstance.encrypt(validateEmail.id.toString()) ) : 0 ),
+                    "user_id": (validateEmail.id != null ? ( await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey) ) : 0 ),
                     "level": ( validateEmail.user_level ),
-                    "vendor_id": (validateEmail.vendor_id != null ? ( await utilInstance.encrypt(validateEmail.vendor_id.toString()) ) : 0 ),
+                    "vendor_id": (validateEmail.vendor_id != null ? ( await _utilInstance.encrypt(validateEmail.vendor_id.toString(), config.cryptoKey.hashKey) ) : 0 ),
                     "user_type": validateEmail.type,
                     "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),
                     "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
@@ -312,7 +312,7 @@ class UserService {
                 "status_msg": "Email or password not valid"
             });
         }*/
-        var urlGoogle = await googleUtilInstance.urlGoogle();
+        var urlGoogle = await google_utilInstance.urlGoogle();
         return JSON.stringify({
             "status_code": "00",
             "status_msg": "OK",
@@ -326,8 +326,8 @@ class UserService {
         try{
 
             // Get Token for access the account
-            var joQuery = await utilInstance.parseQueryString(param.code);
-            var joToken = await googleUtilInstance.getToken(joQuery.code);     
+            var joQuery = await _utilInstance.parseQueryString(param.code);
+            var joToken = await google_utilInstance.getToken(joQuery.code);     
             
             // Get user detail using token
             var paramReq = {
@@ -339,7 +339,7 @@ class UserService {
                 }
             }
             
-            var joResultAccountInfo = await utilInstance.axiosRequest(config.login.oAuth2.google.urlUserInfo, paramReq); 
+            var joResultAccountInfo = await _utilInstance.axiosRequest(config.login.oAuth2.google.urlUserInfo, paramReq); 
             var paramRegister = {
                 "name": joResultAccountInfo.data.name,
                 "email": joResultAccountInfo.data.email,
@@ -380,7 +380,7 @@ class UserService {
             let token = jwt.sign({email:param.email,id:validateEmail.id,phrase:"FORGOTPASSWORD"},config.secret,{expiresIn:config.login.expireToken});
             var forgotPasswordCode = token;
             //var forgotPasswordCode = "FORGOTPASSWORD" + config.frontParam.separatorData + param.email + config.frontParam.separatorData + validateEmail.id + config.frontParam.separatorData + token;
-            //forgotPasswordCode = await utilInstance.encrypt(forgotPasswordCode);
+            //forgotPasswordCode = await _utilInstance.encrypt(forgotPasswordCode);
             var verificationLink = config.frontParam.forgotPasswordLink;
             verificationLink = verificationLink.replace("#VERIFICATION_CODE#", forgotPasswordCode);
 
@@ -391,7 +391,7 @@ class UserService {
                 "verification_link": verificationLink
 
             }
-            var resultNotify = await utilInstance.axiosRequestPost(config.api.notification.forgotPassword, notifyParam);
+            var resultNotify = await _utilInstance.axiosRequestPost(config.api.notification.forgotPassword, notifyParam);
 
             if( resultNotify.status_code == "00" ){
                 //Update status in database
@@ -417,7 +417,7 @@ class UserService {
     }
 
     async doVerifyForgotPasswordCode(param){
-        var decryptedVerificationCode = await utilInstance.decrypt( param.code );
+        var decryptedVerificationCode = await _utilInstance.decrypt( param.code );
         if( decryptedVerificationCode.status_code == "00" ){
             var splittedDecryptedCode = decryptedVerificationCode.decrypted.split(config.frontParam.separatorData);
             var prefix = splittedDecryptedCode[0];
@@ -435,7 +435,7 @@ class UserService {
                     return JSON.stringify({
                         "status_code": "00",
                         "status_msg": "Please input your new password",
-                        "id": await utilInstance.encrypt(id)
+                        "id": await _utilInstance.encrypt(id, config.cryptoKey.hashKey)
                     });
                 }
             }else{
@@ -472,7 +472,7 @@ class UserService {
                     return JSON.stringify({
                         "status_code": "00",
                         "status_msg": "Please input your new password",
-                        "id": await utilInstance.encrypt(id)
+                        "id": await _utilInstance.encrypt(id, config.cryptoKey.hashKey)
                     });
                 }
             }else{
@@ -498,7 +498,7 @@ class UserService {
         if( JSON.parse(result).status_code == "00" ){
 
             //Decrypt id from verify code
-            var rsDecrypted = await utilInstance.decrypt( JSON.parse(result).id );
+            var rsDecrypted = await _utilInstance.decrypt( JSON.parse(result).id, config.cryptoKey.hashKey );
 
             //Encrypt the new password
             var encryptedNewPassword = await utilSecureInstance.generateEncryptedPassword(param.new_password);
@@ -525,17 +525,74 @@ class UserService {
 
     }
 
+    async doLoggedChangePassword( param ){
+
+        var xJoResult = {};
+        var xFlagProcess = true;
+        var xDecId = {};
+
+        // Validate old password
+        var validateEmail = await userRepoInstance.isEmailExists( param.email );
+        if( validateEmail != null ){
+            var validatePassword = await bcrypt.compare(param.old_password, validateEmail.password);
+            if( validatePassword ){
+                
+            }else{
+                xFlagProcess = false;
+                xJoResult = {
+                    status_code: '-99',
+                    status_msg: 'Incorrect old password. Please try again using correct old password'
+                }
+            }
+        }
+
+        if( xFlagProcess ){
+            if( param.user_id != '' ){
+                xDecId = await _utilInstance.decrypt( param.user_id, config.cryptoKey.hashKey );
+                if( xDecId.status_code == '00' ){
+                    param.user_id = xDecId.decrypted;
+                }else{
+                    xJoResult = xDecId;
+                    xFlagProcess = false;
+                }
+            }
+    
+            if( xFlagProcess ){
+                //Encrypt the new password
+                var encryptedNewPassword = await utilSecureInstance.generateEncryptedPassword(param.new_password);
+    
+                //Update to database
+                var resultUpdate = await userRepoInstance.changePassword(encryptedNewPassword, param.email, param.user_id);
+                if( resultUpdate.status_code == "00" ){
+                    return JSON.stringify({
+                        "status_code": "00",
+                        "status_msg": "You've successfully change your password."
+                    });
+                }else{
+                    return JSON.stringify({
+                        "status_code": "-99",
+                        "status_msg": "Change password failed. Please try again or contact to our customer service.",
+                        "err_msg": resultUpdate.err_msg
+                    });
+                }
+            }
+        }  
+        
+        return xJoResult;
+
+    }
+
     async verifyToken( param ){
 
         var joResult = {};
 
         if( param.hasOwnProperty('method') && param.hasOwnProperty('token') && param.method != '' && param.token != '' && param.token != 'undefined' && param.method != 'undefined' ){
             if( param.method == 'conventional' ){
-                joResult = await jwtUtilInstance.verifyJWT(param.token);
+                joResult = await jwt_utilInstance.verifyJWT(param.token);
     
                 if( joResult.status_code == "00" ){
                     //Get User Detail by ID
-                    var xDecId = await utilInstance.decrypt(joResult.result_verify.id);
+                    var xDecId = await _utilInstance.decrypt(joResult.result_verify.id);
                     if( xDecId.status_code == '00' ){
                         var xUserId = xDecId.decrypted;
                         var xObjUser = await userRepoInstance.getById( xUserId );
@@ -546,7 +603,7 @@ class UserService {
                     }
                 }
             }else if( param.method == 'google' ){
-                joResult = await utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
+                joResult = await _utilInstance.axiosRequest(config.login.oAuth2.google.urlVerifyToken + param.token,{});
             }
         }else{
             joResult = {
@@ -565,10 +622,10 @@ class UserService {
         var flagProcess = true;
 
         //Decrypt id
-        var xDecVendorId = await utilInstance.decrypt( param.vendor_id );
+        var xDecVendorId = await _utilInstance.decrypt( param.vendor_id );
         if( xDecVendorId.status_code == "00" ){
             param.vendor_id = xDecVendorId.decrypted;
-            var xDecUserId = await utilInstance.decrypt(param.user_id);
+            var xDecUserId = await _utilInstance.decrypt(param.user_id);
             if( xDecUserId.status_code == "00" ){
                 param.user_id = xDecUserId.decrypted;
             }else{
@@ -590,7 +647,7 @@ class UserService {
         var joResult = {}
         var flagProcess = true;
 
-        var xDecId = await utilInstance.decrypt( param.id );
+        var xDecId = await _utilInstance.decrypt( param.id );
         if( xDecId.status_code == "00" ){
             param.id = xDecId.decrypted;
         }else{
