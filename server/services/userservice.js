@@ -258,6 +258,8 @@ class UserService {
                 var xUrlQuery = "/" + xEmployeeId;  
                 var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
 
+                console.log(JSON.stringify(xEmployeeInfo));
+
                 return JSON.stringify({
                     "status_code": "00",
                     "status_msg": "Login successfully",
