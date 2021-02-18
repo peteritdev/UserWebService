@@ -258,8 +258,6 @@ class UserService {
                 var xUrlQuery = "/" + xEmployeeId;  
                 var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
 
-                console.log(JSON.stringify(xEmployeeInfo));
-
                 return JSON.stringify({
                     "status_code": "00",
                     "status_msg": "Login successfully",
@@ -272,7 +270,7 @@ class UserService {
                     "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
                     "username": validateEmail.name,
                     "employee_id": xEmployeeId,
-                    "employee": ( xEmployeeInfo.data.status_code == "00" ? xEmployeeInfo.data.data : null ),
+                    "employee": ( xEmployeeInfo.status_code == "00" ? xEmployeeInfo.data.data : null ),
                 });
             }else{
                 return JSON.stringify({
