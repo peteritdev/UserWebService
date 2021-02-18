@@ -270,7 +270,7 @@ class UserService {
                     "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
                     "username": validateEmail.name,
                     "employee_id": xEmployeeId,
-                    "employee": ( xEmployeeInfo.status_code == "00" ? xEmployeeInfo.data.data : null ),
+                    "employee": ( xEmployeeInfo.status_code == "00" ? xEmployeeInfo.token_data.data : null ),
                 });
             }else{
                 return JSON.stringify({
