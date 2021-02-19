@@ -168,7 +168,8 @@ class UserService {
 
             }
 
-            
+            console.log(">>> Param : " + JSON.stringify(param));
+            console.log(">>> flagExistEmail : " + flagExistEmail);
             
             if( ( (param.act == "update" || param.act == "update_from_employee") && xDec.status_code == "00" ) || ( param.act == "add" ) ){  
                 
