@@ -136,9 +136,9 @@ class UserService {
             if( param.act == "update" || param.act == "update_from_employee" ){
 
                 if( param.act == "update" ){
-                    xDec = await _utilInstance.decrypt(param.id);
+                    xDec = await _utilInstance.decrypt(param.id, config.cryptoKey.hashKey);
                 }else if( param.act == "update_from_employee" ){
-                    xDec = await _utilInstance.decrypt(param.employee_id);
+                    xDec = await _utilInstance.decrypt(param.employee_id, config.cryptoKey.hashKey);
                 }
 
                 param.id = parseInt(xDec.decrypted);
@@ -185,7 +185,7 @@ class UserService {
                         param.act = "add_from_employee";
                     }else{
                         if( param.hasOwnProperty("user_id") ){
-                            var xDecUserId = await _utilInstance.decrypt(param.user_id);
+                            var xDecUserId = await _utilInstance.decrypt(param.user_id, config.cryptoKey.hashKey);
                             if( xDecUserId.status_code == "00" ){
                                 param.user_id = xDecUserId.decrypted;                    
                             }else{
@@ -215,7 +215,7 @@ class UserService {
     }
 
     async doVerifyAccount(param){
-        var decryptedVerificationCode = await _utilInstance.decrypt( param.code );
+        var decryptedVerificationCode = await _utilInstance.decrypt( param.code, config.cryptoKey.hashKey );
         if( decryptedVerificationCode.status_code == "00" ){
             var splittedDecryptedCode = decryptedVerificationCode.decrypted.split(config.frontParam.separatorData);
             var email = splittedDecryptedCode[0];
@@ -418,7 +418,7 @@ class UserService {
     }
 
     async doVerifyForgotPasswordCode(param){
-        var decryptedVerificationCode = await _utilInstance.decrypt( param.code );
+        var decryptedVerificationCode = await _utilInstance.decrypt( param.code, config.cryptoKey.hashKey );
         if( decryptedVerificationCode.status_code == "00" ){
             var splittedDecryptedCode = decryptedVerificationCode.decrypted.split(config.frontParam.separatorData);
             var prefix = splittedDecryptedCode[0];
