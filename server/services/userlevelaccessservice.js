@@ -7,8 +7,7 @@ const dateFormat = require('dateformat');
 const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 
-const env         = process.env.NODE_ENV || 'development';
-const config      = require(__dirname + '/../config/config.json')[env];
+var config = require('../config/config.json');
 
 // Utility
 const Util = require('peters-globallib');

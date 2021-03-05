@@ -6,9 +6,11 @@ const { hash } = require('bcryptjs');
 const Op = sequelize.Op;
 
 //Model
-const modelUser = require('../models').ms_users;
-const modelCompany = require('../models').ms_companies;
-const modelUserLevel = require('../models').ms_userlevels;  
+const _modelUser = require('../models').ms_users;
+const _modelCompany = require('../models').ms_companies;
+const _modelUserUserLevel = require('../models').ms_useruserlevels;
+const _modelUserLevel = require('../models').ms_userlevels;  
+const _modelApplication = require('../models').ms_applications;
 
 //Utils
 const UtilSecurity = require('../utils/security.js');
@@ -20,37 +22,69 @@ class UserRepository {
     constructor(){}
 
     async getUserByEmployeeId( pId ){
-        var data = await modelUser.findOne({
+        var data = await _modelUser.findOne({
             where: {
                 employee_id: pId,
-            }
+            },
+            include:[
+                {
+                    model: _modelCompany,
+                    as: 'company'
+                },
+                {
+                    attributes: ["id"],
+                    model: _modelUserLevel,
+                    as: 'user_level',
+                    through: {
+                        attributes: [],
+                    },
+                    include: [
+                        {
+                            attributes: ['id','name'],
+                            model: _modelApplication,
+                            as: 'application',
+                        }
+                    ]
+                }
+            ]
         });
 
         return data;
     }
 
     async getById( pId ){
-        var data = await modelUser.findOne({
+        var data = await _modelUser.findOne({
             where: {
                 id: pId,
             },
-            /*include: [
+            include:[
                 {
-                    model: _modelUserLevel,
-                    as: 'level',
+                    model: _modelCompany,
+                    as: 'company'
                 },
                 {
-                    model: _modelUnitKerja,
-                    as: 'unit_kerja',
+                    attributes: ["id"],
+                    model: _modelUserLevel,
+                    as: 'user_level',
+                    through: {
+                        attributes: [],
+                    },
+                    include: [
+                        {
+                            attributes: ['id','name'],
+                            model: _modelApplication,
+                            as: 'application',
+                        }
+                    ]
                 }
-            ]*/
+            ]
         });
 
         return data;
     }
 
     async isEmailExists( pEmail ){
-        var data = await modelUser.findOne({
+        var data = await _modelUser.findOne({
             where:{
                 email: {
                     [Op.like]: pEmail
@@ -58,11 +92,11 @@ class UserRepository {
             },
             include:[
                 {
-                    model: modelCompany,
+                    model: _modelCompany,
                     as: 'company'
                 },
                 {
-                    model: modelUserLevel,
+                    model: _modelUserLevel,
                     as: 'user_level', 
                 }
             ],
@@ -81,7 +115,7 @@ class UserRepository {
             }
         }
 
-        var data = await modelUser.findAndCountAll({
+        var data = await _modelUser.findAndCountAll({
             where: {
                 [Op.or]:[
                     {
@@ -97,16 +131,32 @@ class UserRepository {
                 ],
                 [Op.and]:[
                     {
-                        type: 1
+                        // type: 1
+                        // '$user_app.is_delete$': 0,
                     },jWhereCompany
                 ]
 
             },
             include:[
                 {
-                    model: modelCompany,
+                    model: _modelCompany,
                     as: 'company'
                 },
+                {
+                    attributes: ["id"],
+                    model: _modelUserLevel,
+                    as: 'user_level',
+                    through: {
+                        attributes: [],
+                    },
+                    include: [
+                        {
+                            attributes: ['id','name'],
+                            model: _modelApplication,
+                            as: 'application',
+                        }
+                    ]
+                }
             ],
             limit: param.limit,
             offset: param.offset
@@ -120,7 +170,7 @@ class UserRepository {
     }
 
     async verifyVerificationCode( pEmail, pId ){
-        var data = await modelUser.findOne({
+        var data = await _modelUser.findOne({
             where:{
                 email: pEmail,
                 id: pId
@@ -142,7 +192,7 @@ class UserRepository {
             var created = null;
 
             if( param.method == 'conventional' ){
-                created = await modelUser.create({
+                created = await _modelUser.create({
                     name: param.name,
                     email: param.email,
                     password: hashedPassword,
@@ -154,7 +204,7 @@ class UserRepository {
                     employee_id: param.employee_id,
                 },{transaction});
             }else if( param.method == 'google' ){
-                created = await modelUser.create({
+                created = await _modelUser.create({
                     name: param.name,
                     email: param.email,
                     password: hashedPassword,
@@ -237,13 +287,13 @@ class UserRepository {
                 }
                 
                 if( param.act == "update" || param.act == "update_from_employee"  ){
-                    saved = await modelUser.update(joDataUpdate,
+                    saved = await _modelUser.update(joDataUpdate,
                         {
                             where: xWhere,
                         },
                         {transaction});
                 }else if( param.act == "add_from_employee" ){
-                    saved = await modelUser.create(joDataUpdate,{transaction});
+                    saved = await _modelUser.create(joDataUpdate,{transaction});
                 }              
                 
             }       
@@ -277,7 +327,7 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await modelUser.update({
+            var updated = await _modelUser.update({
                 "status": 1,
                 "verified_at": currDateTime
             },{
@@ -313,7 +363,7 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await modelUser.update({
+            var updated = await _modelUser.update({
                 "status": 2,
                 "forgot_password_at": currDateTime
             },{
@@ -349,7 +399,7 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await modelUser.update({
+            var updated = await _modelUser.update({
                 "status": 1,
                 "password": pNewPassword
             },{
@@ -394,7 +444,7 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await modelUser.update({
+            var updated = await _modelUser.update({
                 "google_token": pToken,
                 "google_token_expire": pExpire,
                 "google_token_id": pIdToken,
@@ -435,7 +485,7 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await modelUser.update({
+            var updated = await _modelUser.update({
                 vendor_id: pVendorId,
             },{
                 where:{
@@ -470,7 +520,7 @@ class UserRepository {
 		
 			var saved = null;
             transaction = await sequelize.transaction();
-            saved = await modelUser.destroy({
+            saved = await _modelUser.destroy({
                 where: {
                     id: param.id
                 }

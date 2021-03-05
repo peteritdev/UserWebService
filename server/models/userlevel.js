@@ -9,6 +9,7 @@ module.exports = ( sequelize, DataTypes ) => {
         },
         name: DataTypes.STRING,
         app: DataTypes.STRING,
+        application_id: DataTypes.INTEGER,
         is_delete: DataTypes.INTEGER,
         deleted_at: DataTypes.DATE,
         deleted_by: DataTypes.INTEGER,
@@ -31,6 +32,19 @@ module.exports = ( sequelize, DataTypes ) => {
         updated_by_name: DataTypes.STRING,
 
     } );
+
+    UserLevel.associate = function(models){
+        UserLevel.belongsTo( models.ms_applications, {
+            foreignKey: 'application_id',
+            as: 'application',
+            onDelete: 'CASCADE',
+        } );
+        UserLevel.belongsToMany( models.ms_users,{
+            through: 'ms_useruserlevels',
+            as: 'user',
+            foreignKey: 'user_level_id',
+        } );
+    }
 
     return UserLevel;
 }

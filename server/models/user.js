@@ -49,11 +49,17 @@ module.exports = (sequelize, DataTypes) => {
       as: 'company'
     } );
 
-    User.belongsTo( models.ms_userlevels, {
-      foreignKey: 'user_level_id',
-      onDelete: 'CASCADE',
+    // User.belongsTo( models.ms_userlevels, {
+    //   foreignKey: 'user_level_id',
+    //   onDelete: 'CASCADE',
+    //   as: 'user_level',
+    // } );
+
+    User.belongsToMany( models.ms_userlevels,{
+      through: 'ms_useruserlevels',
       as: 'user_level',
-    } );
+      foreignKey: 'user_id',
+  } );
   }
 
   return User;

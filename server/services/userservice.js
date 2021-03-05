@@ -27,6 +27,9 @@ const google_utilInstance = new GoogleUtil();
 const JwtUtil = require('../utils/jwtutil.js');
 const jwt_utilInstance = new JwtUtil();
 
+const LocalUtil = require('../utils/globalutility.js');
+const _localUtilInstance = new LocalUtil();
+
 class UserService {
 
     constructor(){}
@@ -47,9 +50,11 @@ class UserService {
             var xRows = xResultList.data.rows;
 
             for(var index in xRows){
+
                 joArrData.push({
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
+                    user_level: ( xRows[index].user_level == null ? null : xRows[index].user_level),
                     email: xRows[index].email,
                     company_id: ( xRows[index].company != null ? xRows[index].company.id : null ),
                     company_name: ( xRows[index].company != null ? xRows[index].company.name : '' ),
@@ -258,6 +263,8 @@ class UserService {
                 var xUrlAPI = config.api.employeeService.getEmployeeInfo;
                 var xUrlQuery = "/" + xEmployeeId;  
                 var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
+
+                console.log(JSON.stringify(xEmployeeInfo));
 
                 return JSON.stringify({
                     "status_code": "00",
@@ -593,13 +600,14 @@ class UserService {
     
                 if( joResult.status_code == "00" ){
                     //Get User Detail by ID
-                    var xDecId = await _utilInstance.decrypt(joResult.result_verify.id);
+                    var xDecId = await _utilInstance.decrypt(joResult.result_verify.id, config.cryptoKey.hashKey);
+                    
                     if( xDecId.status_code == '00' ){
                         var xUserId = xDecId.decrypted;
                         var xObjUser = await userRepoInstance.getById( xUserId );
                         if( xObjUser != null ){
                             joResult.result_verify.name = xObjUser.name;
-                            joResult.result_verify.user_level_id = xObjUser.level_id;
+                            joResult.result_verify.user_level_id = xObjUser.user_level_id;
                         }
                     }
                 }
@@ -664,23 +672,63 @@ class UserService {
     async getUserByEmployeeId(pId){
 
         var xJoResult = {};
-        var xResult = await userRepoInstance.getUserByEmployeeId( pId );
+        var xDecId = null;
+        var xFlagProcess = true;
+        var xData = {};
 
-        if( xResult !== null ){
-            xJoResult = {
-                "status_code": "00",
-                "status_msg": "OK",
-                "data": xResult,
-            }
-        }else{
-            xJoResult = {
-                "status_code": "-99",
-                "status_msg": "Data not found",
+        if( pId.length == 65 ){
+            xDecId = await _utilInstance.decrypt( pId, config.cryptoKey.hashKey );
+            if( xDecId.status_code == '00' ){
+                pId = xDecId.decrypted;
+            }else{
+                xFlagProcess = false;
+                xJoResult = xDecId;
             }
         }
 
+        if( xFlagProcess ){
+            var xResult = await userRepoInstance.getUserByEmployeeId( pId );
+
+            if( xResult != null ){
+
+                xData = {
+                    id: await _utilInstance.encrypt( xResult.id, config.cryptoKey.hashKey),
+                    employee_id: await _utilInstance.encrypt( xResult.employee_id, config.cryptoKey.hashKey),
+                    name: xResult.name,
+                    email: xResult.email,
+                    status: xResult.status,
+                    verified_at: xResult.verified_at,
+                    sanqua_company_id: xResult.sanqua_company_id,
+                    company: xResult.company,
+                }
+
+                if( xResult.user_level != null ){
+                    console.log(">>> HERE : ");
+                    // Reformat user_level key
+                    var xJsonUserLevel = await _localUtilInstance.reformatJSONUserLevel( xResult.user_level );
+                    // xResult.user_level = xJsonUserLevel;
+                    // console.log(JSON.stringify(xResult));
+                    xData.application = xJsonUserLevel;
+                }
+                
+
+                xJoResult = {
+                    "status_code": "00",
+                    "status_msg": "OK",
+                    "data": xData,
+                }
+            }else{
+                xJoResult = {
+                    "status_code": "-99",
+                    "status_msg": "Data not found",
+                }
+            }
+        }        
+
         return xJoResult;
     }
+
+
 
 };
 

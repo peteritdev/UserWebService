@@ -1,4 +1,4 @@
-const userLevelController = require('../controllers').userLevel;
+const userUserLevelController = require('../controllers').userUserLevel;
 const { check, validationResult } = require('express-validator');
 
 var rootAPIPath = '/api/oauth/v1/';
@@ -16,28 +16,22 @@ module.exports = (app) => {
 
     arrValidate = [];
     arrValidate = [
-        check('name').not().isEmpty().withMessage('Parameter name is required'),
-        check('application_id','Parameter application_id is required and must be numeric').not().isEmpty().isInt(),
+        check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
+        check('user_level_id','Parameter user_level_id is required and must be numeric').not().isEmpty().isInt(),
     ];
-    app.post( rootAPIPath + 'user_level/save', arrValidate, userLevelController.save );
+    app.post( rootAPIPath + 'user_app/save', arrValidate, userUserLevelController.userUserLevel_Save );
 
     arrValidate = [];
     arrValidate = [
         check('limit','Parameter limit is required and must be numeric').not().isEmpty().isInt(),
         check('offset','Parameter offset is required and must be numeric').not().isEmpty().isInt(),
-        check('app').not().isEmpty().withMessage('Parameter app is required'),
+        check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
     ];
-    app.get( rootAPIPath + 'user_level/list', arrValidate, userLevelController.list );
-
-    arrValidate = [];
-    arrValidate = [
-        check('application_id').not().isEmpty().withMessage('Parameter application_id is required'),
-    ];
-    app.get( rootAPIPath + 'user_level/drop_down', arrValidate, userLevelController.dropDownList );
+    app.get( rootAPIPath + 'user_app/list', arrValidate, userUserLevelController.userUserLevel_List );
 
     arrValidate = [];
     arrValidate = [
         check('id').not().isEmpty().withMessage('Parameter id is required'),
     ];
-    app.post( rootAPIPath + 'user_level/delete/:id', arrValidate, userLevelController.deleteUserLevel );
+    app.delete( rootAPIPath + 'user_app/delete/:id', arrValidate, userUserLevelController.userUserLevel_Delete );
 }

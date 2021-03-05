@@ -1,93 +1,102 @@
 var env = process.env.NODE_ENV || 'development';
-var configEnv = require(__dirname + '/../config/config.json')[env];
+var config = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
+var sequelize = new Sequelize(config.database, config.username, config.password, config);
 const { hash } = require('bcryptjs');
 const Op = sequelize.Op;
 
-// Model
-const _modelDb = require('../models').ms_userlevels;
+//Model
+const _modelDb = require('../models').ms_useruserlevels;
+const _modelUser = require('../models').ms_users;
+const _modelUserLevel = require('../models').ms_userlevels;
+const _modelApp = require('../models').ms_applications;
 
-// Utils
-const Util = require('peters-globallib');
-const _utilInstance = new Util();
+const Utility = require('peters-globallib');
+const _utilInstance = new Utility();
 
-class UserLevelRepository {
+
+
+class UserUserLevelRepository{
     constructor(){}
 
-    async getById( pParam ){
-        var xData = _modelDb.findOne({
-            where: {
-                id: pParam.id,
-            }
-        });
-
-        return xData;
-    }
-
     async list( pParam ){
-        var xOrder = ['name', 'ASC'];
-        var xWhereApp = {};
 
-        if( pParam.hasOwnProperty('order_by') && pParam.order_by != '' ){
+        var xWhere = {};
+
+        var xOrder = ['id', 'ASC'];
+        var xInclude = [
+            {
+                model: _modelUserLevel,
+                as: 'user_level',
+                include: [
+                    {
+                        model: _modelApp,
+                        as: 'application',
+                    }
+                ]
+            }
+        ];
+
+        if( pParam.hasOwnProperty('employee_user_id') ){
+            if( pParam.employee_user_id != '' ){
+                xWhere = {
+                    user_id: pParam.employee_user_id,
+                }
+            }
+        }
+
+        if( pParam.order_by != '' && pParam.hasOwnProperty('order_by') ){
             xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
         }
 
-        if( pParam.hasOwnProperty('app') && pParam.app != '' ){
-            xWhereApp = {
-                app: pParam.app,
-            }
-        }
-
-        if( pParam.hasOwnProperty('application_id') ){
-            xWhereApp = {
-                application_id: pParam.application_id,
-            }
-        }
-
-        var xParam = {
+        var xParamQuery = {
             where: {
                 [Op.and]:[
                     {
                         is_delete: 0
                     },
-                    xWhereApp,
+                    xWhere,
                 ],
-                [Op.or]:[
-                    {
-                        name: {
-                            [Op.iLike]: '%' + pParam.keyword + '%'
-                        },
-                    },
-                    {
-                        app: {
-                            [Op.iLike]: '%' + pParam.keyword + '%'
-                        },
-                    }
-                ]
-
-            },
-            /*include:[
-                xJoinedTable,
-            ],*/
-            order: [
-                xOrder
-            ]
+            },          
+            include: xInclude,  
+            order: [xOrder],
         };
 
         if( pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit') ){
-            if( pParam.offset != '' && pParam.limit != '' ){
-                xParam.offset = pParam.offset;
-                xParam.limit = pParam.limit;
+            if( pParam.offset != '' && pParam.limit != ''){
+                xParamQuery.offset = pParam.offset;
+                xParamQuery.limit = pParam.limit;
             }
         }
 
-        var xData = await _modelDb.findAndCountAll(xParam);
+        var xData = await _modelDb.findAndCountAll(xParamQuery);
 
         return xData;
     }
 
-    async save( pParam, pAct ){
+    async isDataExists( pParam ){
+        var data = await _modelDb.findOne({
+            where: {
+                user_id: pParam.user_id,
+                user_level_id: pParam.user_level_id,
+            }
+        });
+        
+        return data;
+    }
+
+    async getById( pParam ){
+        var xData = await _modelDb.findOne({
+            where: {
+                id: pParam.id,
+                is_delete: 0,
+            },
+        });
+
+        return xData;
+    }
+
+    async save(pParam, pAct){
         let xTransaction;
         var xJoResult = {};
         
@@ -110,6 +119,7 @@ class UserLevelRepository {
                     xJoResult = {
                         status_code: "00",
                         status_msg: "Data has been successfully saved",
+                        created_id: await _utilInstance.encrypt( (xSaved.id).toString(), config.cryptoKey.hashKey ),
                     }                     
                     
 
@@ -152,27 +162,30 @@ class UserLevelRepository {
                 status_msg: "Failed save or update data. Error : " + e,
                 err_msg: e
             }
-
             
         }
         
         return xJoResult;
     }
 
-    async delete(pParam){
+    async delete( pParam ){
         let xTransaction;
         var xJoResult = {};
-        var xId = pParam.id;
-        delete pParam.id;
 
         try{
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
-            xSaved = await _modelDb.destroy(
+            xSaved = await _modelDb.update(
+                {
+                    is_delete: 1,
+                    deleted_by: pParam.deleted_by,
+                    deleted_by_name: pParam.deleted_by_name,
+                    deleted_at: await _utilInstance.getCurrDateTime(),
+                },
                 {
                     where: {
-                        id: xId
+                        id: pParam.id
                     }
                 },
                 {xTransaction}
@@ -196,8 +209,9 @@ class UserLevelRepository {
             }
 
             return xJoResult;
-        }        
+        }
     }
 }
 
-module.exports = UserLevelRepository;
+module.exports = UserUserLevelRepository;
+

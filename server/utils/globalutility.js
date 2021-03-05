@@ -9,6 +9,19 @@ const urlQueryParser = require('query-string');
 
 class GlobalUtility{
 
+    async reformatJSONUserLevel( pJson ){
+        
+        var xApplication = [];
+
+        for( var i = 0; i < pJson.length; i++ ){
+            if( pJson[i].hasOwnProperty('application') ){
+                xApplication.push( pJson[i].application.name );
+            }            
+        }
+
+        return xApplication;
+    }
+
     async getCurrDateTime(){
         var dt = dateTime.create();
         var formatted = dt.format('Y-m-d H:M:S');
