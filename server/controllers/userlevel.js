@@ -10,9 +10,9 @@ const _oAuthServiceInstance = new OAuthService();
 
 const { check, validationResult } = require('express-validator');
 
-module.exports = { save, list, dropDownList, deleteUserLevel, getUserLevelById }
+module.exports = { save, list, dropDownList, deleteUserLevel, getById }
 
-async function getUserLevelById( req, res ){
+async function getById( req, res ){
     var xJoResult = {};
     var xOAuthResult = await _oAuthServiceInstance.verifyToken( { token: req.headers['x-token'], method: req.headers['x-method'] } );
     xOAuthResult = JSON.parse(xOAuthResult);
@@ -29,7 +29,7 @@ async function getUserLevelById( req, res ){
                 });
             }else{
                 
-                xJoResult = await _userLevelServiceInstance.getUserLevelById(req.params);
+                xJoResult = await _userLevelServiceInstance.getById(req.params);
                 xJoResult = JSON.stringify(xJoResult);
                 console.log(xJoResult);
             }

@@ -8,6 +8,7 @@ const Op = sequelize.Op;
 // Model
 const _modelDb = require('../models').ms_userlevelaccess;
 const _modelMenu = require('../models').ms_menus;
+const _modelApplication = require('../models').ms_applications;
 
 // Utils
 const Util = require('peters-globallib');
@@ -76,6 +77,14 @@ class UserLevelRepository {
         xJoinedTable.push({
             model: _modelMenu,
             as: 'menu',
+            attributes: ['id','name','path'],
+            include: [
+                {
+                    model: _modelApplication,
+                    as: 'application',
+                    attributes: ['id','name'],
+                }
+            ]
         });
 
         var xParam = {

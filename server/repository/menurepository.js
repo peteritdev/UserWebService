@@ -7,6 +7,7 @@ const Op = sequelize.Op;
 
 // Model
 const _modelDb = require('../models').ms_menus;
+const _modelApplication = require('../models').ms_applications;
 
 // Utils
 const Util = require('peters-globallib');
@@ -28,6 +29,7 @@ class MenuRepository {
     async list( pParam ){
         var xOrder = ['name', 'ASC'];
         var xWhereApp = {};
+        var xInclude = [];
 
         if( pParam.hasOwnProperty('order_by') && pParam.order_by != '' ){
             xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
@@ -38,6 +40,14 @@ class MenuRepository {
                 app: pParam.app,
             }
         }
+
+        xInclude = [
+            {
+                model: _modelApplication,
+                as: 'application',
+                attributes: ['id', 'name'],
+            }
+        ];
 
         var xParam = {
             where: {
@@ -61,9 +71,7 @@ class MenuRepository {
                 ]
 
             },
-            /*include:[
-                xJoinedTable,
-            ],*/
+            include:xInclude,
             order: [
                 xOrder
             ]

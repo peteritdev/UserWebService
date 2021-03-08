@@ -23,7 +23,7 @@ class UserLevelService{
 
     async getById(pParam){
         var xJoResult = {};
-        var xFlagProcess = false;
+        var xFlagProcess = true;
         
         var xDecId = await _utilInstance.decrypt( pParam.id, config.cryptoKey.hashKey );
         if( xDecId.status_code == '00' ){
@@ -32,7 +32,7 @@ class UserLevelService{
             xJoResult = xDecId;
             xFlagProcess = false;
         }
-
+        
         if( xFlagProcess )xJoResult = await _userLevelRepository.getById(pParam);
 
         return xJoResult;
@@ -58,7 +58,7 @@ class UserLevelService{
                 xJoArrData.push({
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
-                    app: xRows[index].app,
+                    application: xRows[index].application,
                     created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updated_at: moment(xRows[index].updatedAt).format('YYYY-MM-DD HH:mm:ss'),
                 });

@@ -32,7 +32,7 @@ class UserRepository {
                     as: 'company'
                 },
                 {
-                    attributes: ["id"],
+                    attributes: ["id","name"],
                     model: _modelUserLevel,
                     as: 'user_level',
                     through: {
@@ -63,7 +63,7 @@ class UserRepository {
                     as: 'company'
                 },
                 {
-                    attributes: ["id"],
+                    attributes: ["id","name"],
                     model: _modelUserLevel,
                     as: 'user_level',
                     through: {
@@ -96,8 +96,19 @@ class UserRepository {
                     as: 'company'
                 },
                 {
+                    attributes: ["id","name"],
                     model: _modelUserLevel,
-                    as: 'user_level', 
+                    as: 'user_level',
+                    through: {
+                        attributes: [],
+                    },
+                    include: [
+                        {
+                            attributes: ['id','name'],
+                            model: _modelApplication,
+                            as: 'application',
+                        }
+                    ]
                 }
             ],
         });
@@ -143,7 +154,7 @@ class UserRepository {
                     as: 'company'
                 },
                 {
-                    attributes: ["id"],
+                    attributes: ["id","name"],
                     model: _modelUserLevel,
                     as: 'user_level',
                     through: {

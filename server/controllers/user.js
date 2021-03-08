@@ -187,6 +187,7 @@ async function login(req, res){
             "error_msg": errors
         });
     }else{
+        req.body.application_id = req.headers['x-application-id'];
         joResult = await userServiceInstance.doLogin(req.body);
     }    
     

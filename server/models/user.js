@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       through: 'ms_useruserlevels',
       as: 'user_level',
       foreignKey: 'user_id',
-  } );
+    } );
   }
 
   return User;

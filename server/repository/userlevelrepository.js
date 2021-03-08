@@ -7,6 +7,7 @@ const Op = sequelize.Op;
 
 // Model
 const _modelDb = require('../models').ms_userlevels;
+const _modelApplication = require('../models').ms_applications;
 
 // Utils
 const Util = require('peters-globallib');
@@ -16,10 +17,20 @@ class UserLevelRepository {
     constructor(){}
 
     async getById( pParam ){
+        console.log(">> GO TO REPO");
+        var xInclude = [
+            {
+                model: _modelApplication,
+                as: 'application',
+                attributes: ['id','name'],
+            }
+        ];
+        console.log('>>> GET HERE...');
         var xData = _modelDb.findOne({
             where: {
                 id: pParam.id,
-            }
+            },
+            include: xInclude,
         });
 
         return xData;
@@ -28,22 +39,25 @@ class UserLevelRepository {
     async list( pParam ){
         var xOrder = ['name', 'ASC'];
         var xWhereApp = {};
+        var xInclude = [];
 
         if( pParam.hasOwnProperty('order_by') && pParam.order_by != '' ){
             xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
         }
 
-        if( pParam.hasOwnProperty('app') && pParam.app != '' ){
-            xWhereApp = {
-                app: pParam.app,
-            }
-        }
-
-        if( pParam.hasOwnProperty('application_id') ){
+        if( pParam.hasOwnProperty('application_id') && pParam.application_id != '' ){
             xWhereApp = {
                 application_id: pParam.application_id,
             }
         }
+
+        xInclude = [
+            {
+                model: _modelApplication,
+                as: 'application',
+                attributes: ['id','name'],
+            }
+        ];
 
         var xParam = {
             where: {
@@ -67,9 +81,7 @@ class UserLevelRepository {
                 ]
 
             },
-            /*include:[
-                xJoinedTable,
-            ],*/
+            include:xInclude,
             order: [
                 xOrder
             ]

@@ -251,35 +251,65 @@ class UserService {
 
     async doLogin( param ){
         var validateEmail = await userRepoInstance.isEmailExists( param.email );
+        var xFlagProcess = true;
+
         if( validateEmail != null ){
             var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
             if( validatePassword ){
 
-                // Generate JWT Token
-                let token = jwt.sign({email:param.email,id:validateEmail.id},config.secret,{expiresIn:config.login.expireToken});
+                // Check if this user has privilege based on assigned application_id
+                if( param.application_id != '' ){
 
-                // Get Employee Info
-                var xEmployeeId = (validateEmail.employee_id != null ? ( await _utilInstance.encrypt(validateEmail.employee_id.toString(), config.cryptoKey.hashKey) ) : 0 );
-                var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-                var xUrlQuery = "/" + xEmployeeId;  
-                var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
+                    // Check if administrator
+                    var xTempFilterAdministrator = (validateEmail.user_level).filter( x => x.application.id == 1 );
+                    if( xTempFilterAdministrator.length == 0 ){
+                        // Check if non administrator
+                        var xTempFilter = (validateEmail.user_level).filter( x => x.application.id == param.application_id );
+                        if( xTempFilter.length == 0 ){
+                            return JSON.stringify({
+                                "status_code": "-99",
+                                "status_msg": "You don't have privilege to access this page"
+                            });
+                        }
+                    }
+                    
+                    
+                }else{
+                    xFlagProcess = false;
+                    return JSON.stringify({
+                        "status_code": "-99",
+                        "status_msg": "You need to supply application id to use this api"
+                    });
+                }
 
-                console.log(JSON.stringify(xEmployeeInfo));
+                if( true ){
+                    // Generate JWT Token
+                    let token = jwt.sign({email:param.email,id:validateEmail.id},config.secret,{expiresIn:config.login.expireToken});
 
-                return JSON.stringify({
-                    "status_code": "00",
-                    "status_msg": "Login successfully",
-                    "token": token,
-                    "user_id": (validateEmail.id != null ? ( await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey) ) : 0 ),
-                    "level": ( validateEmail.user_level ),
-                    "vendor_id": (validateEmail.vendor_id != null ? ( await _utilInstance.encrypt(validateEmail.vendor_id.toString(), config.cryptoKey.hashKey) ) : 0 ),
-                    "user_type": validateEmail.type,
-                    "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),
-                    "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
-                    "username": validateEmail.name,
-                    "employee_id": xEmployeeId,
-                    "employee": ( xEmployeeInfo.status_code == "00" ? xEmployeeInfo.token_data.data : null ),
-                });
+                    // Get Employee Info
+                    var xEmployeeId = (validateEmail.employee_id != null ? ( await _utilInstance.encrypt(validateEmail.employee_id.toString(), config.cryptoKey.hashKey) ) : 0 );
+                    var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+                    var xUrlQuery = "/" + xEmployeeId;  
+                    var xEmployeeInfo = await _utilInstance.axiosRequest( ( xUrlAPI + xUrlQuery ), {} );
+
+                    console.log(JSON.stringify(xEmployeeInfo));
+
+                    return JSON.stringify({
+                        "status_code": "00",
+                        "status_msg": "Login successfully",
+                        "token": token,
+                        "user_id": (validateEmail.id != null ? ( await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey) ) : 0 ),
+                        "level": ( validateEmail.user_level ),
+                        "vendor_id": (validateEmail.vendor_id != null ? ( await _utilInstance.encrypt(validateEmail.vendor_id.toString(), config.cryptoKey.hashKey) ) : 0 ),
+                        "user_type": validateEmail.type,
+                        "sanqua_company_id": ( validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0 ),
+                        "sanqua_company_name": ( validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : "" ),
+                        "username": validateEmail.name,
+                        "employee_id": xEmployeeId,
+                        "employee": ( xEmployeeInfo.status_code == "00" ? xEmployeeInfo.token_data.data : null ),
+                    });
+                }
+
             }else{
                 return JSON.stringify({
                     "status_code": "-99",
@@ -703,7 +733,6 @@ class UserService {
                 }
 
                 if( xResult.user_level != null ){
-                    console.log(">>> HERE : ");
                     // Reformat user_level key
                     var xJsonUserLevel = await _localUtilInstance.reformatJSONUserLevel( xResult.user_level );
                     // xResult.user_level = xJsonUserLevel;

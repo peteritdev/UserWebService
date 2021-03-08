@@ -25,9 +25,14 @@ module.exports = (app) => {
     arrValidate = [
         check('limit','Parameter limit is required and must be numeric').not().isEmpty().isInt(),
         check('offset','Parameter offset is required and must be numeric').not().isEmpty().isInt(),
-        check('app').not().isEmpty().withMessage('Parameter app is required'),
     ];
     app.get( rootAPIPath + 'user_level/list', arrValidate, userLevelController.list );
+
+    arrValidate = [];
+    arrValidate = [
+        check('id').not().isEmpty().withMessage('Parameter id is required'),
+    ];
+    app.get( rootAPIPath + 'user_level/detail/:id', arrValidate, userLevelController.getById );
 
     arrValidate = [];
     arrValidate = [

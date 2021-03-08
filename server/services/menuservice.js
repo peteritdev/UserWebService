@@ -58,7 +58,7 @@ class MenuService{
                 xJoArrData.push({
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
-                    app: xRows[index].app,
+                    application: xRows[index].application,
                     path: xRows[index].path,
                     created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updated_at: moment(xRows[index].updatedAt).format('YYYY-MM-DD HH:mm:ss'),

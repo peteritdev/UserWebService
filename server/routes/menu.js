@@ -17,7 +17,7 @@ module.exports = (app) => {
     arrValidate = [];
     arrValidate = [
         check('name').not().isEmpty().withMessage('Parameter name is required'),
-        check('app').not().isEmpty().withMessage('Parameter app is required'),
+        check('application_id','Parameter application_id is required and must be numeric').not().isEmpty().isInt(),
     ];
     app.post( rootAPIPath + 'menu/save', arrValidate, menuController.save );
 
@@ -25,14 +25,11 @@ module.exports = (app) => {
     arrValidate = [
         check('limit','Parameter limit is required and must be numeric').not().isEmpty().isInt(),
         check('offset','Parameter offset is required and must be numeric').not().isEmpty().isInt(),
-        check('app').not().isEmpty().withMessage('Parameter app is required'),
+        // check('app').not().isEmpty().withMessage('Parameter app is required'),
     ];
     app.get( rootAPIPath + 'menu/list', arrValidate, menuController.list );
 
     arrValidate = [];
-    arrValidate = [
-        check('app').not().isEmpty().withMessage('Parameter app is required'),
-    ];
     app.get( rootAPIPath + 'menu/drop_down', arrValidate, menuController.dropDownList );
 
     arrValidate = [];

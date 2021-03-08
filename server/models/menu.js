@@ -33,5 +33,13 @@ module.exports = ( sequelize, DataTypes ) => {
         updated_by_name: DataTypes.STRING,
     });
 
+    Menu.associate = function(models){
+        Menu.belongsTo( models.ms_applications, {
+            foreignKey: 'application_id',
+            as: 'application',
+            onDelete: 'CASCADE',
+        } );
+    }
+
     return Menu;
 }
