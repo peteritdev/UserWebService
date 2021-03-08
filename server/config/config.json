@@ -3,8 +3,8 @@
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
-    "host": "127.0.0.1",
-    "port":5432,
+    "host": "localhost",
+    "port":5435,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
@@ -33,7 +33,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
       }
       
     },
