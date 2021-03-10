@@ -25,7 +25,7 @@ module.exports = (app) => {
     arrValidate = [
         check('limit','Parameter limit is required and must be numeric').not().isEmpty().isInt(),
         check('offset','Parameter offset is required and must be numeric').not().isEmpty().isInt(),
-        check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
+        // check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
     ];
     app.get( rootAPIPath + 'user_app/list', arrValidate, userUserLevelController.userUserLevel_List );
 

@@ -34,6 +34,10 @@ class UserUserLevelRepository{
                         as: 'application',
                     }
                 ]
+            },
+            {
+                model: _modelUser,
+                as: 'user',
             }
         ];
 
@@ -41,6 +45,14 @@ class UserUserLevelRepository{
             if( pParam.employee_user_id != '' ){
                 xWhere = {
                     user_id: pParam.employee_user_id,
+                }
+            }
+        }
+
+        if( pParam.hasOwnProperty('employee_id') ){
+            if( pParam.employee_id != '' ){
+                xWhere = {
+                    '$user.employee_id$': pParam.employee_id,
                 }
             }
         }

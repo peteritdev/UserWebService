@@ -27,15 +27,32 @@ class UserUserLevelService {
         var xJoArrData = [];
         var xFlagProcess = true;
 
-        if( pParam.employee_user_id != '' ){
-            var xDecId = await _utilInstance.decrypt( pParam.employee_user_id, config.cryptoKey.hashKey );
-            if( xDecId.status_code == '00' ){
-                pParam.employee_user_id = xDecId.decrypted;
-            }else{
-                xFlagProcess = false;
-                xJoResult = xDecId;
+        if( pParam.hasOwnProperty('employee_user_id') ){
+            if( pParam.employee_user_id != '' ){
+                console.log(">>> HERE");
+                var xDecId = await _utilInstance.decrypt( pParam.employee_user_id, config.cryptoKey.hashKey );
+                if( xDecId.status_code == '00' ){
+                    pParam.employee_user_id = xDecId.decrypted;
+                }else{
+                    xFlagProcess = false;
+                    xJoResult = xDecId;
+                }
             }
-        }
+        }        
+
+        if( pParam.hasOwnProperty('employee_id') ){
+            if( pParam.employee_id != '' ){
+                var xDecId = await _utilInstance.decrypt( pParam.employee_id, config.cryptoKey.hashKey );
+                console.log(JSON.stringify(xDecId));
+                if( xDecId.status_code == '00' ){
+                    pParam.employee_id = xDecId.decrypted;
+                }else{
+                    xFlagProcess = false;
+                    xJoResult = xDecId;
+                }
+            }
+        }   
+        
         
         if( xFlagProcess ){
             var xResultList = await _repoInstance.list(pParam);
@@ -44,8 +61,8 @@ class UserUserLevelService {
                 for( var index in xRows ){
                     xJoArrData.push({
                         id: await _utilInstance.encrypt( (xRows[index].id).toString(), config.cryptoKey.hashKey ),
-                        application_id: parseInt(xRows[index].user_level.application_id),
-                        user_level_id: parseInt(xRows[index].user_level.id),
+                        application_id: ( xRows[index].user_level.application_id != null ? parseInt(xRows[index].user_level.application_id) : null ),
+                        user_level_id: ( xRows[index].user_level != null ? parseInt(xRows[index].user_level.id) : null ),
                     });
                 }
                 xJoResult = {
