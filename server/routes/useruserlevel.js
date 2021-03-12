@@ -16,7 +16,7 @@ module.exports = (app) => {
 
     arrValidate = [];
     arrValidate = [ 
-        check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
+        // check('employee_user_id').not().isEmpty().withMessage('Parameter user_id is required'),
         check('user_level_id','Parameter user_level_id is required and must be numeric').not().isEmpty().isInt(),
     ];
     app.post( rootAPIPath + 'user_app/save', arrValidate, userUserLevelController.userUserLevel_Save );

@@ -14,6 +14,8 @@ const config      = require(__dirname + '/../config/config.json')[env];
 //Repository
 const UserUserLevelRepository = require('../repository/useruserlevelrepository.js');
 const _repoInstance = new UserUserLevelRepository();
+const UserRepository = require('../repository/userrepository.js');
+const _userRepoInstance = new UserRepository();
 
 //Util
 const Utility = require('peters-globallib');
@@ -126,23 +128,44 @@ class UserUserLevelService {
 
         delete pParam.act;
 
-        if( xAct == "add" ){           
+        if( xAct == "add" ){      
 
             // User Id
             var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
             if( xDecId.status_code == '00' ){
                 pParam.created_by = xDecId.decrypted;
-                pParam.created_by_name = pParam.user_name;
-
-                // employee_user_id
-                xDecId = await _utilInstance.decrypt(pParam.employee_user_id, config.cryptoKey.hashKey);
-                if( xDecId.status_code == '00' ){
-                    pParam.user_id = xDecId.decrypted;
-                    delete pParam.employee_user_id;
-                }else{
-                    xFlagProcess = false;
-                    xJoResult = xDecId;
+                pParam.created_by_name = pParam.user_name;                
+            
+                if( pParam.hasOwnProperty('employee_user_id') ){
+                    if( pParam.employee_user_id != '' ){
+                        // employee_user_id
+                        xDecId = await _utilInstance.decrypt(pParam.employee_user_id, config.cryptoKey.hashKey);
+                        if( xDecId.status_code == '00' ){
+                            pParam.user_id = xDecId.decrypted;
+                            delete pParam.employee_user_id;
+                        }else{
+                            xFlagProcess = false;
+                            xJoResult = xDecId;
+                        }
+                    }
                 }
+
+                if( pParam.hasOwnProperty('employee_id') ){
+                    if( pParam.employee_user_id != '' ){
+                        // employee_id
+                        xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
+                        if( xDecId.status_code == '00' ){
+                            // Get User ID by employee_id
+                            var xUserData = await _userRepoInstance.getUserByEmployeeId( xDecId.decrypted );
+                            pParam.user_id = xUserData.id;
+                            delete pParam.employee_id;
+                        }else{
+                            xFlagProcess = false;
+                            xJoResult = xDecId;
+                        }
+                    }
+                }
+                
             }else{
                 xFlagProcess = false;
                 xJoResult = xDecId;
