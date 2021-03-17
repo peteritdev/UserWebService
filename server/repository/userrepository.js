@@ -88,7 +88,7 @@ class UserRepository {
             where:{
                 email: {
                     [Op.like]: pEmail
-                }
+                },
             },
             include:[
                 {
@@ -101,6 +101,9 @@ class UserRepository {
                     as: 'user_level',
                     through: {
                         attributes: [],
+                        where: {
+                            is_delete: 0,
+                        }
                     },
                     include: [
                         {
