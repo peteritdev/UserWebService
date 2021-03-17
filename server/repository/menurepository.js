@@ -35,9 +35,9 @@ class MenuRepository {
             xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
         }
 
-        if( pParam.hasOwnProperty('app') && pParam.app != '' ){
+        if( pParam.hasOwnProperty('application_id') && pParam.application_id != '' ){
             xWhereApp = {
-                app: pParam.app,
+                application_id: pParam.application_id,
             }
         }
 
