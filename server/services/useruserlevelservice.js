@@ -218,10 +218,12 @@ class UserUserLevelService {
 
 
                 }else{
+                    console.log(">>> Here 1");
                     xFlagProcess = false;
                     xJoResult = xDecId;
                 }                
             }else{
+                console.log(">>> Here 2");
                 xFlagProcess = false;
                 xJoResult = xDecId;
             }
