@@ -179,7 +179,7 @@ class UserUserLevelService {
 
         }else if( xAct == "update" ){ 
 
-            console.log(JSON.stringify(pParam));
+            // console.log(JSON.stringify(pParam));
 
             var xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
             if( xDecId.status_code == "00" ){
@@ -195,6 +195,7 @@ class UserUserLevelService {
                         pParam.user_id = xDecId.decrypted;
                         delete pParam.employee_user_id;
                     }else{
+                        console.log(">>> Here 4");
                         xFlagProcess = false;
                         xJoResult = xDecId;
                     }
@@ -210,6 +211,7 @@ class UserUserLevelService {
                                 pParam.user_id = xUserData.id;
                                 delete pParam.employee_id;
                             }else{
+                                console.log(">>> Here 3");
                                 xFlagProcess = false;
                                 xJoResult = xDecId;
                             }
