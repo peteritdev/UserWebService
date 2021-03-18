@@ -177,7 +177,7 @@ class UserUserLevelService {
             }           
 
 
-        }else if( xAct == "update" ){
+        }else if( xAct == "update" ){ 
 
             console.log(JSON.stringify(pParam));
 
@@ -198,6 +198,25 @@ class UserUserLevelService {
                         xFlagProcess = false;
                         xJoResult = xDecId;
                     }
+
+                    // Employee_id
+                    if( pParam.hasOwnProperty('employee_id') ){
+                        if( pParam.employee_user_id != '' ){
+                            // employee_id
+                            xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
+                            if( xDecId.status_code == '00' ){
+                                // Get User ID by employee_id
+                                var xUserData = await _userRepoInstance.getUserByEmployeeId( xDecId.decrypted );
+                                pParam.user_id = xUserData.id;
+                                delete pParam.employee_id;
+                            }else{
+                                xFlagProcess = false;
+                                xJoResult = xDecId;
+                            }
+                        }
+                    }
+
+
                 }else{
                     xFlagProcess = false;
                     xJoResult = xDecId;

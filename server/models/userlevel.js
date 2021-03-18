@@ -41,7 +41,7 @@ module.exports = ( sequelize, DataTypes ) => {
         } );
         UserLevel.belongsToMany( models.ms_users,{
             through: 'ms_useruserlevels',
-            as: 'user',
+            as: 'user_userlevel',
             foreignKey: 'user_level_id',
         } );
     }
