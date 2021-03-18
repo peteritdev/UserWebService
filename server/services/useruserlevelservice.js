@@ -190,19 +190,23 @@ class UserUserLevelService {
                     pParam.updated_by_name = pParam.user_name;
 
                     // employee_user_id
-                    xDecId = await _utilInstance.decrypt(pParam.employee_user_id, config.cryptoKey.hashKey);
-                    if( xDecId.status_code == '00' ){
-                        pParam.user_id = xDecId.decrypted;
-                        delete pParam.employee_user_id;
-                    }else{
-                        console.log(">>> Here 4");
-                        xFlagProcess = false;
-                        xJoResult = xDecId;
+                    if( pParam.hasOwnProperty('employee_user_id') ){
+                        if( pParam.employee_user_id != '' ){
+                            xDecId = await _utilInstance.decrypt(pParam.employee_user_id, config.cryptoKey.hashKey);
+                            if( xDecId.status_code == '00' ){
+                                pParam.user_id = xDecId.decrypted;
+                                delete pParam.employee_user_id;
+                            }else{
+                                console.log(">>> Here 4");
+                                xFlagProcess = false;
+                                xJoResult = xDecId;
+                            }
+                        }
                     }
 
                     // Employee_id
                     if( pParam.hasOwnProperty('employee_id') ){
-                        if( pParam.employee_user_id != '' ){
+                        if( pParam.employee_id != '' ){
                             // employee_id
                             xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
                             if( xDecId.status_code == '00' ){
