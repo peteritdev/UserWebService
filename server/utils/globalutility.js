@@ -99,6 +99,10 @@ class GlobalUtility{
         return urlQueryParser.parse(pString);
     }
 
+    async generateRandomPassword(){
+        return generatePassword.randomPassword();
+    }
+
 }
 
 module.exports = GlobalUtility;

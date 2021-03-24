@@ -235,7 +235,7 @@ async function forgotPassword(req, res){
             "error_msg": errors
         });
     }else{
-        joResult = await userServiceInstance.doForgotPassword(req.body);
+        joResult = await userServiceInstance.doForgotPasswordWithGenerateNew(req.body);
     }    
 
     res.setHeader('Content-Type','application/json');

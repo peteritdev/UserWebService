@@ -454,6 +454,54 @@ class UserService {
         }
     }
 
+    async doForgotPasswordWithGenerateNew( param ){
+        var validateEmail = await userRepoInstance.isEmailExists( param.email );
+        if( validateEmail != null ){
+
+            //Generate new Password
+            var xNewPassword = await _utilInstance.generateRandomPassword();
+
+            //Prepare parameter and send to notification service
+            var notifyParam = {
+                "email": param.email,
+                "name": validateEmail.name,
+                "new_password": xNewPassword
+
+            }
+
+            console.log(">>> Here");
+            console.log(">>> Here : " + config.api.notification.forgotPassword);
+            console.log(">>> Here : " + JSON.stringify(notifyParam));
+            var resultNotify = await _utilInstance.axiosRequestPost(config.api.notification.forgotPassword, '', notifyParam);
+
+            if( resultNotify.status_code == "00" ){
+                //Update status in database
+                var resultUpdate = await userRepoInstance.forgotPassword(param.email, await utilSecureInstance.generateEncryptedPassword(xNewPassword), 'generate_new_password');
+ 
+                if( resultUpdate.status_code == "00" ){
+                    return JSON.stringify({  
+                        "status_code": "00",
+                        "status_msg": "New password has sent to your email. Please check and use that password for login.",
+                        // "result_send_email_verification": resultNotify.data
+                    });
+                }else{
+                    return JSON.stringify({
+                        "status_code": "-99",
+                        "status_msg": "Update status forgot password failed",
+                        // "result_send_email_verification": resultNotify.data
+                    });
+                }
+                
+            }            
+            
+        }else{
+            return JSON.stringify({
+                "status_code": "-99",
+                "status_msg": "Email not found",
+            });
+        }
+    }
+
     async doVerifyForgotPasswordCode(param){
         var decryptedVerificationCode = await _utilInstance.decrypt( param.code, config.cryptoKey.hashKey );
         if( decryptedVerificationCode.status_code == "00" ){

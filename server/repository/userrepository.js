@@ -369,7 +369,7 @@ class UserRepository {
         }
     }
 
-    async forgotPassword( pEmail ){
+    async forgotPassword( pEmail, pNewPassword, pMethod ){
         let transaction;
         var joResult = {};
         var currDateTime = await utilInstance.getCurrDateTime();
@@ -377,10 +377,20 @@ class UserRepository {
         try{
             transaction = await sequelize.transaction();
             
-            var updated = await _modelUser.update({
-                "status": 2,
-                "forgot_password_at": currDateTime
-            },{
+            var xUpdateParam = {};
+            if( pMethod == 'link_verification' ){
+                xUpdateParam = {
+                    "status": 2,
+                    "forgot_password_at": currDateTime
+                };
+            }else if( pMethod == 'generate_new_password' ){
+                xUpdateParam = {
+                    "forgot_password_at": currDateTime,
+                    "password": pNewPassword,
+                };
+            }
+
+            var updated = await _modelUser.update(xUpdateParam,{
                 where:{
                     email: pEmail
                 }
