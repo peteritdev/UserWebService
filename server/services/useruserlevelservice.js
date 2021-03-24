@@ -65,6 +65,7 @@ class UserUserLevelService {
                         id: await _utilInstance.encrypt( (xRows[index].id).toString(), config.cryptoKey.hashKey ),
                         application_id: ( xRows[index].user_level.application_id != null ? parseInt(xRows[index].user_level.application_id) : null ),
                         user_level_id: ( xRows[index].user_level != null ? parseInt(xRows[index].user_level.id) : null ),
+                        user_level_name: ( xRows[index].user_level != null ? xRows[index].user_level.name : null ),
                     });
                 }
                 xJoResult = {
