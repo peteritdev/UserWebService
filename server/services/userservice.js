@@ -75,6 +75,37 @@ class UserService {
         return (joResult);
     }
 
+    async dropDownList(param){
+        var joResult = {};
+        var joArrData = [];       
+
+        var xResultList = await userRepoInstance.list(param);
+
+        if( xResultList.data.count > 0 ){
+            joResult.status_code = "00";
+            joResult.status_msg = "OK";
+
+            var xRows = xResultList.data.rows;
+
+            for(var index in xRows){
+
+                joArrData.push({
+                    id: xRows[index].id,
+                    name: xRows[index].name,
+                    email: xRows[index].email,
+                });
+            }
+
+            joResult.data = joArrData;
+        }else{
+            joResult.status_code = "-99";
+            joResult.status_msg = "Data not found";
+            joResult.data = joArrData;
+        }
+
+        return (joResult);
+    }
+
     async doRegister(param){
 
         var joResult;

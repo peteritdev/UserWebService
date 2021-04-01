@@ -12,7 +12,7 @@ const bcrypt = require('bcryptjs');
 // Validation Parameter
 const { check, validationResult } = require('express-validator');
 
-module.exports = { list, save, deleteUser,
+module.exports = { list, dropDownList, save, deleteUser,
                    register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, loggedChangePassword, 
                    loginGoogle, parseQueryGoogle, verifyToken, addVendorId,
                    getUserByEmployeeId,};
@@ -34,6 +34,30 @@ async function list( req, res ){
     }    */
 
     joResult = await userServiceInstance.list(req.query);        
+            //joResult.token_data = oAuthResult.token_data;
+            joResult = JSON.stringify(joResult);
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function dropDownList( req, res ){
+    var joResult;
+    var errors = null;
+
+    /*var oAuthResult = await userServiceInstance.verifyToken({
+                                                                token: req.headers['x-token'],
+                                                                method: req.headers['x-method']
+                                                            });
+    if( JSON.parse(oAuthResult).status_code == "00" ){
+        joResult = await userServiceInstance.list(req.query);        
+            joResult.token_data = oAuthResult.token_data;
+            joResult = JSON.stringify(joResult);
+    }else{
+        joResult = (oAuthResult);
+    }    */
+
+    joResult = await userServiceInstance.dropDownList(req.query);        
             //joResult.token_data = oAuthResult.token_data;
             joResult = JSON.stringify(joResult);
 
@@ -289,6 +313,7 @@ async function loggedChangePassword(req, res){
     });
 
     oAuthResult = JSON.parse(oAuthResult);
+    
 
     if( oAuthResult.status_code == "00" ){
 

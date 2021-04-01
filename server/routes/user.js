@@ -83,6 +83,7 @@ module.exports = (app) => {
   // Admin Site
   var arrValidateUserList = [];
   app.get(rootAPIPath + 'user/list', arrValidateUserList, userController.list);
+  app.get(rootAPIPath + 'user/drop_down', arrValidateUserList, userController.dropDownList);
 
   var arrValidateUserSave = [
     check("name").not().isEmpty().withMessage("Name is required"),
