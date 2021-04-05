@@ -42,7 +42,8 @@ class ApprovalMatrixService {
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
                     application_table: {
-                        id: await _utilInstance.encrypt((xRows[index].application_table.id).toString(), config.cryptoKey.hashKey),
+                        // id: await _utilInstance.encrypt((xRows[index].application_table.id).toString(), config.cryptoKey.hashKey),
+                        id: xRows[index].application_table.id,
                         table_name: xRows[index].application_table.table_name,
                         application: {
                             id: await _utilInstance.encrypt((xRows[index].application_table.application.id).toString(), config.cryptoKey.hashKey), 
