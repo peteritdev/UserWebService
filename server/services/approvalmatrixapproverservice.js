@@ -16,6 +16,9 @@ const config      = require(__dirname + '/../config/config.json')[env];
 const ApplicationMatrixApproverRepository = require('../repository/approvalmatrixapproverrepository.js');
 const _repoInstance = new ApplicationMatrixApproverRepository();
 
+const ApprovalMatrixApproverUserRepository = require('../repository/approvalmatrixapproveruserrepository.js');
+const _approverUserRepoInstance = new ApprovalMatrixApproverUserRepository();
+
 //Util
 const Utility = require('peters-globallib');
 const _utilInstance = new Utility();
@@ -204,8 +207,17 @@ class ApprovalMatrixApproverService {
             }
 
             if( xFlagProcess ){
-                var xAddResult = await _repoInstance.save( pParam, xAct );
-                xJoResult = xAddResult;
+
+                // Delete approval matrix approver user
+                var xResultDelete = await _repoInstance.deletePermanent({id: pParam.id});
+                if( xResultDelete.status_code == '00' ){
+                    var xAddResult = await _repoInstance.save( pParam, "add_with_detail" );
+                    xJoResult = xAddResult;
+                }else{
+                    xJoResult = xResultDelete;
+                }
+
+                
             }
             
         }

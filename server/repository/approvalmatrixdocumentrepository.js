@@ -127,7 +127,7 @@ class ApprovalMatrixDocumentRepository {
 
                 }                
 
-            }if( pAct == "add_with_detail" ){
+            }else if( pAct == "add_with_detail" ){
 
                 pParam.status = 1;
                 pParam.is_delete = 0;
@@ -282,6 +282,70 @@ class ApprovalMatrixDocumentRepository {
 
             return xJoResult;
         }
+    }
+
+    async isUserAllowApprove( pParam ){
+        
+        var xJoResult = {};
+        var xSql = "";
+        var xObjJsonWhere = {};
+
+        if( pParam.hasOwnProperty('document_id') ){
+            if( pParam.document_id != '' ){
+                xObjJsonWhere.documentId = pParam.document_id;
+            }
+        }
+
+        if( pParam.hasOwnProperty('user_id') ){
+            if( pParam.user_id != '' ){
+                xObjJsonWhere.userId = pParam.user_id;
+            }
+        }
+
+        // console.log(">>> HERE : "+  JSON.stringify(xObjJsonWhere));
+
+        xSql = ' SELECT amd.min_approver, amd.total_approved, ' + 
+               '    ( ' + 
+               '        CASE WHEN sequence = 1 THEN ( ' + 
+               '               CASE WHEN total_approved < min_approver  then 1 else 0 end ' + 
+               '        ) ' + 
+               '        WHEN sequence > 1 THEN ( ' + 
+               '            select case when total_approved < min_approver then 0 else 1 end ' + 
+               '            from tr_approvalmatrixdocuments amd_sub inner join tr_approvalmatrixdocumentusers amdu_sub ' + 
+               '                on amd_sub.id = amdu_sub.approval_matrix_document_id ' + 
+               '            where amd_sub.document_id = :documentId ' + 
+               '            and sequence = ( amd.sequence - 1 ) ' + 
+               '        ) ELSE 0 END ' + 
+               '    ) AS "is_your_turn" ' + 
+               ' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' + 
+               '  ON amd.id = amdu.approval_matrix_document_id ' + 
+               ' WHERE amd.document_id = :documentId and amd.total_approved < min_approver ' + 
+               '    AND amdu.user_id = :userId';
+
+        var xDtQuery = await sequelize.query(xSql, {
+            replacements: xObjJsonWhere,
+            type: sequelize.QueryTypes.SELECT,
+        });
+
+        
+
+        if (xDtQuery.length > 0) {
+            xJoResult = {
+              status_code: "00",
+              status_msg: "OK",
+              is_allow_approve: xDtQuery[0].is_your_turn,
+              min_approver: xDtQuery[0].min_approver,
+              total_approved: xDtQuery[0].total_approved,
+            };
+        }else {
+            xJoResult = {
+              status_code: "-99",
+              status_msg: "Data not found"
+            };
+        }
+
+        return xJoResult;
+
     }
 }
 

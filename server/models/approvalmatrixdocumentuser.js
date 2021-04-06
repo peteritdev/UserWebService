@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = ( sequelize, DataTypes ) => {
-    const ApprivalMatrixDocumentUser = sequelize.define( 'tr_approvalmatrixdocumentusers', {
+    const ApprovalMatrixDocumentUser = sequelize.define( 'tr_approvalmatrixdocumentusers', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -35,19 +35,19 @@ module.exports = ( sequelize, DataTypes ) => {
 
     } );
 
-    ApprivalMatrixDocumentUser.associate = function( models ){
-        ApprivalMatrixDocumentUser.belongsTo( models.tr_approvalmatrixdocuments, {
+    ApprovalMatrixDocumentUser.associate = function( models ){
+        ApprovalMatrixDocumentUser.belongsTo( models.tr_approvalmatrixdocuments, {
             foreignKey: 'approval_matrix_document_id',
             as: 'approval_matrix_document',
             onDelete: 'CASCADE',
         } );
 
-        ApprivalMatrixDocumentUser.belongsTo( models.ms_users, {
+        ApprovalMatrixDocumentUser.belongsTo( models.ms_users, {
             foreignKey: 'user_id',
             as: 'user',
             onDelete: 'CASCADE',
         } );
     }
 
-    return ApprivalMatrixDocumentUser;
+    return ApprovalMatrixDocumentUser;
 }

@@ -13,6 +13,8 @@ module.exports = ( sequelize, DataTypes ) => {
         document_no: DataTypes.STRING,
         sequence: DataTypes.INTEGER,
         min_approver: DataTypes.INTEGER,
+        total_approved: DataTypes.INTEGER,
+
         is_delete: DataTypes.INTEGER,
         table_name: DataTypes.STRING,
         application_name: DataTypes.STRING,

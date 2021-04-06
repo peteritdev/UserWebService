@@ -208,6 +208,43 @@ class ApprovalMatrixApproverUserRepository {
             return xJoResult;
         }
     }
+
+    async deletePermanent( pParam ){
+        let xTransaction;
+        var xJoResult = {};
+
+        try{
+            var xSaved = null;
+            xTransaction = await sequelize.transaction();
+
+            xSaved = await _modelDb.destroy(
+                {
+                    where: {
+                        approval_matrix_approver_id: pParam.approval_matrix_approver_id,
+                    },
+                },
+                {xTransaction});
+    
+            await xTransaction.commit();
+
+            xJoResult = {
+                status_code: "00",
+                status_msg: "Data has been successfully deleted",
+            }
+
+            return xJoResult;
+
+        }catch(e){
+            if( xTransaction ) await xTransaction.rollback();
+            xJoResult = {
+                status_code: "-99",
+                status_msg: "Failed delete data",
+                err_msg: e
+            }
+
+            return xJoResult;
+        }
+    }
 }
 
 module.exports = ApprovalMatrixApproverUserRepository;

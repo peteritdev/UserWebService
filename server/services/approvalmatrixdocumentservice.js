@@ -77,6 +77,46 @@ class ApprovalMatrixDocumentService {
         return (xJoResult);
     }    
 
+    async isUserAllowApprove( pParam ){
+        var xJoResult;
+        var xFlagProcess = true;
+        var xDecId = null;
+
+        if( pParam.hasOwnProperty('document_id') ){
+            if( pParam.document_id != '' ){
+                xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
+                if( xDecId.status_code == '00' ){
+                    pParam.document_id = xDecId.decrypted;
+                }else{
+                    xFlagProcess = false;
+                    xJoResult = xDecId;
+                }
+            }
+        }
+
+        if( xFlagProcess ){
+            if( pParam.hasOwnProperty('user_id') ){
+                if( pParam.user_id != '' ){
+                    xDecId = await _utilInstance.decrypt( pParam.user_id, config.cryptoKey.hashKey );
+                    if( xDecId.status_code == '00' ){
+                        pParam.user_id = xDecId.decrypted;
+                    }else{
+                        xFlagProcess = false;
+                        xJoResult = xDecId;
+                    }
+                }
+            }
+        }
+
+        if( xFlagProcess ){
+
+            var xJoResult = await _repoInstance.isUserAllowApprove( pParam );
+
+        }
+
+        return xJoResult;
+    }
+
     async save(pParam){
         var xJoResult;
         var xAct = pParam.act;
