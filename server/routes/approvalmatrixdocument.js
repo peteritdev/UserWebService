@@ -17,7 +17,7 @@ module.exports = (app) => {
 
     var arrValidate = [];
 
-    // Save
+    // Confirm
     arrValidate = [];
     arrValidate = [
         check("document_id").not().isEmpty().withMessage("Parameter document_id cannot be empty"),
@@ -25,6 +25,15 @@ module.exports = (app) => {
 
     ];
     app.post( rootAPIPath + 'approval_matrix/document/confirm', arrValidate, approvalMatrixDocumentController.approvalMatrixDocumentUser_ConfirmDocument );
+
+    // Save
+    arrValidate = [];
+    arrValidate = [
+        check("document_id").not().isEmpty().withMessage("Parameter document_id cannot be empty"),
+        check("document_no").not().isEmpty().withMessage("Parameter document_no cannot be empty"),
+        check("application_id","Parameter application_id must be integer and cannot be empty").not().isEmpty().isInt(),
+    ];
+    app.post( rootAPIPath + 'approval_matrix/document/save', arrValidate, approvalMatrixDocumentController.approvalMatrixDocument_Save );
 
     // List
     arrValidate = [];
