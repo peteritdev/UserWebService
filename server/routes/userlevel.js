@@ -36,7 +36,7 @@ module.exports = (app) => {
 
     arrValidate = [];
     arrValidate = [
-        check('application_id').not().isEmpty().withMessage('Parameter application_id is required'),
+        // check('application_id').not().isEmpty().withMessage('Parameter application_id is required'),
     ];
     app.get( rootAPIPath + 'user_level/drop_down', arrValidate, userLevelController.dropDownList );
 

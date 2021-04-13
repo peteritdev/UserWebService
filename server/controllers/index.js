@@ -9,7 +9,9 @@ const approvalMatrix = require('./approvalmatrix');
 const approvalMatrixApprover = require('./approvalmatrixapprover');
 const approvalMatrixApproverUser = require('./approvalmatrixapproveruser');
 const approvalMatrixDocument = require('./approvalmatrixdocument');
+const notificationTemplate = require('./notificationtemplate');
 
 module.exports = {
-	user, userLevel, menu, userLevelAccess, application, userUserLevel, applicationTable, approvalMatrix, approvalMatrixApprover, approvalMatrixApproverUser, approvalMatrixDocument,
+	user, userLevel, menu, userLevelAccess, application, userUserLevel, applicationTable, 
+	approvalMatrix, approvalMatrixApprover, approvalMatrixApproverUser, approvalMatrixDocument, notificationTemplate,
 }

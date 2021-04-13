@@ -146,6 +146,7 @@ class ApprovalMatrixDocumentService {
             if( xFlagProcess ){
 
                 var xParamSave = null;
+                var xResultApprover4Notification = [];
                 
                 // Get approval matrix
                 var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById({
@@ -165,6 +166,8 @@ class ApprovalMatrixDocumentService {
                                 xApproverUser.push({
                                     user_id: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.id,
                                     user_name: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.name,
+                                    email: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.email,
+                                    status: 0,
                                 })
                             }
                         }
@@ -181,11 +184,17 @@ class ApprovalMatrixDocumentService {
                         }
 
                         var xAddResult = await _repoInstance.save( xParamSave, 'add_with_detail' );
+
+                        xResultApprover4Notification.push({
+                            sequence: xRowsApprovalMatrix[index].sequence,
+                            approver_user: xApproverUser,
+                        });
                     }
 
                     xJoResult = {
                         status_code: '00',
                         status_msg: 'Data has been successfully saved',
+                        approvers: xResultApprover4Notification,
                     }
 
                 }

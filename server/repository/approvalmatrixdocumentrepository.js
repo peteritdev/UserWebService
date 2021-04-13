@@ -24,12 +24,12 @@ class ApprovalMatrixDocumentRepository {
         var xOrder = ['id', 'ASC'];
         var xInclude = [
             {
-                attributes: [ 'id' ],
+                attributes: [ 'id','status' ],
                 model: _modelApprovalMatrixDocumentUser,
                 as: 'approval_matrix_document_user',
                 include: [
                     {
-                        attributes: ['id','name'],
+                        attributes: ['id','name','email'],
                         model: _modelUser,
                         as: 'user',
                     }

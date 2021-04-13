@@ -64,7 +64,7 @@ class ApprovalMatrixDocumentUserService {
                     pParam.updated_by = pParam.user_id;
                     pParam.updated_by_name = pParam.user_name;
 
-                    xJoResult = await _repoInstance.confirmDocument( pParam );
+                    var xResultConfirm = await _repoInstance.confirmDocument( pParam );
                     // Check if document already approve all or not
                     var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id } );
                     if( xJoAlreadyApproveAll.status_code == '00' ){
@@ -72,7 +72,36 @@ class ApprovalMatrixDocumentUserService {
                         if( xJoAlreadyApproveAll.total == 0 ){
                             xDocumentApproved = true;
                         }
+                        xJoResult = xResultConfirm;
                         xJoResult.status_document_approved = xDocumentApproved;
+
+                        // Get Approver User with the status
+                        var xJaApprovalMatrixDocument = [];
+                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id} );
+                        if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
+                            var xRows = xResultApprovalMatrixDocument.rows;
+                            for( var i in xRows ){
+
+                                var xJaApproverUser = [];
+                                var xJaDataApproverUser = xRows[i].approval_matrix_document_user;
+                                for( var j in xJaDataApproverUser ){
+                                    xJaApproverUser.push({
+                                        user_id: xJaDataApproverUser[j].user.id,
+                                        user_name: xJaDataApproverUser[j].user.name,
+                                        email: xJaDataApproverUser[j].user.email,
+                                        status: xJaDataApproverUser[j].status,
+                                    })
+                                }
+
+                                xJaApprovalMatrixDocument.push({
+                                    sequence: xRows[i].sequence,
+                                    approver_user: xJaApproverUser,
+                                });
+                            }
+                        }
+
+                        xJoResult.approvers = xJaApprovalMatrixDocument;
+
                     }else{
                         xJoResult = xJoAlreadyApproveAll;
                     }
