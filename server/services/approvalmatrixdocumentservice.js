@@ -62,6 +62,7 @@ class ApprovalMatrixDocumentService {
                         application_name: xRows[index].application_name,
                         table_name: xRows[index].table_name,
                         approver_user: xRows[index].approval_matrix_document_user,
+                        min_approver: xRows[index].min_approver,
                         created_at: moment(xRows[index].createdAt).format('DD-MM-YYYY HH:mm:ss'),
                         updated_at: moment(xRows[index].updatedAt).format('DD-MM-YYYY HH:mm:ss'),
                     });
