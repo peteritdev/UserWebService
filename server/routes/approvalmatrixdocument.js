@@ -26,6 +26,15 @@ module.exports = (app) => {
     ];
     app.post( rootAPIPath + 'approval_matrix/document/confirm', arrValidate, approvalMatrixDocumentController.approvalMatrixDocumentUser_ConfirmDocument );
 
+    // Confirm Via Email
+    arrValidate = [];
+    arrValidate = [
+        check("document_id").not().isEmpty().withMessage("Parameter document_id cannot be empty"),
+        check("status","Parameter status_confirm must be integer and cannot be empty").not().isEmpty().isInt(),
+        check("user_id","Parameter user_id must be integer and cannot be empty").not().isEmpty().isInt(),
+    ];
+    app.post( rootAPIPath + 'approval_matrix/document/confirm_via_email', arrValidate, approvalMatrixDocumentController.approvalMatrixDocumentUser_ConfirmDocumentViaEmail );
+
     // Save
     arrValidate = [];
     arrValidate = [

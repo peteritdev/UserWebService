@@ -74,26 +74,29 @@ async function notificationTemplate_GetByCode( req, res ){
     var joResult;
     var errors = null;
 
-    var oAuthResult = await _oAuthServiceInstance.verifyToken( { token: req.headers['x-token'], method: req.headers['x-method'] } );
-    oAuthResult = JSON.parse(oAuthResult);
+    // Note: no need authentication since confirm can triger via email without login
+    // var oAuthResult = await _oAuthServiceInstance.verifyToken( { token: req.headers['x-token'], method: req.headers['x-method'] } );
+    // oAuthResult = JSON.parse(oAuthResult);
 
-    if( oAuthResult.status_code == "00" ){
-        // Validate first
-        var errors = validationResult(req).array();   
+    // if( oAuthResult.status_code == "00" ){
+        
+    // }else{
+    //     joResult = JSON.stringify(oAuthResult);
+    // }    
+
+    // Validate first
+    var errors = validationResult(req).array();   
             
-        if( errors.length != 0 ){
-            joResult = JSON.stringify({
-                "status_code": "-99",
-                "status_msg":"Parameter value has problem",
-                "error_msg": errors
-            });
-        }else{                      
-            joResult = await _serviceInstance.getByCode(req.params);
-            joResult = JSON.stringify(joResult);
-        }
-    }else{
-        joResult = JSON.stringify(oAuthResult);
-    }    
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter value has problem",
+            "error_msg": errors
+        });
+    }else{                      
+        joResult = await _serviceInstance.getByCode(req.params);
+        joResult = JSON.stringify(joResult);
+    }
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);

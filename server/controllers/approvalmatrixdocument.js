@@ -13,7 +13,7 @@ const _oAuthServiceInstance = new OAuthService();
 const { check, validationResult } = require('express-validator');
 
 module.exports = {approvalMatrixDocument_Save, approvalMatrixDocument_List, approvalMatrixDocument_Delete, approvalMatrixDocument_IsUserAllow,
-                  approvalMatrixDocumentUser_ConfirmDocument };
+                  approvalMatrixDocumentUser_ConfirmDocument, approvalMatrixDocumentUser_ConfirmDocumentViaEmail };
 
 // Document Type
 async function approvalMatrixDocument_List( req, res ){
@@ -101,6 +101,28 @@ async function approvalMatrixDocumentUser_ConfirmDocument( req, res ){
     }else{
         joResult = JSON.stringify(oAuthResult);
     }    
+
+    res.setHeader('Content-Type','application/json');
+    res.status(200).send(joResult);
+}
+
+async function approvalMatrixDocumentUser_ConfirmDocumentViaEmail( req, res ){
+    var joResult;
+    var errors = null;
+
+    // Validate first
+    var errors = validationResult(req).array();   
+        
+    if( errors.length != 0 ){
+        joResult = JSON.stringify({
+            "status_code": "-99",
+            "status_msg":"Parameter value has problem",
+            "error_msg": errors
+        });
+    }else{
+        joResult = await _documentUserServiceInstance.confirmDocumentViaEmail(req.body);
+        joResult = JSON.stringify(joResult);
+    }      
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
