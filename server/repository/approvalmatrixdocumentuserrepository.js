@@ -24,6 +24,50 @@ class ApprovalMatrixDocumentUserRepository {
             var xSaved = null;
             xTransaction = await sequelize.transaction();
             
+            var xSql = ' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' + 
+                             ' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' + 
+                             ' AND tr_approvalmatrixdocuments.document_id = :documentId ' + 
+                             ' AND tr_approvalmatrixdocumentusers.user_id = :userId ' ;
+
+            var xUpdate = await sequelize.query( xSql, {
+                replacements: {
+                    status: pParam.status,
+                    documentId: pParam.document_id,
+                    userId: pParam.user_id
+                }},
+                {xTransaction},
+            );
+
+            await xTransaction.commit();
+
+            xJoResult = {
+                status_code: "00",
+                status_msg: "Data has been successfully confirmed"
+            }
+
+        }catch(e){
+            if( xTransaction ) await xTransaction.rollback();
+            xJoResult = {
+                status_code: "-99",
+                status_msg: "Failed save or update data. Error : " + e,
+                err_msg: e
+            }
+            
+        }
+        
+        return xJoResult;
+    }
+
+    // Note: this function not work when need update with join table
+    async confirmDocument_Sequelize(pParam, pAct){
+        let xTransaction;
+        var xJoResult = {};
+        
+        try{
+
+            var xSaved = null;
+            xTransaction = await sequelize.transaction();
+            
             pParam.updatedAt = await _utilInstance.getCurrDateTime();
             var xWhere = {                
                 where : {
