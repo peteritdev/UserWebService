@@ -73,7 +73,7 @@
     },
     "timezone": "Asia/Jakarta",
 
-    "cryptoKey":{
+    "cryptoKey":{ 
       "md5Key": "4B1C9E44D769C429",
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
