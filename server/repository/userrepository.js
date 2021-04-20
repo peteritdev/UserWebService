@@ -87,7 +87,7 @@ class UserRepository {
         var data = await _modelUser.findOne({
             where:{
                 email: {
-                    [$like]: pEmail
+                    [Op.like]: pEmail
                 },
             },
             include:[
