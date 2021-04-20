@@ -281,7 +281,9 @@ class UserService {
     }
 
     async doLogin( param ){
+        console.log(">>> Start validation isEmailExists...");
         var validateEmail = await userRepoInstance.isEmailExists( param.email );
+        console.log(">>> End validation isEmailExists...");
         var xFlagProcess = true;
 
         if( validateEmail != null ){
