@@ -285,6 +285,7 @@ class UserService {
         console.log(">>> Username : " + config.username);
         console.log(">>> Password : " + config.password);
         console.log(">>> Port : " + config.port);
+        console.log(">>> Param : " + JSON.stringify(param));
         var validateEmail = await userRepoInstance.isEmailExists( param.email );
         console.log(">>> End validation isEmailExists...");
         var xFlagProcess = true;
