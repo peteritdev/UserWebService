@@ -7,7 +7,7 @@ const dateFormat = require('dateformat');
 const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 
-var env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'localhost';
 var config = require(__dirname + '/../config/config.json')[env];
 
 // Model
@@ -284,6 +284,7 @@ class UserService {
         console.log(">>> Start validation isEmailExists...");
         console.log(">>> Username : " + config.username);
         console.log(">>> Password : " + config.password);
+        console.log(">>> IP : " + config.host);
         console.log(">>> Port : " + config.port);
         console.log(">>> Param : " + JSON.stringify(param));
         var validateEmail = await userRepoInstance.isEmailExists( param.email );

@@ -1,4 +1,4 @@
-var env = process.env.NODE_ENV || 'development';
+var env = process.env.NODE_ENV || 'localhost';
 var configEnv = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
@@ -84,37 +84,44 @@ class UserRepository {
     }
 
     async isEmailExists( pEmail ){
-        var data = await _modelUser.findOne({
-            where:{
-                email: {
-                    [Op.like]: pEmail
-                },
-            },
-            include:[
-                {
-                    model: _modelCompany,
-                    as: 'company'
-                },
-                {
-                    attributes: ["id","name"],
-                    model: _modelUserLevel,
-                    as: 'user_level',
-                    through: {
-                        attributes: [],
-                        where: {
-                            is_delete: 0,
-                        }
+        var data = null;
+
+        try{
+            data = await _modelUser.findOne({
+                where:{
+                    email: {
+                        [Op.like]: pEmail
                     },
-                    include: [
-                        {
-                            attributes: ['id','name'],
-                            model: _modelApplication,
-                            as: 'application',
-                        }
-                    ]
-                }
-            ],
-        });
+                },
+                include:[
+                    {
+                        model: _modelCompany,
+                        as: 'company'
+                    },
+                    {
+                        attributes: ["id","name"],
+                        model: _modelUserLevel,
+                        as: 'user_level',
+                        through: {
+                            attributes: [],
+                            where: {
+                                is_delete: 0,
+                            }
+                        },
+                        include: [
+                            {
+                                attributes: ['id','name'],
+                                model: _modelApplication,
+                                as: 'application',
+                            }
+                        ]
+                    }
+                ],
+            });
+        }catch(err){
+            console.log("Exception at [UserRepository.isEmailExists]: " + err);
+        }
+        
         
         return data;
     }
