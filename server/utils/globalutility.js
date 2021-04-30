@@ -15,7 +15,7 @@ class GlobalUtility{
 
         for( var i = 0; i < pJson.length; i++ ){
             if( pJson[i].hasOwnProperty('application') ){
-                if( pJson[i].application.name != null ){
+                if( pJson[i].application != null ){
                     xApplication.push(  pJson[i].application.name );
                 }
                 
