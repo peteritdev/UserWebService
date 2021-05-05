@@ -237,6 +237,8 @@ class UserService {
                 flagProcess = false;
                 joResult = xDec; 
             }       
+
+            console.log(">>> JO Result : " + JSON.stringify(joResult));
             
             if( flagProcess )joResult = await userRepoInstance.save( param );
 
