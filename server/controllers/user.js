@@ -117,6 +117,7 @@ async function save(req, res){
     }else{         
         
         //req.body.user_id = JSON.parse(oAuthResult).result_verify.id;
+        console.log(">>> Body : " + JSON.stringify(req.body));
         joResult = await userServiceInstance.save(req.body);
         joResult = JSON.stringify(joResult);
     }
