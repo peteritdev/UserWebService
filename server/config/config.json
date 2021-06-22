@@ -60,7 +60,7 @@
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
     "host": "localhost",
-    "port":5432,
+    "port":5435,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
