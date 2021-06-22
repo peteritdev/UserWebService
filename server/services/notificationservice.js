@@ -18,7 +18,7 @@ class NotificationService {
 
         pMsg = pMsg.toString();
         pMsg = pMsg.replace( "#USER_NAME#", pParam.name );
-        pMsg = pMsg.replace( "#EMAIL#", pParam.name );
+        pMsg = pMsg.replace( "#EMAIL#", pParam.email );
         pMsg = pMsg.replace( "#PASSWORD#", pParam.password );
 
         return pMsg;
