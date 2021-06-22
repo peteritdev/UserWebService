@@ -41,7 +41,7 @@ class NotificationService {
                 broker_port: 9092,
                 client_id: 'eSanqua-Oauth',
                 key: 'K003',
-                message: (`{"subject": "${xSubject}","body": "${xStringifyBody}","recipients": {"to": "${pParam.vendor.email}"}}`),
+                message: (`{"subject": "${xSubject}","body": "${xStringifyBody}","recipients": {"to": "${pParam.email}"}}`),
             }
 
             xJoResult = await _utilInstance.sendNotification( xParamKafkaProducer );            
