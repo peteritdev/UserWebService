@@ -3,10 +3,6 @@ const config      = require(__dirname + '/../config/config.json')[env];
 
 const moment = require('moment');
 
-// Services
-const OAuthService = require('../services/oauthservice.js');
-const _oAuthService = new OAuthService();
-
 const NotificationTemplateService = require('../services/notificationtemplateservice.js');
 const _notificationTemplateServiceInstance = new NotificationTemplateService();
 
@@ -29,13 +25,13 @@ class NotificationService {
 
     }
 
-    async sendNotification_NewEmployeeRegister( pMethod, pToken, pParam ){
+    async sendNotification_NewEmployeeRegister( pParam ){
         var xJoResult = {};
-        var xNotifTemplate = await _oAuthService.getNotificationTemplate( pMethod, pToken, 'ESANQUA_REGISTRATION' );
+        var xNotifTemplate = await _notificationTemplateServiceInstance.getByCode({code: 'ESANQUA_REGISTRATION'});
 
         if( xNotifTemplate != null ){
-            var xSubject = await this.eSanqua_NewEmployeeRegister_ReplaceWithVariable( xNotifTemplate.token_data.data.subject, pParam );
-            var xBody = await this.eSanqua_NewEmployeeRegister_ReplaceWithVariable( xNotifTemplate.token_data.data.body, pParam );
+            var xSubject = await this.eSanqua_NewEmployeeRegister_ReplaceWithVariable( xNotifTemplate.data.subject, pParam );
+            var xBody = await this.eSanqua_NewEmployeeRegister_ReplaceWithVariable( xNotifTemplate.data.body, pParam );
 
             // Kafka send notification
             var xStringifyBody = xBody.replace(/\"/g,"\\\"");
