@@ -244,6 +244,7 @@ class UserRepository {
                 status_code: "00",
                 status_msg: "User successfully add to database",
                 created_id: created.id,
+                clear_password: param.password,
                 google_token: param.google_token,
                 google_token_expire: param.google_token_expire,
                 google_token_id: param.google_token_id

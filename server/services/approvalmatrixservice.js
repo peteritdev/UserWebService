@@ -48,7 +48,16 @@ class ApprovalMatrixService {
                         application: {
                             id: await _utilInstance.encrypt((xRows[index].application_table.application.id).toString(), config.cryptoKey.hashKey), 
                             name: xRows[index].application_table.application.name,
-                        }
+                        },
+
+                    },
+                    company: {
+                        id: xRows[index].company_id,
+                        name: xRows[index].company_name,
+                    },
+                    department: {
+                        id: xRows[index].department_id,
+                        name: xRows[index].department_name,
                     },
                     created_at: moment(xRows[index].createdAt).format('DD-MM-YYYY HH:mm:ss'),
                     updated_at: moment(xRows[index].updatedAt).format('DD-MM-YYYY HH:mm:ss'),

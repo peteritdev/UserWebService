@@ -17,6 +17,10 @@ const modelUser = require('../models').ms_users;
 const UserRepository = require('../repository/userrepository.js');
 const userRepoInstance = new UserRepository();
 
+// Services
+const NotificationService = require( '../services/notificationservice.js' );
+const _notificationServiceInstance = new NotificationService();
+
 // Utility
 const Util = require('peters-globallib');
 const _utilInstance = new Util();
@@ -110,8 +114,8 @@ class UserService {
 
         var joResult;
         var result = await userRepoInstance.isEmailExists( param.email );
-
-        
+        var xClearPassword = "";       
+        var xNotificationRegistration = {}; 
 
         if( result == null ){
 
@@ -119,13 +123,24 @@ class UserService {
 
             if( joResult.status_code == "00" ){
 
+                xClearPassword = joResult.clear_password;
+                delete joResult.clear_password;
                 var resultNotify = null;
                 
                 //Prepare to send notification if registration method using conventional
                 if( param.method == 'conventional' ){  
                     
                     if( param.type == 1 ){
-                        param.status = 1;
+                        param.status = 1;                 
+
+                        var xParamNotif = {
+                            name: param.name,
+                            email: param.email,
+                            password: xClearPassword,
+                        };
+                        // This line used for notify to user that his/her account already created and inform them the login information
+                        xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister( param.method, param.token, xParamNotif );                        
+
                     }else if( param.type == 2 ){    
                         var notifyParam = {
                             "email": param.email,
@@ -143,7 +158,8 @@ class UserService {
                     "data": param,
                     "result_check_email": result,
                     "result_add": joResult,
-                    "result_send_email_verification": ( resultNotify !== null ? resultNotify.data : null )
+                    "result_send_email_verification": ( resultNotify !== null ? resultNotify.data : null ),
+                    "result_notif_registration": xNotificationRegistration,
                 });
             }           
             

@@ -150,10 +150,21 @@ class ApprovalMatrixDocumentService {
                 var xResultApprover4Notification = [];
                 
                 // Get approval matrix
-                var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById({
+                var xParamFilter = {
                     application_id: pParam.application_id,
                     table_name: pParam.table_name,
-                });
+                };
+                if( pParam.hasOwnProperty('company_id') ){
+                    if( pParam.company_id != '' ){
+                        xParamFilter.company_id = pParam.company_id;
+                    }   
+                }
+                if( pParam.hasOwnProperty('department_id') ){
+                    if( pParam.department_id != '' ){
+                        xParamFilter.department_id = pParam.department_id;
+                    }   
+                }
+                var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
 
                 if( xApprovalMatrix.count > 0 ){  
                     

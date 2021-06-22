@@ -340,7 +340,7 @@ class ApprovalMatrixDocumentRepository {
         }else {
             xJoResult = {
               status_code: "-99",
-              status_msg: "Data not found"
+              status_msg: "You not allow to approve this document."
             };
         }
 
