@@ -20,7 +20,7 @@ const ApplicationMatrixDocumentUserRepository = require('../repository/approvalm
 const _repoInstance = new ApplicationMatrixDocumentUserRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const { jobs } = require('googleapis/build/src/apis/jobs');
 const _utilInstance = new Utility();
 

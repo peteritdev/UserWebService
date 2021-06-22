@@ -20,7 +20,7 @@ const ApplicationMatrixApproverRepository = require('../repository/approvalmatri
 const _approvalMatrixApproverRepoInstance = new ApplicationMatrixApproverRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixDocumentService {

@@ -16,7 +16,7 @@ const ApplicationRepository = require('../repository/applicationrepository.js');
 const _repoInstance = new ApplicationRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApplicationService {

@@ -18,7 +18,7 @@ const UserRepository = require('../repository/userrepository.js');
 const _userRepoInstance = new UserRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class UserUserLevelService {

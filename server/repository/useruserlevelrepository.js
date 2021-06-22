@@ -11,7 +11,7 @@ const _modelUser = require('../models').ms_users;
 const _modelUserLevel = require('../models').ms_userlevels;
 const _modelApp = require('../models').ms_applications;
 
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 

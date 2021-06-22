@@ -10,7 +10,7 @@ const _modelDb = require('../models').tr_approvalmatrixdocuments;
 const _modelApprovalMatrixDocumentUser = require('../models').tr_approvalmatrixdocumentusers;
 const _modelUser = require('../models').ms_users;
 
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixDocumentRepository {

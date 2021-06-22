@@ -10,7 +10,7 @@ const _modelDb = require('../models').ms_approvalmatrix;
 const _modelApplicationTable = require('../models').ms_applicationtables;
 const _modelApplication = require('../models').ms_applications;
 
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixRepository {

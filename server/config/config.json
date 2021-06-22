@@ -1,5 +1,7 @@
 {
   "localhost": {
+    "appPort": 1189,
+
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
@@ -56,6 +58,8 @@
   },
 
   "development": {
+    "app_port": 9189,
+
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
@@ -89,7 +93,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:9189/api/hr/v1/employee"
       }
       
     },
@@ -116,6 +120,8 @@
   },
 
   "production": {
+    "app_port": 1189,
+
     "username": "postgres",
     "password": "SANQUAD0ck3rP912",
     "database": "sanqua_oauthdb",

@@ -22,7 +22,7 @@ const NotificationService = require( '../services/notificationservice.js' );
 const _notificationServiceInstance = new NotificationService();
 
 // Utility
-const Util = require('peters-globallib');
+const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 const UtilSecurity = require('../utils/security.js');
 const utilSecureInstance = new UtilSecurity();

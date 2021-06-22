@@ -16,7 +16,7 @@ const NotificationTemplateRepository = require('../repository/notificationtempla
 const _repoInstance = new NotificationTemplateRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class NotificationTemplateService {

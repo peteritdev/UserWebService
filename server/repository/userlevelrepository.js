@@ -10,7 +10,7 @@ const _modelDb = require('../models').ms_userlevels;
 const _modelApplication = require('../models').ms_applications;
 
 // Utils
-const Util = require('peters-globallib');
+const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 
 class UserLevelRepository {

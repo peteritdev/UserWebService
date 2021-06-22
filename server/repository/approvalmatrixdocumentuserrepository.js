@@ -9,7 +9,7 @@ const Op = sequelize.Op;
 const _modelDb = require('../models').tr_approvalmatrixdocumentusers;
 const _modelDocumentDb = require('../models').tr_approvalmatrixdocuments;
 
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixDocumentUserRepository {
