@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('../app');
 const env         = process.env.NODE_ENV || 'localhost';
-const config      = require(__dirname + '/../config/config.json')[env];
+const config      = require(__dirname + '/../server/config/config.json')[env];
 
 const port = parseInt(process.env.PORT,10) || (config.appPort);
 app.set('port',port);

@@ -1,6 +1,6 @@
 {
   "localhost": {
-    "appPort": 1189,
+    "appPort": 9189,
 
     "username": "postgres",
     "password": "P455uu0rd^^ok",
@@ -37,7 +37,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
       }
       
     },
@@ -93,7 +93,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:9189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
       }
       
     },
