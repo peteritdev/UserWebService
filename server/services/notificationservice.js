@@ -37,7 +37,7 @@ class NotificationService {
             var xStringifyBody = xBody.replace(/\"/g,"\\\"");
             var xParamKafkaProducer = {
                 mode: 'eSanqua-Oauth',
-                broker_host: '10.10.20.8',
+                broker_host: '10.10.20.6',
                 broker_port: 9092,
                 client_id: 'eSanqua-Oauth',
                 key: 'K003',
