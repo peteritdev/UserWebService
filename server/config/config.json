@@ -37,7 +37,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://10.10.20.8:8189/api/hr/v1/employee"
       }
       
     },
@@ -58,7 +58,7 @@
   },
 
   "development": {
-    "app_port": 9189,
+    "appPort": 9189,
 
     "username": "postgres",
     "password": "P455uu0rd^^ok",
@@ -120,7 +120,7 @@
   },
 
   "production": {
-    "app_port": 1189,
+    "appPort": 1189,
 
     "username": "postgres",
     "password": "SANQUAD0ck3rP912",
