@@ -742,6 +742,7 @@ class UserService {
                         if( xObjUser != null ){
                             joResult.result_verify.name = xObjUser.name;
                             joResult.result_verify.user_level_id = xObjUser.user_level_id;
+                            joResult.result_verify.user_level = xObjUser.user_level;
                         }
                     }
                 }

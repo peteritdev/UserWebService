@@ -66,7 +66,14 @@ class ApprovalMatrixDocumentUserService {
 
                     var xResultConfirm = await _repoInstance.confirmDocument( pParam );
                     // Check if document already approve all or not
-                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id } );
+                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { 
+                        document_id: pParam.document_id,
+                        table_name: pParam.table_name,
+                        application_id: pParam.application_id,
+                    } );
+
+                    console.log(">>> xJoAlreadyApproveAll: " + JSON.stringify(xJoAlreadyApproveAll))
+
                     if( xJoAlreadyApproveAll.status_code == '00' ){
                         var xDocumentApproved = false;
                         if( xJoAlreadyApproveAll.total == 0 ){
@@ -77,7 +84,7 @@ class ApprovalMatrixDocumentUserService {
 
                         // Get Approver User with the status
                         var xJaApprovalMatrixDocument = [];
-                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id} );
+                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id, table_name: pParam.table_name, application_id: pParam.application_id} );
                         if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
                             var xRows = xResultApprovalMatrixDocument.rows;
                             for( var i in xRows ){

@@ -95,6 +95,9 @@ async function approvalMatrixDocumentUser_ConfirmDocument( req, res ){
         }else{                      
             req.body.user_id = oAuthResult.result_verify.id;
             req.body.user_name = oAuthResult.result_verify.name;
+
+            console.log(">>> Request : " + JSON.stringify(req.body));
+
             joResult = await _documentUserServiceInstance.confirmDocument(req.body);
             joResult = JSON.stringify(joResult);
         }  

@@ -63,11 +63,14 @@ class UserRepository {
                     as: 'company'
                 },
                 {
-                    attributes: ["id","name"],
+                    attributes: ["id","name","is_admin"],
                     model: _modelUserLevel,
                     as: 'user_level',
                     through: {
                         attributes: [],
+                        where: {
+                            is_delete: 0,
+                        }
                     },
                     include: [
                         {
@@ -77,7 +80,7 @@ class UserRepository {
                         }
                     ]
                 }
-            ]
+            ],
         });
 
         return data;
@@ -99,7 +102,7 @@ class UserRepository {
                         as: 'company'
                     },
                     {
-                        attributes: ["id","name"],
+                        attributes: ["id","name", "is_admin"],
                         model: _modelUserLevel,
                         as: 'user_level',
                         through: {

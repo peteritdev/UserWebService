@@ -18,24 +18,48 @@ class ApprovalMatrixDocumentUserRepository {
     async confirmDocument(pParam, pAct){
         let xTransaction;
         var xJoResult = {};
+        var xSql = '';
+        var xJsonReplacement = {};
         
         try{
 
             var xSaved = null;
             xTransaction = await sequelize.transaction();
+
+            xSql = ' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' + 
+                    ' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' + 
+                    ' AND tr_approvalmatrixdocuments.document_id = :documentId ' + 
+                    ' AND tr_approvalmatrixdocumentusers.user_id = :userId ' ;
+             xJsonReplacement = {
+                                    status: pParam.status,
+                                    documentId: pParam.document_id,
+                                    userId: pParam.user_id,
+                                };
+
+            if( pParam.hasOwnProperty('application_id') && pParam.hasOwnProperty('table_name') ){
+                if( pParam.application_id != '' && pParam.table_name != '' ){
+                    xSql = ' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' + 
+                            ' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' + 
+                            ' AND tr_approvalmatrixdocuments.document_id = :documentId ' + 
+                            ' AND tr_approvalmatrixdocumentusers.user_id = :userId ' + 
+                            ' AND tr_approvalmatrixdocuments.application_id = :applicationId ' + 
+                            ' AND tr_approvalmatrixdocuments.table_name LIKE :tableName' ;
+                    xJsonReplacement = {};
+                    xJsonReplacement = {
+                        status: pParam.status,
+                        documentId: pParam.document_id,
+                        userId: pParam.user_id,
+                        applicationId: pParam.application_id,
+                        tableName: pParam.table_name,
+                    };
+                }
+            }
             
-            var xSql = ' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' + 
-                             ' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' + 
-                             ' AND tr_approvalmatrixdocuments.document_id = :documentId ' + 
-                             ' AND tr_approvalmatrixdocumentusers.user_id = :userId ' ;
+            
 
             var xUpdate = await sequelize.query( xSql, {
-                replacements: {
-                    status: pParam.status,
-                    documentId: pParam.document_id,
-                    userId: pParam.user_id
-                }},
-                {xTransaction},
+                replacements: xJsonReplacement},
+                {transaction: xTransaction},
             );
 
             await xTransaction.commit();
@@ -111,14 +135,23 @@ class ApprovalMatrixDocumentUserRepository {
         var xSql = "";
         var xObjJsonWhere = {};
 
+        xSql = ' SELECT COUNT(0) AS total FROM tr_approvalmatrixdocuments WHERE document_id = :documentId AND total_approved < min_approver ';
+
         if( pParam.hasOwnProperty('document_id') ){
             if( pParam.document_id != '' ){
                 xObjJsonWhere.documentId = pParam.document_id;
             }
         }
 
-        xSql = ' SELECT COUNT(0) AS total FROM tr_approvalmatrixdocuments WHERE document_id = :documentId AND total_approved < min_approver ';
+        if( pParam.hasOwnProperty('application_id') && pParam.hasOwnProperty('table_name') ){
+            if( pParam.application_id != '' && pParam.table_name != '' ){
+                xSql += ' AND application_id = :applicationId AND table_name LIKE :tableName ';
+                xObjJsonWhere.applicationId = pParam.application_id;
+                xObjJsonWhere.tableName = pParam.table_name;
+            }
+        }
 
+        
         var xDtQuery = await sequelize.query(xSql, {
             replacements: xObjJsonWhere,
             type: sequelize.QueryTypes.SELECT,
