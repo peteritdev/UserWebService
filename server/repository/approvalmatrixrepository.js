@@ -14,9 +14,9 @@ const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixRepository {
-    constructor(){}
+    constructor() { }
 
-    async list( pParam ){
+    async list(pParam) {
 
         var xWhere = {};
 
@@ -34,25 +34,29 @@ class ApprovalMatrixRepository {
             },
         ];
 
-        if( pParam.order_by != '' && pParam.hasOwnProperty('order_by') ){
-            xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
+        if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
+            xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC')];
         }
 
         var xParamQuery = {
             where: {
-                [Op.and]:[
+                [Op.and]: [
                     {
                         is_delete: 0
                     },
-                    xWhere,
+                    {
+                        name: {
+                            [Op.iLike]: '%' + pParam.keyword + '%',
+                        }
+                    },
                 ],
-            },          
-            include: xInclude,  
+            },
+            include: xInclude,
             order: [xOrder],
         };
 
-        if( pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit') ){
-            if( pParam.offset != '' && pParam.limit != ''){
+        if (pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit')) {
+            if (pParam.offset != '' && pParam.limit != '') {
                 xParamQuery.offset = pParam.offset;
                 xParamQuery.limit = pParam.limit;
             }
@@ -63,7 +67,7 @@ class ApprovalMatrixRepository {
         return xData;
     }
 
-    async getById( pParam ){
+    async getById(pParam) {
         var xInclude = [
             {
                 model: _modelApplicationTable,
@@ -81,55 +85,55 @@ class ApprovalMatrixRepository {
         return xData;
     }
 
-    async save(pParam, pAct){
+    async save(pParam, pAct) {
         let xTransaction;
         var xJoResult = {};
-        
-        try{
+
+        try {
 
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
-            if( pAct == "add" ){
+            if (pAct == "add") {
 
                 pParam.status = 1;
                 pParam.is_delete = 0;
 
-                xSaved = await _modelDb.create(pParam, {xTransaction}); 
+                xSaved = await _modelDb.create(pParam, { xTransaction });
 
-                if( xSaved.id != null ){
+                if (xSaved.id != null) {
 
                     await xTransaction.commit();
 
                     xJoResult = {
                         status_code: "00",
                         status_msg: "Data has been successfully saved",
-                        created_id: await _utilInstance.encrypt( (xSaved.id).toString(), config.cryptoKey.hashKey ),
-                    }                     
-                    
+                        created_id: await _utilInstance.encrypt((xSaved.id).toString(), config.cryptoKey.hashKey),
+                    }
 
-                }else{
 
-                    if( xTransaction ) await xTransaction.rollback();
+                } else {
+
+                    if (xTransaction) await xTransaction.rollback();
 
                     xJoResult = {
                         status_code: "-99",
                         status_msg: "Failed save to database",
                     }
 
-                }                
+                }
 
-            }else if( pAct == "update" ){
-                
+            } else if (pAct == "update") {
+
                 pParam.updatedAt = await _utilInstance.getCurrDateTime();
                 var xId = pParam.id;
                 delete pParam.id;
                 var xWhere = {
-                    where : {
+                    where: {
                         id: xId,
                     }
                 };
-                xSaved = await _modelDb.update( pParam, xWhere, {xTransaction} );
+                xSaved = await _modelDb.update(pParam, xWhere, { xTransaction });
 
                 await xTransaction.commit();
 
@@ -140,24 +144,24 @@ class ApprovalMatrixRepository {
 
             }
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed save or update data. Error : " + e,
                 err_msg: e
             }
-            
+
         }
-        
+
         return xJoResult;
     }
 
-    async delete( pParam ){
+    async delete(pParam) {
         let xTransaction;
         var xJoResult = {};
 
-        try{
+        try {
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
@@ -173,9 +177,9 @@ class ApprovalMatrixRepository {
                         id: pParam.id
                     }
                 },
-                {xTransaction}
+                { xTransaction }
             );
-    
+
             await xTransaction.commit();
 
             xJoResult = {
@@ -185,8 +189,8 @@ class ApprovalMatrixRepository {
 
             return xJoResult;
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed save or update data",
@@ -197,11 +201,11 @@ class ApprovalMatrixRepository {
         }
     }
 
-    async deletePermanent( pParam ){
+    async deletePermanent(pParam) {
         let xTransaction;
         var xJoResult = {};
 
-        try{
+        try {
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
@@ -211,9 +215,9 @@ class ApprovalMatrixRepository {
                         id: pParam.id
                     }
                 },
-                {xTransaction}
+                { xTransaction }
             );
-    
+
             await xTransaction.commit();
 
             xJoResult = {
@@ -223,8 +227,8 @@ class ApprovalMatrixRepository {
 
             return xJoResult;
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed save or update data",
