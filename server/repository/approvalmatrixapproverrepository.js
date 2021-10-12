@@ -17,9 +17,9 @@ const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixApproverRepository {
-    constructor(){}
+    constructor() { }
 
-    async list( pParam ){
+    async list(pParam) {
 
         var xWhere = {};
         var xWhereAnd = [];
@@ -50,7 +50,7 @@ class ApprovalMatrixApproverRepository {
                 as: 'approval_matrix_approver_user',
                 include: [
                     {
-                        attributes: ['id','name', 'email'],
+                        attributes: ['id', 'name', 'email'],
                         model: _modelUser,
                         as: 'user',
                     }
@@ -58,26 +58,26 @@ class ApprovalMatrixApproverRepository {
             }
         ];
 
-        if( pParam.hasOwnProperty('application_id') ){
-            if( pParam.application_id != '' ){
+        if (pParam.hasOwnProperty('application_id')) {
+            if (pParam.application_id != '') {
                 xWhereAnd.push({
-                    '$approval_matrix.application_table.application.id$':pParam.application_id,
+                    '$approval_matrix.application_table.application.id$': pParam.application_id,
                 })
             }
         }
 
-        if( pParam.hasOwnProperty('table_name') ){
-            if( pParam.table_name != '' ){
+        if (pParam.hasOwnProperty('table_name')) {
+            if (pParam.table_name != '') {
                 xWhereAnd.push({
-                    '$approval_matrix.application_table.table_name$':pParam.table_name,
+                    '$approval_matrix.application_table.table_name$': pParam.table_name,
                 })
             }
         }
 
-        if( pParam.hasOwnProperty('approval_matrix_id') ){
-            if( pParam.approval_matrix_id != '' ){
+        if (pParam.hasOwnProperty('approval_matrix_id')) {
+            if (pParam.approval_matrix_id != '') {
                 xWhereAnd.push({
-                    approval_matrix_id:pParam.approval_matrix_id,
+                    approval_matrix_id: pParam.approval_matrix_id,
                 })
             }
         }
@@ -86,20 +86,20 @@ class ApprovalMatrixApproverRepository {
             is_delete: 0
         });
 
-        xWhere.$and = xWhereAnd;  
+        xWhere.$and = xWhereAnd;
 
-        if( pParam.order_by != '' && pParam.hasOwnProperty('order_by') ){
-            xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC') ];
+        if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
+            xOrder = [pParam.order_by, (pParam.order_type == 'desc' ? 'DESC' : 'ASC')];
         }
 
         var xParamQuery = {
-            where: xWhere,        
-            include: xInclude,  
+            where: xWhere,
+            include: xInclude,
             order: [xOrder],
         };
 
-        if( pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit') ){
-            if( pParam.offset != '' && pParam.limit != ''){
+        if (pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit')) {
+            if (pParam.offset != '' && pParam.limit != '') {
                 xParamQuery.offset = pParam.offset;
                 xParamQuery.limit = pParam.limit;
             }
@@ -110,10 +110,10 @@ class ApprovalMatrixApproverRepository {
         return xData;
     }
 
-    async getById( pParam ){
+    async getById(pParam) {
 
         var xWhere = {};
-        var xWhereAnd = [];    
+        var xWhereAnd = [];
 
         var xInclude = [
             {
@@ -140,7 +140,7 @@ class ApprovalMatrixApproverRepository {
                 as: 'approval_matrix_approver_user',
                 include: [
                     {
-                        attributes: ['id','name', 'email'],
+                        attributes: ['id', 'name', 'email'],
                         model: _modelUser,
                         as: 'user',
                     }
@@ -148,27 +148,35 @@ class ApprovalMatrixApproverRepository {
             }
         ];
 
-        if( pParam.hasOwnProperty('application_id') ){
-            if( pParam.application_id != '' ){
+        if (pParam.hasOwnProperty('application_id')) {
+            if (pParam.application_id != '') {
                 xWhereAnd.push({
-                    '$approval_matrix.application_table.application.id$':pParam.application_id,
+                    '$approval_matrix.application_table.application.id$': pParam.application_id,
                 })
             }
         }
 
-        if( pParam.hasOwnProperty('table_name') ){
-            if( pParam.table_name != '' ){
+        if (pParam.hasOwnProperty('table_name')) {
+            if (pParam.table_name != '') {
                 xWhereAnd.push({
-                    '$approval_matrix.application_table.table_name$':pParam.table_name,
+                    '$approval_matrix.application_table.table_name$': pParam.table_name,
                 })
             }
         }
 
-        if( pParam.hasOwnProperty('company_id') && pParam.hasOwnProperty('department_id') ){
-            if( pParam.company_id != '' && pParam.department_id != '' ){
+        if (pParam.hasOwnProperty('company_id') && pParam.hasOwnProperty('department_id')) {
+            if (pParam.company_id != '' && pParam.department_id != '') {
                 xWhereAnd.push({
-                    '$approval_matrix.company_id$':pParam.company_id,
-                    '$approval_matrix.department_id$':pParam.department_id,
+                    '$approval_matrix.company_id$': pParam.company_id,
+                    '$approval_matrix.department_id$': pParam.department_id,
+                })
+            }
+        }
+
+        if (pParam.hasOwnProperty('company_id')) {
+            if (pParam.company_id != '') {
+                xWhereAnd.push({
+                    '$approval_matrix.company_id$': pParam.company_id,
                 })
             }
         }
@@ -177,15 +185,15 @@ class ApprovalMatrixApproverRepository {
             is_delete: 0
         });
 
-        if( pParam.hasOwnProperty('id') ){
-            if( pParam.id != '' ){
+        if (pParam.hasOwnProperty('id')) {
+            if (pParam.id != '') {
                 xWhereAnd.push({
                     id: pParam.id,
                 })
             }
         }
 
-        xWhere.$and = xWhereAnd;        
+        xWhere.$and = xWhereAnd;
 
         var xData = await _modelDb.findAndCountAll({
             where: xWhere,
@@ -195,93 +203,93 @@ class ApprovalMatrixApproverRepository {
         return xData;
     }
 
-    async save(pParam, pAct){
+    async save(pParam, pAct) {
         let xTransaction;
         var xJoResult = {};
-        
-        try{
+
+        try {
 
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
-            if( pAct == "add" ){
+            if (pAct == "add") {
 
                 pParam.status = 1;
                 pParam.is_delete = 0;
 
-                xSaved = await _modelDb.create(pParam, {xTransaction}); 
+                xSaved = await _modelDb.create(pParam, { xTransaction });
 
-                if( xSaved.id != null ){
+                if (xSaved.id != null) {
 
                     await xTransaction.commit();
 
                     xJoResult = {
                         status_code: "00",
                         status_msg: "Data has been successfully saved",
-                        created_id: await _utilInstance.encrypt( (xSaved.id).toString(), config.cryptoKey.hashKey ),
-                    }                     
-                    
+                        created_id: await _utilInstance.encrypt((xSaved.id).toString(), config.cryptoKey.hashKey),
+                    }
 
-                }else{
 
-                    if( xTransaction ) await xTransaction.rollback();
+                } else {
+
+                    if (xTransaction) await xTransaction.rollback();
 
                     xJoResult = {
                         status_code: "-99",
                         status_msg: "Failed save to database",
                     }
 
-                }                
+                }
 
-            }else if( pAct == "add_with_detail" ){
+            } else if (pAct == "add_with_detail") {
 
                 pParam.status = 1;
                 pParam.is_delete = 0;
 
-                xSaved = await _modelDb.create(pParam, 
-                                               {
-                                                include: [
-                                                    {
-                                                        model: _modelApprovalMatrixApproverUser,
-                                                        as: 'approval_matrix_approver_user'
-                                                    }
-                                                ],
-                                               },
-                                               {xTransaction}); 
+                xSaved = await _modelDb.create(pParam,
+                    {
+                        include: [
+                            {
+                                model: _modelApprovalMatrixApproverUser,
+                                as: 'approval_matrix_approver_user'
+                            }
+                        ],
+                    },
+                    { xTransaction });
 
-                if( xSaved.id != null ){
+                if (xSaved.id != null) {
 
                     await xTransaction.commit();
 
                     xJoResult = {
                         status_code: "00",
                         status_msg: "Data has been successfully saved",
-                        created_id: await _utilInstance.encrypt( (xSaved.id).toString(), config.cryptoKey.hashKey ),
-                    }                     
-                    
+                        created_id: await _utilInstance.encrypt((xSaved.id).toString(), config.cryptoKey.hashKey),
+                    }
 
-                }else{
 
-                    if( xTransaction ) await xTransaction.rollback();
+                } else {
+
+                    if (xTransaction) await xTransaction.rollback();
 
                     xJoResult = {
                         status_code: "-99",
                         status_msg: "Failed save to database",
                     }
 
-                }                
+                }
 
-            }else if( pAct == "update" ){
-                
+            } else if (pAct == "update") {
+
                 pParam.updatedAt = await _utilInstance.getCurrDateTime();
                 var xId = pParam.id;
                 delete pParam.id;
                 var xWhere = {
-                    where : {
+                    where: {
                         id: xId,
                     }
                 };
-                xSaved = await _modelDb.update( pParam, xWhere, {xTransaction} );
+                xSaved = await _modelDb.update(pParam, xWhere, { xTransaction });
 
                 await xTransaction.commit();
 
@@ -292,24 +300,24 @@ class ApprovalMatrixApproverRepository {
 
             }
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed save or update data. Error : " + e,
                 err_msg: e
             }
-            
+
         }
-        
+
         return xJoResult;
     }
 
-    async delete( pParam ){
+    async delete(pParam) {
         let xTransaction;
         var xJoResult = {};
 
-        try{
+        try {
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
@@ -325,9 +333,9 @@ class ApprovalMatrixApproverRepository {
                         id: pParam.id
                     }
                 },
-                {xTransaction}
+                { xTransaction }
             );
-    
+
             await xTransaction.commit();
 
             xJoResult = {
@@ -337,8 +345,8 @@ class ApprovalMatrixApproverRepository {
 
             return xJoResult;
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed save or update data",
@@ -349,11 +357,11 @@ class ApprovalMatrixApproverRepository {
         }
     }
 
-    async deletePermanent( pParam ){
+    async deletePermanent(pParam) {
         let xTransaction;
         var xJoResult = {};
 
-        try{
+        try {
             var xSaved = null;
             xTransaction = await sequelize.transaction();
 
@@ -363,8 +371,8 @@ class ApprovalMatrixApproverRepository {
                         id: pParam.id,
                     },
                 },
-                {xTransaction});
-    
+                { xTransaction });
+
             await xTransaction.commit();
 
             xJoResult = {
@@ -374,8 +382,8 @@ class ApprovalMatrixApproverRepository {
 
             return xJoResult;
 
-        }catch(e){
-            if( xTransaction ) await xTransaction.rollback();
+        } catch (e) {
+            if (xTransaction) await xTransaction.rollback();
             xJoResult = {
                 status_code: "-99",
                 status_msg: "Failed delete data",
