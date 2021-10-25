@@ -9,8 +9,8 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 
 
-const env         = process.env.NODE_ENV || 'localhost';
-const config      = require(__dirname + '/../config/config.json')[env];
+const env = process.env.NODE_ENV || 'localhost';
+const config = require(__dirname + '/../config/config.json')[env];
 
 //Repository
 const ApplicationMatrixDocumentRepository = require('../repository/approvalmatrixdocumentrepository.js');
@@ -24,36 +24,36 @@ const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixDocumentService {
-    constructor(){}
+    constructor() { }
 
-    async list(pParam){
+    async list(pParam) {
         var xJoResult = {};
-        var xJoArrData = [];       
-        var xFlagProcess = true;        
+        var xJoArrData = [];
+        var xFlagProcess = true;
 
-        if( pParam.hasOwnProperty('document_id') ){
-            if( pParam.document_id != '' ){
-                var xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
-                if( xDecId.status_code == '00' ){
+        if (pParam.hasOwnProperty('document_id')) {
+            if (pParam.document_id != '') {
+                var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
+                if (xDecId.status_code == '00') {
                     pParam.document_id = xDecId.decrypted;
-                }else{
+                } else {
                     xJoResult = xDecId;
                     xFlagProcess = false;
                 }
             }
         }
 
-        if( xFlagProcess ){
+        if (xFlagProcess) {
             var xResultList = await _repoInstance.list(pParam);
-            if( xResultList.count > 0 ){
+            if (xResultList.count > 0) {
                 xJoResult.status_code = "00";
                 xJoResult.status_msg = "OK";
                 xJoResult.total_record = xResultList.count;
-    
+
                 var xRows = xResultList.rows;
-    
-                for(var index in xRows){                
-    
+
+                for (var index in xRows) {
+
                     xJoArrData.push({
                         id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                         document_id: await _utilInstance.encrypt((xRows[index].document_id).toString(), config.cryptoKey.hashKey),
@@ -67,41 +67,41 @@ class ApprovalMatrixDocumentService {
                         updated_at: moment(xRows[index].updatedAt).format('DD-MM-YYYY HH:mm:ss'),
                     });
                 }
-    
+
                 xJoResult.data = xJoArrData;
-            }else{
+            } else {
                 xJoResult.status_code = "-99";
                 xJoResult.status_msg = "Data not found";
             }
-        }     
+        }
 
         return (xJoResult);
-    }    
+    }
 
-    async isUserAllowApprove( pParam ){
+    async isUserAllowApprove(pParam) {
         var xJoResult;
         var xFlagProcess = true;
         var xDecId = null;
 
-        if( pParam.hasOwnProperty('document_id') ){
-            if( pParam.document_id != '' ){
-                xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
-                if( xDecId.status_code == '00' ){
+        if (pParam.hasOwnProperty('document_id')) {
+            if (pParam.document_id != '') {
+                xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
+                if (xDecId.status_code == '00') {
                     pParam.document_id = xDecId.decrypted;
-                }else{
+                } else {
                     xFlagProcess = false;
                     xJoResult = xDecId;
                 }
             }
         }
 
-        if( xFlagProcess ){
-            if( pParam.hasOwnProperty('user_id') ){
-                if( pParam.user_id != '' ){
-                    xDecId = await _utilInstance.decrypt( pParam.user_id, config.cryptoKey.hashKey );
-                    if( xDecId.status_code == '00' ){
+        if (xFlagProcess) {
+            if (pParam.hasOwnProperty('user_id')) {
+                if (pParam.user_id != '') {
+                    xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+                    if (xDecId.status_code == '00') {
                         pParam.user_id = xDecId.decrypted;
-                    }else{
+                    } else {
                         xFlagProcess = false;
                         xJoResult = xDecId;
                     }
@@ -109,72 +109,72 @@ class ApprovalMatrixDocumentService {
             }
         }
 
-        if( xFlagProcess ){
+        if (xFlagProcess) {
 
-            var xJoResult = await _repoInstance.isUserAllowApprove( pParam );
+            var xJoResult = await _repoInstance.isUserAllowApprove(pParam);
 
         }
 
         return xJoResult;
     }
 
-    async save(pParam){
+    async save(pParam) {
         var xJoResult;
         var xAct = pParam.act;
         var xFlagProcess = true;
 
         delete pParam.act;
 
-        if( xAct == "add" ){       
-            
+        if (xAct == "add") {
+
             // Add Header
-            var xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
-            if( xDecId.status_code == '00' ){
+            var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
+            if (xDecId.status_code == '00') {
                 pParam.document_id = xDecId.decrypted;
                 xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
-                if( xDecId.status_code == '00' ){
+                if (xDecId.status_code == '00') {
                     pParam.created_by = xDecId.decrypted;
                     pParam.created_by_name = pParam.user_name;
-                }else{
+                } else {
                     xFlagProcess = false;
                     xJoResult = xDecId;
                 }
-            }else{
+            } else {
                 xFlagProcess = false;
                 xJoResult = xDecId;
             }
-                
-            if( xFlagProcess ){
+
+            if (xFlagProcess) {
 
                 var xParamSave = null;
                 var xResultApprover4Notification = [];
-                
+
                 // Get approval matrix
                 var xParamFilter = {
                     application_id: pParam.application_id,
                     table_name: pParam.table_name,
                 };
-                if( pParam.hasOwnProperty('company_id') ){
-                    if( pParam.company_id != '' ){
+                if (pParam.hasOwnProperty('company_id')) {
+                    if (pParam.company_id != '') {
                         xParamFilter.company_id = pParam.company_id;
-                    }   
+                    }
                 }
-                if( pParam.hasOwnProperty('department_id') ){
-                    if( pParam.department_id != '' ){
+                if (pParam.hasOwnProperty('department_id')) {
+                    if (pParam.department_id != '') {
                         xParamFilter.department_id = pParam.department_id;
-                    }   
+                    }
                 }
                 var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
 
-                if( xApprovalMatrix.count > 0 ){  
-                    
+                if (xApprovalMatrix.count > 0) {
+
                     var xRowsApprovalMatrix = xApprovalMatrix.rows;
 
-                    for( var index in xRowsApprovalMatrix ) {
+                    for (var index in xRowsApprovalMatrix) {
 
                         var xApproverUser = [];
-                        if( xRowsApprovalMatrix[index].approval_matrix_approver_user.length > 0 ){
-                            for( var j = 0; j < xRowsApprovalMatrix[index].approval_matrix_approver_user.length; j++ ){
+                        if (xRowsApprovalMatrix[index].approval_matrix_approver_user.length > 0) {
+                            for (var j = 0; j < xRowsApprovalMatrix[index].approval_matrix_approver_user.length; j++) {
                                 xApproverUser.push({
                                     user_id: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.id,
                                     user_name: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.name,
@@ -195,7 +195,7 @@ class ApprovalMatrixDocumentService {
                             approval_matrix_document_user: xApproverUser,
                         }
 
-                        var xAddResult = await _repoInstance.save( xParamSave, 'add_with_detail' );
+                        var xAddResult = await _repoInstance.save(xParamSave, 'add_with_detail');
 
                         xResultApprover4Notification.push({
                             sequence: xRowsApprovalMatrix[index].sequence,
@@ -211,29 +211,29 @@ class ApprovalMatrixDocumentService {
 
                 }
 
-            }                 
+            }
 
 
-        }else if( xAct == "fetch_matrix" ){
+        } else if (xAct == "fetch_matrix") {
             // Delete approval matrix first
-            var xFlagProcess = true;  
+            var xFlagProcess = true;
             var xTempEncDocumentId = '';
 
             var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
-            if( xDecId.status_code == "00" ){
+            if (xDecId.status_code == "00") {
                 xTempEncDocumentId = pParam.document_id;
-                pParam.document_id = xDecId.decrypted;                               
-            }else{
+                pParam.document_id = xDecId.decrypted;
+            } else {
                 xFlagProcess = false;
                 xJoResult = xDecId;
             }
 
-            var xDeleteResult = await _repoInstance.deletePermanent( pParam );
-            
-            if( xDeleteResult.status_code == '00' ){
+            var xDeleteResult = await _repoInstance.deletePermanent(pParam);
+
+            if (xDeleteResult.status_code == '00') {
                 pParam.act = 'add';
                 pParam.document_id = xTempEncDocumentId;
-                var xResultAdd = this.save( pParam );
+                var xResultAdd = this.save(pParam);
                 xJoResult = xResultAdd;
             }
 
@@ -242,20 +242,62 @@ class ApprovalMatrixDocumentService {
         return xJoResult;
     }
 
-    async delete( pParam ){
+    async delete(pParam) {
         var xJoResult;
-        var xFlagProcess = true;  
+        var xFlagProcess = true;
 
         var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
-        if( xDecId.status_code == "00" ){
-            pParam.document_id = xDecId.decrypted;                               
-        }else{
+        if (xDecId.status_code == "00") {
+            pParam.document_id = xDecId.decrypted;
+        } else {
             xFlagProcess = false;
             xJoResult = xDecId;
         }
 
-        var xDeleteResult = await _repoInstance.deletePermanent( pParam );
+        var xDeleteResult = await _repoInstance.deletePermanent(pParam);
         xJoResult = xDeleteResult;
+
+        return xJoResult;
+    }
+
+    // Purpose: this function use for verify approval using QRCode
+    // Component of qrcode : 
+    // - VALIDATE_SIGNATURE|ASMS|movement_id which is document_id|user_id
+    async verifyApprovalByQRCode(pParam) {
+        var xJoResult = {};
+        var xFlagProcess = false;
+        var xDecId = null;
+
+        try {
+            let xSplitedSignature = (pParam.signature).split('|');
+            var xDecId = await _utilInstance.decrypt(xSplitedSignature[2], config.cryptoKey.hashKey);
+            if (xDecId.status_code == '00') {
+                let xSplitedId = (xDecId.decrypted).split('|');
+                let xVerifyParam = {
+                    document_id: xSplitedId[0],
+                    app_code: xSplitedSignature[1],
+                    user_id: xSplitedId[1],
+                }
+                let xResultVerifyApproval = await _repoInstance.verifyApprovalByQRCode(xVerifyParam);
+                if (xResultVerifyApproval.status_code == '00') {
+                    xJoResult = {
+                        status_code: '00',
+                        status_msg: 'OK',
+                        data: {
+                            application_name: xResultVerifyApproval.data.application.name,
+                            document_date: (xResultVerifyApproval.data.createdAt != '' ? moment(xResultVerifyApproval.data.createdAt).format('DD MMM YYYY') : null),
+                            document_no: xResultVerifyApproval.data.document_no,
+                            approver_name: xResultVerifyApproval.data.approval_matrix_document_user.user_name,
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            xJoResult = {
+                status_code: '-99',
+                status_msg: `[approvalmatroxdocumentservice.verifyApprovalByQRCode] Err: ${e}`
+            }
+        }
 
         return xJoResult;
     }
