@@ -290,7 +290,7 @@ class ApprovalMatrixDocumentService {
                                 application_name: xResultVerifyApproval.data.application.name,
                                 document_date: (xResultVerifyApproval.data.createdAt != '' ? moment(xResultVerifyApproval.data.createdAt).format('DD MMM YYYY') : null),
                                 document_no: xResultVerifyApproval.data.document_no,
-                                approver_name: xResultVerifyApproval.data.approval_matrix_document_user.user_name,
+                                approver_name: xResultVerifyApproval.data.approval_matrix_document_user[0].user_name,
                             }
                         }
                     } else {
