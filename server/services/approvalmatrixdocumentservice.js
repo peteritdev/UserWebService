@@ -279,17 +279,27 @@ class ApprovalMatrixDocumentService {
                     user_id: xSplitedId[1],
                 }
                 let xResultVerifyApproval = await _repoInstance.verifyApprovalByQRCode(xVerifyParam);
+                console.log(`>>> xResultVerifyApproval : ${JSON.stringify(xResultVerifyApproval)}`);
                 if (xResultVerifyApproval.status_code == '00') {
-                    xJoResult = {
-                        status_code: '00',
-                        status_msg: 'OK',
-                        data: {
-                            application_name: xResultVerifyApproval.data.application.name,
-                            document_date: (xResultVerifyApproval.data.createdAt != '' ? moment(xResultVerifyApproval.data.createdAt).format('DD MMM YYYY') : null),
-                            document_no: xResultVerifyApproval.data.document_no,
-                            approver_name: xResultVerifyApproval.data.approval_matrix_document_user.user_name,
+
+                    if (xResultVerifyApproval.data != null) {
+                        xJoResult = {
+                            status_code: '00',
+                            status_msg: 'OK',
+                            data: {
+                                application_name: xResultVerifyApproval.data.application.name,
+                                document_date: (xResultVerifyApproval.data.createdAt != '' ? moment(xResultVerifyApproval.data.createdAt).format('DD MMM YYYY') : null),
+                                document_no: xResultVerifyApproval.data.document_no,
+                                approver_name: xResultVerifyApproval.data.approval_matrix_document_user.user_name,
+                            }
+                        }
+                    } else {
+                        xJoResult = {
+                            status_code: '-99',
+                            status_msg: 'Data not found',
                         }
                     }
+
                 }
             }
         } catch (e) {
