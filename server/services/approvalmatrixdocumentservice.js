@@ -165,6 +165,7 @@ class ApprovalMatrixDocumentService {
                     }
                 }
                 var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
+                console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
 
                 if (xApprovalMatrix.count > 0) {
 
