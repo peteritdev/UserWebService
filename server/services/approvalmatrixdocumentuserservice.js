@@ -58,7 +58,7 @@ class ApprovalMatrixDocumentUserService {
 
             // Check if this user allow to approve or not
             // console.log(">>> HERE : " + JSON.stringify(pParam));
-            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id } );
+            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id, application_id: pParam.application_id } );
             if( xJoIsAllow.status_code == '00' ){
                 if( xJoIsAllow.is_allow_approve == 1 ){
                     pParam.updated_by = pParam.user_id;
