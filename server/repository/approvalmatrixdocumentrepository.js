@@ -302,7 +302,7 @@ class ApprovalMatrixDocumentRepository {
 
         if (pParam.hasOwnProperty('application_id')) {
             if (pParam.application_id != '') {
-                xObjJsonWhere.application_id = pParam.application_id;
+                xObjJsonWhere.applicationId = pParam.application_id;
             }
         }
 
@@ -334,7 +334,7 @@ class ApprovalMatrixDocumentRepository {
 
         var xDtQuery = await sequelize.query(xSql, {
             replacements: xObjJsonWhere,
-            type: sequelize.QueryTypes.SELECT,
+            type: sequelize.QueryTypes.SELECT,x
         });
 
 
