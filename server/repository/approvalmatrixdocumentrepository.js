@@ -300,6 +300,12 @@ class ApprovalMatrixDocumentRepository {
             }
         }
 
+        if (pParam.hasOwnProperty('application_id')) {
+            if (pParam.application_id != '') {
+                xObjJsonWhere.application_id = pParam.application_id;
+            }
+        }
+
         if (pParam.hasOwnProperty('user_id')) {
             if (pParam.user_id != '') {
                 xObjJsonWhere.userId = pParam.user_id;
@@ -323,7 +329,7 @@ class ApprovalMatrixDocumentRepository {
             '    ) AS "is_your_turn" ' +
             ' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' +
             '  ON amd.id = amdu.approval_matrix_document_id ' +
-            ' WHERE amd.document_id = :documentId and amd.total_approved < min_approver ' +
+            ' WHERE amd.document_id = :documentId and amd.application_id = :applicationId and amd.total_approved < min_approver ' +
             '    AND amdu.user_id = :userId';
 
         var xDtQuery = await sequelize.query(xSql, {
