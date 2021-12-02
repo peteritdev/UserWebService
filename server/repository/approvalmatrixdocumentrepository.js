@@ -334,7 +334,7 @@ class ApprovalMatrixDocumentRepository {
 
         var xDtQuery = await sequelize.query(xSql, {
             replacements: xObjJsonWhere,
-            type: sequelize.QueryTypes.SELECT,x
+            type: sequelize.QueryTypes.SELECT,
         });
 
 
