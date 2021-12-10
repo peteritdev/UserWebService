@@ -28,7 +28,7 @@ async function getMenuById( req, res ){
                     "error_msg": xError
                 });
             }else{                
-                xJoResult = await _menuServiceInstance.getMenuById(req.params);
+                xJoResult = await _menuServiceInstance.getById(req.params);
                 xJoResult = JSON.stringify(xJoResult);
                 console.log(xJoResult);
             }

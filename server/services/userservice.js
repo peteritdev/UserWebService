@@ -345,8 +345,12 @@ class UserService {
                     // Get Employee Info
                     var xEmployeeId = (validateEmail.employee_id != null ? (await _utilInstance.encrypt(validateEmail.employee_id.toString(), config.cryptoKey.hashKey)) : 0);
                     var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-                    var xUrlQuery = "/" + xEmployeeId;
-                    var xEmployeeInfo = await _utilInstance.axiosRequest((xUrlAPI + xUrlQuery), {});
+                    var xUrlQuery = "?id=" + xEmployeeId;
+                    var xEmployeeInfo = await _utilInstance.axiosRequest((xUrlAPI + xUrlQuery), {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
 
                     console.log(JSON.stringify(xEmployeeInfo));
 
@@ -362,7 +366,7 @@ class UserService {
                         "sanqua_company_name": (validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0 ? validateEmail.company.alias : ""),
                         "username": validateEmail.name,
                         "employee_id": xEmployeeId,
-                        "employee": (xEmployeeInfo.status_code == "00" ? xEmployeeInfo.token_data.data : null),
+                        "data": (xEmployeeInfo.status_code == "00" ? ( xEmployeeInfo.token_data.status_code == '00' ? xEmployeeInfo.token_data.data : null ) : null),
                     });
                 }
 

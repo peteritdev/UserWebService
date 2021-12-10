@@ -28,6 +28,7 @@ class MenuService{
         var xDecId = await _utilInstance.decrypt( pParam.id, config.cryptoKey.hashKey );
         if( xDecId.status_code == '00' ){
             pParam.id = xDecId.decrypted;
+            xFlagProcess = true;
         }else{
             xJoResult = xDecId;
             xFlagProcess = false;
@@ -58,6 +59,8 @@ class MenuService{
                 xJoArrData.push({
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
+                    display_name: xRows[index].display_name,
+                    is_main: ( xRows[index].is_main == 1 ? 'Yes' : 'No'),
                     application: xRows[index].application,
                     path: xRows[index].path,
                     created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),

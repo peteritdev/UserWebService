@@ -41,6 +41,12 @@ class MenuRepository {
             }
         }
 
+        if( pParam.hasOwnProperty('is_main') && pParam.is_main != '' ){
+            xWhereApp = {
+                is_main: pParam.is_main,
+            }
+        }
+
         xInclude = [
             {
                 model: _modelApplication,
@@ -60,6 +66,11 @@ class MenuRepository {
                 [Op.or]:[
                     {
                         name: {
+                            [Op.iLike]: '%' + pParam.keyword + '%'
+                        },
+                    },
+                    {
+                        display_name: {
                             [Op.iLike]: '%' + pParam.keyword + '%'
                         },
                     },

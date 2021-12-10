@@ -3,7 +3,7 @@ var configEnv = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
 const { hash } = require('bcryptjs');
-const Op = sequelize.Op;
+const Op = Sequelize.Op;
 
 //Model
 const _modelUser = require('../models').ms_users;
@@ -92,15 +92,15 @@ class UserRepository {
         try{
             data = await _modelUser.findOne({
                 where:{
-                    email: {
+                    username: {
                         [Op.like]: pEmail
                     },
                 },
                 include:[
-                    {
-                        model: _modelCompany,
-                        as: 'company'
-                    },
+                    // {
+                    //     model: _modelCompany,
+                    //     as: 'company'
+                    // },
                     {
                         attributes: ["id","name", "is_admin"],
                         model: _modelUserLevel,
