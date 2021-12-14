@@ -280,7 +280,6 @@ class ApprovalMatrixDocumentService {
                     user_id: xSplitedId[1],
                 }
                 let xResultVerifyApproval = await _repoInstance.verifyApprovalByQRCode(xVerifyParam);
-                console.log(`>>> xResultVerifyApproval : ${JSON.stringify(xResultVerifyApproval)}`);
                 if (xResultVerifyApproval.status_code == '00') {
 
                     if (xResultVerifyApproval.data != null) {
@@ -292,6 +291,7 @@ class ApprovalMatrixDocumentService {
                                 document_date: (xResultVerifyApproval.data.createdAt != '' ? moment(xResultVerifyApproval.data.createdAt).format('DD MMM YYYY') : null),
                                 document_no: xResultVerifyApproval.data.document_no,
                                 approver_name: xResultVerifyApproval.data.approval_matrix_document_user[0].user_name,
+                                status: xResultVerifyApproval.data.approval_matrix_document_user[0].status,
                             }
                         }
                     } else {
