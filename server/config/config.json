@@ -37,7 +37,7 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://10.10.20.8:2189/api/hr/v1/employee"
       }
       
     },
