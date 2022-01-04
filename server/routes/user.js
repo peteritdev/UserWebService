@@ -2,7 +2,7 @@ const userController = require('../controllers').user;
 
 const { check, validationResult } = require('express-validator');
 
-var rootAPIPath = '/api/oauth/v1/';
+var rootAPIPath = '/simpeg/oauth/v1/';
 
 module.exports = (app) => { 
 

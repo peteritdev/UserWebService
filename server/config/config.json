@@ -1,5 +1,5 @@
 {
-  "localhost_ky": {
+  "localhost": {
     "appPort": 9189,
     "username": "postgres",
     "password": "O91o88juli83^^ok",
@@ -47,7 +47,7 @@
       }
     }
   },
-  "localhost": {
+  "localhost_sqa": {
     "appPort": 9189,
     "username": "postgres",
     "password": "P455uu0rd^^ok",
