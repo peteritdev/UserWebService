@@ -97,8 +97,8 @@
   },
   "development": {
     "appPort": 9189,
-    "username": "peter.itdev@gmail.com",
-    "password": "Pet3rgr33sql4dm1n",
+    "username": "dika",
+    "password": "P0stgr33sqlKyr1",
     "database": "ky_oauthdb",
     "host": "192.168.28.88",
     "port": 5432,
