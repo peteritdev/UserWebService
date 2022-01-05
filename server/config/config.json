@@ -147,16 +147,18 @@
     "timezone": "+07:00"
   },
   "production": {
-    "appPort": 1189,
-    "username": "postgres",
-    "password": "SANQUAD0ck3rP912",
-    "database": "sanqua_oauthdb",
-    "host": "127.0.0.1",
-    "port": 5435,
+    "appPort": 9189,
+    "username": "peter.itdev@gmail.com",
+    "password": "Pet3rgr33sql4dm1n",
+    "database": "ky_oauthdb",
+    "host": "localhost",
+    "port": 5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
-      "typeCast": true
+      "typeCast": true,
+      "useUTC": false,
+      "charset": "utf8mb4_unicode_ci"
     },
     "timezone": "Asia/Jakarta",
     "cryptoKey": {
@@ -176,7 +178,7 @@
         "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
       },
       "employeeService": {
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8081/simpeg/v1/user/profile"
       }
     },
     "login": {
@@ -190,11 +192,6 @@
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
         }
       }
-    },
-    "dialectOptions": {
-      "useUTC": false,
-      "charset": "utf8mb4_unicode_ci"
-    },
-    "timezone": "+07:00"
-  }
+    }
+  },
 }
