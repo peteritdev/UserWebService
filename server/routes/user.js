@@ -2,7 +2,7 @@ const userController = require('../controllers').user;
 
 const { check, validationResult } = require('express-validator');
 
-var rootAPIPath = '/api/oauth/v1/';
+var rootAPIPath = '/simpeg/oauth/v1/';
 
 module.exports = (app) => { 
 
@@ -31,7 +31,8 @@ module.exports = (app) => {
   app.post(rootAPIPath + 'user/verify_account', arrValidateVerify, userController.verifyAccount);
 
   var arrValidateLogin = [
-    check("email").isEmail().withMessage("Invalid email format"),
+    // check("email").isEmail().withMessage("Invalid email format"),
+    check("email").not().isEmpty().withMessage("Email is required"),
     check("password").not().isEmpty().withMessage("Password is required")
   ];
   app.post(rootAPIPath + 'user/login', arrValidateLogin, userController.login);
@@ -100,5 +101,7 @@ module.exports = (app) => {
   app.post(rootAPIPath + "user/delete/:id", arrValidateUserDelete, userController.deleteUser);
 
   app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
+
+  app.post(rootAPIPath + 'user/encrypt_password', userController.getEncryptedPassword);  
 
 };

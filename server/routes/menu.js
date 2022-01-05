@@ -36,5 +36,11 @@ module.exports = (app) => {
     arrValidate = [
         check('id').not().isEmpty().withMessage('Parameter id is required'),
     ];
+    app.get( rootAPIPath + 'menu/detail/:id', arrValidate, menuController.getMenuById );
+
+    arrValidate = [];
+    arrValidate = [
+        check('id').not().isEmpty().withMessage('Parameter id is required'),
+    ];
     app.post( rootAPIPath + 'menu/delete/:id', arrValidate, menuController.deleteMenu );
 }

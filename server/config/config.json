@@ -1,10 +1,11 @@
 {
   "localhost": {
+    "appPort": 9189,
     "username": "postgres",
-    "password": "P455uu0rd^^ok",
-    "database": "sanqua_oauthdb",
-    "host": "10.10.20.8",
-    "port":5435,
+    "password": "O91o88juli83^^ok",
+    "database": "ky_oauthdb",
+    "host": "localhost",
+    "port": 5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
@@ -13,37 +14,30 @@
       "charset": "utf8mb4_unicode_ci"
     },
     "timezone": "Asia/Jakarta",
-
-    "cryptoKey":{
+    "cryptoKey": {
       "md5Key": "4B1C9E44D769C429",
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
-
-    "token_expire":"7",
-    "token_expire_unit":"day",
+    "token_expire": "7",
+    "token_expire_unit": "day",
     "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
-
-    "frontParam":{
-      "separatorData": "Þ", 
+    "frontParam": {
+      "separatorData": "Þ",
       "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
-    },  
-  
-    "api":{
+    },
+    "api": {
       "notification": {
         "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
         "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
       },
-  
-      "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+      "employeeService": {
+        "getEmployeeInfo": "http://localhost:8081/simpeg/v1/user/profile"
       }
-      
     },
-  
-    "login":{
+    "login": {
       "expireToken": "24h",
-      "oAuth2":{
-        "google":{
+      "oAuth2": {
+        "google": {
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
           "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
           "redirect": "http://sanquawater.co.id",
@@ -52,52 +46,46 @@
         }
       }
     }
-
   },
-
-  "development": {
+  "localhost_sqa": {
+    "appPort": 9189,
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
-    "host": "localhost",
-    "port":5435,
+    "host": "10.10.20.8",
+    "port": 5435,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
-      "typeCast": true
+      "typeCast": true,
+      "useUTC": false,
+      "charset": "utf8mb4_unicode_ci"
     },
     "timezone": "Asia/Jakarta",
-
-    "cryptoKey":{
+    "cryptoKey": {
       "md5Key": "4B1C9E44D769C429",
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
-
-    "token_expire":"7",
-    "token_expire_unit":"day",
+    "token_expire": "7",
+    "token_expire_unit": "day",
     "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
-
-    "frontParam":{
-      "separatorData": "Þ", 
+    "frontParam": {
+      "separatorData": "Þ",
       "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
-    },  
-  
-    "api":{
+    },
+    "api": {
       "notification": {
         "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
         "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
       },
-  
-      "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+      "employeeService": {
+        "getEmployeeInfo": "http://10.10.20.8:8189/api/hr/v1/employee"
       }
-      
     },
-  
-    "login":{
+    "login": {
       "expireToken": "24h",
-      "oAuth2":{
-        "google":{
+      "oAuth2": {
+        "google": {
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
           "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
           "redirect": "http://sanquawater.co.id",
@@ -105,59 +93,47 @@
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
         }
       }
-    },
-  
-    "dialectOptions": {
-      "useUTC": false,
-      "charset": "utf8mb4_unicode_ci"
-    },
-    "timezone": "+07:00"
-
+    }
   },
-
-  "production": {
-    "username": "postgres",
-    "password": "SANQUAD0ck3rP912",
-    "database": "sanqua_oauthdb",
-    "host": "127.0.0.1",
-    "port":5435,
+  "development": {
+    "appPort": 9189,
+    "username": "peter.itdev@gmail.com",
+    "password": "Pet3rgr33sql4dm1n",
+    "database": "ky_oauthdb",
+    "host": "localhost",
+    "port": 5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
-      "typeCast": true
+      "typeCast": true,
+      "useUTC": false,
+      "charset": "utf8mb4_unicode_ci"
     },
     "timezone": "Asia/Jakarta",
-
-    "cryptoKey":{ 
+    "cryptoKey": {
       "md5Key": "4B1C9E44D769C429",
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
-
-    "token_expire":"7",
-    "token_expire_unit":"day",
+    "token_expire": "7",
+    "token_expire_unit": "day",
     "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
-
-    "frontParam":{
-      "separatorData": "Þ", 
+    "frontParam": {
+      "separatorData": "Þ",
       "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
-    },  
-  
-    "api":{
+    },
+    "api": {
       "notification": {
         "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
         "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
       },
-  
-      "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+      "employeeService": {
+        "getEmployeeInfo": "http://localhost:8081/simpeg/v1/user/profile"
       }
-      
     },
-  
-    "login":{
+    "login": {
       "expireToken": "24h",
-      "oAuth2":{
-        "google":{
+      "oAuth2": {
+        "google": {
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
           "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
           "redirect": "http://sanquawater.co.id",
@@ -165,15 +141,6 @@
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
         }
       }
-    },
-  
-    "dialectOptions": {
-      "useUTC": false,
-      "charset": "utf8mb4_unicode_ci"
-    },
-    "timezone": "+07:00"
-
+    }
   }
-  
-  
 }

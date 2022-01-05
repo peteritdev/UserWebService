@@ -15,7 +15,7 @@ const { check, validationResult } = require('express-validator');
 module.exports = { list, dropDownList, save, deleteUser,
                    register, generatePassword, verifyAccount, login, forgotPassword, verifyForgotPassword, changePassword, loggedChangePassword, 
                    loginGoogle, parseQueryGoogle, verifyToken, addVendorId,
-                   getUserByEmployeeId,};
+                   getUserByEmployeeId, getEncryptedPassword};
 
 async function list( req, res ){
     var joResult;
@@ -406,4 +406,23 @@ async function getUserByEmployeeId( req, res ){
 
     res.setHeader('Content-Type','application/json');
     res.status(200).send(joResult);
+}
+
+async function getEncryptedPassword( req, res ){
+
+    var joResult;
+
+    //var encPassword = md5( req.body.password + config.md5Key );
+    bcrypt.genSalt( 10, function( err, salt ){
+        bcrypt.hash( req.body.password, salt, function( err, hash ){
+            joResult = JSON.stringify({
+                "status_code": "00",
+                "status_msg": "User successfully created",
+                "password": hash
+            });
+            res.setHeader('Content-Type','application/json');
+            res.status(200).send(joResult);
+        });
+    } );
+
 }

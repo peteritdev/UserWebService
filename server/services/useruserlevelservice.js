@@ -18,7 +18,7 @@ const UserRepository = require('../repository/userrepository.js');
 const _userRepoInstance = new UserRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
 
 class UserUserLevelService {
@@ -66,6 +66,7 @@ class UserUserLevelService {
                         application_id: ( xRows[index].user_level.application_id != null ? parseInt(xRows[index].user_level.application_id) : null ),
                         user_level_id: ( xRows[index].user_level != null ? parseInt(xRows[index].user_level.id) : null ),
                         user_level_name: ( xRows[index].user_level != null ? xRows[index].user_level.name : null ),
+                        is_admin: ( xRows[index].user_level != null ? parseInt(xRows[index].user_level.is_admin) : null ),
                     });
                 }
                 xJoResult = {

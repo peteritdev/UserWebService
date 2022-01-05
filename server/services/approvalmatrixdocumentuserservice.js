@@ -20,7 +20,7 @@ const ApplicationMatrixDocumentUserRepository = require('../repository/approvalm
 const _repoInstance = new ApplicationMatrixDocumentUserRepository();
 
 //Util
-const Utility = require('peters-globallib');
+const Utility = require('peters-globallib-v2');
 const { jobs } = require('googleapis/build/src/apis/jobs');
 const _utilInstance = new Utility();
 
@@ -58,7 +58,7 @@ class ApprovalMatrixDocumentUserService {
 
             // Check if this user allow to approve or not
             // console.log(">>> HERE : " + JSON.stringify(pParam));
-            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id } );
+            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id, application_id: pParam.application_id } );
             if( xJoIsAllow.status_code == '00' ){
                 if( xJoIsAllow.is_allow_approve == 1 ){
                     pParam.updated_by = pParam.user_id;
@@ -66,7 +66,14 @@ class ApprovalMatrixDocumentUserService {
 
                     var xResultConfirm = await _repoInstance.confirmDocument( pParam );
                     // Check if document already approve all or not
-                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id } );
+                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { 
+                        document_id: pParam.document_id,
+                        table_name: pParam.table_name,
+                        application_id: pParam.application_id,
+                    } );
+
+                    console.log(">>> xJoAlreadyApproveAll: " + JSON.stringify(xJoAlreadyApproveAll))
+
                     if( xJoAlreadyApproveAll.status_code == '00' ){
                         var xDocumentApproved = false;
                         if( xJoAlreadyApproveAll.total == 0 ){
@@ -77,7 +84,7 @@ class ApprovalMatrixDocumentUserService {
 
                         // Get Approver User with the status
                         var xJaApprovalMatrixDocument = [];
-                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id} );
+                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id, table_name: pParam.table_name, application_id: pParam.application_id} );
                         if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
                             var xRows = xResultApprovalMatrixDocument.rows;
                             for( var i in xRows ){
@@ -142,7 +149,7 @@ class ApprovalMatrixDocumentUserService {
 
             // Check if this user allow to approve or not
             // console.log(">>> HERE : " + JSON.stringify(pParam));
-            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id } );
+            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id, application_id: pParam.application_id, table_name: pParam.table_name } );
             if( xJoIsAllow.status_code == '00' ){
                 if( xJoIsAllow.is_allow_approve == 1 ){
                     pParam.updated_by = pParam.user_id;
@@ -150,7 +157,7 @@ class ApprovalMatrixDocumentUserService {
 
                     var xResultConfirm = await _repoInstance.confirmDocument( pParam );
                     // Check if document already approve all or not
-                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id } );
+                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id, application_id: pParam.application_id, table_name: pParam.table_name } );
                     if( xJoAlreadyApproveAll.status_code == '00' ){
                         var xDocumentApproved = false;
                         if( xJoAlreadyApproveAll.total == 0 ){
@@ -161,7 +168,7 @@ class ApprovalMatrixDocumentUserService {
 
                         // Get Approver User with the status
                         var xJaApprovalMatrixDocument = [];
-                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id} );
+                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id, application_id: pParam.application_id, table_name: pParam.table_name} );
                         if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
                             var xRows = xResultApprovalMatrixDocument.rows;
                             for( var i in xRows ){

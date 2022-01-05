@@ -11,7 +11,7 @@ const env         = process.env.NODE_ENV || 'localhost';
 const config      = require(__dirname + '/../config/config.json')[env];
 
 // Utility
-const Util = require('peters-globallib');
+const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 
 // Repository
@@ -58,6 +58,7 @@ class UserLevelService{
                 xJoArrData.push({
                     id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
                     name: xRows[index].name,
+                    is_admin: xRows[index].is_admin,
                     application: xRows[index].application,
                     created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),
                     updated_at: moment(xRows[index].updatedAt).format('YYYY-MM-DD HH:mm:ss'),
