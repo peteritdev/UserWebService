@@ -100,7 +100,7 @@
     "username": "peter.itdev@gmail.com",
     "password": "Pet3rgr33sql4dm1n",
     "database": "ky_oauthdb",
-    "host": "localhost",
+    "host": "192.168.28.88",
     "port": 5432,
     "dialect": "postgres",
     "dialectOptions": {
