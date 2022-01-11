@@ -929,6 +929,31 @@ class UserService {
 
 		return xJoResult;
 	}
+
+	async generateClientIDAndClientSecret(pParam) {
+		var xJoResult = {};
+
+		try {
+			// Generate client_id
+			let xClientId = Math.random().toString(16).slice(2) + crypto.randomBytes(3).toString('hex'); //crypto.randomBytes(32).toString('base64');
+			let xClientSecret = crypto.randomBytes(20).toString('hex');
+			xJoResult = {
+				status_code: '00',
+				status_msg: 'OK',
+				data: {
+					client_id: xClientId,
+					client_secret: xClientSecret
+				}
+			};
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Error exception [userservice.generateClientIDAndClientSecret]: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
 }
 
 module.exports = UserService;
