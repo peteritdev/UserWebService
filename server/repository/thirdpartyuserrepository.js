@@ -14,6 +14,57 @@ const _utilInstance = new Utility();
 class ThirdPartyUserRepository {
 	constructor() {}
 
+	async getByClientIDAndToken(pParam) {
+		var xJoResult = {};
+		var xWhere = {};
+
+		try {
+			if (pParam.hasOwnProperty('token') && pParam.hasOwnProperty('client_id')) {
+				if (pParam.token != '' && pParam.client_id != '') {
+					xWhere = {
+						access_token: pParam.token,
+						client_id: pParam.client_id,
+						status: 1,
+						is_delete: 0
+					};
+
+					var xData = await _modelDb.findOne({
+						where: xWhere
+					});
+
+					if (xData != null) {
+						xJoResult = {
+							status_code: '00',
+							status_msg: 'Token registered'
+						};
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Token not found'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Param not valid'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Param not valid'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: 'Exception [thirdpartyuserrepository.getbytoken]. Error : ' + e.message
+			};
+		}
+
+		return xJoResult;
+	}
+
 	async getByClientID(pParam) {
 		var xJoResult = {};
 		var xWhere = {};

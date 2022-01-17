@@ -309,10 +309,17 @@ class ThirdPartyUserService {
 				}
 			}
 		} catch (e) {
-			xJoResult = {
-				status_code: '-99',
-				status_msg: `Error exception [thirdpartyuserservice.refreshToken]: ${e.message}`
-			};
+			if (e.name == 'TokenExpiredError') {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: `Token expired. Please resignin again`
+				};
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: `Error exception [thirdpartyuserservice.refreshtoken]: ${e.message}`
+				};
+			}
 		}
 
 		return xJoResult;
@@ -325,14 +332,38 @@ class ThirdPartyUserService {
 			if (pParam.hasOwnProperty('authorization')) {
 				if (pParam.authorization.startsWith('Bearer ')) {
 					let xToken = pParam.authorization.slice(7, pParam.authorization.length);
-					let xVerifyResult = 
+					let xVerifyResult = await jwt.verify(xToken, config.thirdPartyConfig.secret);
+					console.log(`>>> Verify Result : ${JSON.stringify(xVerifyResult)}`);
+					if (xVerifyResult) {
+						// Check if token registered on database
+						let xCheckToken = await _repoInstance.getByClientIDAndToken({
+							token: xToken,
+							client_id: xVerifyResult.client_id
+						});
+
+						if (xCheckToken.status_code == '00') {
+							xJoResult = {
+								status_code: '00',
+								status_msg: 'Verified'
+							};
+						} else {
+							xJoResult = xCheckToken;
+						}
+					}
 				}
 			}
 		} catch (e) {
-			xJoResult = {
-				status_code: '-99',
-				status_msg: `Error exception [thirdpartyuserservice.verifyAccessToken]: ${e.message}`
-			};
+			if (e.name == 'TokenExpiredError') {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: `Token expired. Please resignin again`
+				};
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: `Error exception [thirdpartyuserservice.verifyAccessToken]: ${e.message}`
+				};
+			}
 		}
 
 		return xJoResult;

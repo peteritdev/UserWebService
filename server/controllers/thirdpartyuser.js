@@ -9,7 +9,7 @@ const _oAuthServiceInstance = new OAuthService();
 // Validation Parameter
 const { check, validationResult } = require('express-validator');
 
-module.exports = { save, getToken, refreshToken };
+module.exports = { save, getToken, refreshToken, verifyToken };
 
 async function save(req, res) {
 	var joResult;
@@ -82,6 +82,28 @@ async function refreshToken(req, res) {
 	} else {
 		req.body.authorization = req.headers['authorization'];
 		joResult = await _serviceInstance.refreshToken(req.body);
+		joResult = JSON.stringify(joResult);
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
+}
+
+async function verifyToken(req, res) {
+	var joResult;
+	var errors = null;
+
+	var errors = validationResult(req).array();
+
+	if (errors.length != 0) {
+		joResult = JSON.stringify({
+			status_code: '-99',
+			status_msg: 'Parameter value has problem',
+			error_msg: errors
+		});
+	} else {
+		req.body.authorization = req.headers['authorization'];
+		joResult = await _serviceInstance.verifyAccessToken(req.body);
 		joResult = JSON.stringify(joResult);
 	}
 

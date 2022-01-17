@@ -48,7 +48,7 @@
     },
     "thirdPartyConfig":{
       "expireToken": "72h",
-      "expireRefreshToken": "120h",
+      "expireRefreshToken": "5s",
       "secret": "FDF948F31687ED6543B6AD2C1F4A2",
       "refreshSecret": "CAA34F88EE51CF7645179FFCAE1C1"
     }

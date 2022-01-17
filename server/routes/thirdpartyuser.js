@@ -33,4 +33,7 @@ module.exports = (app) => {
 
 	xArrValidate = [ check('refresh_token').not().isEmpty().withMessage('Parameter refresh_token can not empty') ];
 	app.post(_rootAPIPath + 'refresh_token', xArrValidate, _thirdPartyUser.refreshToken);
+
+	xArrValidate = [];
+	app.post(_rootAPIPath + 'verify_token', xArrValidate, _thirdPartyUser.verifyToken);
 };
