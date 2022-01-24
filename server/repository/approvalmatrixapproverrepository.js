@@ -20,7 +20,7 @@ class ApprovalMatrixApproverRepository {
 	constructor() {}
 
 	async list(pParam) {
-		var xWhere = {};
+		var xWhere = [];
 		var xWhereAnd = [];
 
 		var xOrder = [ 'id', 'ASC' ];
@@ -85,7 +85,12 @@ class ApprovalMatrixApproverRepository {
 			is_delete: 0
 		});
 
-		xWhere.$and = xWhereAnd;
+		// xWhere.$and = xWhereAnd;
+		if (xWhereAnd.length > 0) {
+			xWhere.push({
+				[Op.and]: xWhereAnd
+			});
+		}
 
 		if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
 			xOrder = [ pParam.order_by, pParam.order_type == 'desc' ? 'DESC' : 'ASC' ];
@@ -110,7 +115,7 @@ class ApprovalMatrixApproverRepository {
 	}
 
 	async getById(pParam) {
-		var xWhere = {};
+		var xWhere = [];
 		var xWhereAnd = [];
 
 		var xInclude = [
@@ -191,7 +196,11 @@ class ApprovalMatrixApproverRepository {
 			}
 		}
 
-		xWhere.$and = xWhereAnd;
+		if (xWhereAnd.length > 0) {
+			xWhere.push({
+				[Op.and]: xWhereAnd
+			});
+		}
 
 		var xData = await _modelDb.findAndCountAll({
 			where: xWhere,
