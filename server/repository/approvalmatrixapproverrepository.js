@@ -200,7 +200,8 @@ class ApprovalMatrixApproverRepository {
 
 		var xData = await _modelDb.findAndCountAll({
 			where: xWhere,
-			include: xInclude
+			include: xInclude,
+			order: [ xOrder ]
 		});
 
 		return xData;
