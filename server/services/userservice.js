@@ -907,6 +907,43 @@ class UserService {
 
 		return xJoResult;
 	}
+
+	async doUpdateFCMToken(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = false;
+		var xDecId = null;
+
+		try {
+			if (pParam.hasOwnProperty('user_id')) {
+				if (pParam.user_id != '') {
+					xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+					if (xDecId.status_code == '00') {
+						pParam.user_id = xDecId.decrypted;
+						xFlagProcess = true;
+					} else {
+						xJoResult = xDecId;
+					}
+				}
+			}
+
+			if (xFlagProcess) {
+				xJoResult = await userRepoInstance.saveGeneral(
+					{
+						id: pParam.user_id,
+						fcm_token: pParam.fcm_token
+					},
+					'update'
+				);
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `[UserService.doUpdateFCMToken] Exception: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
 }
 
 module.exports = UserService;

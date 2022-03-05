@@ -29,7 +29,8 @@ module.exports = {
 	parseQueryGoogle,
 	verifyToken,
 	addVendorId,
-	getUserByEmployeeId
+	getUserByEmployeeId,
+	updateFCMToken
 };
 
 async function list(req, res) {
@@ -423,4 +424,28 @@ async function getUserByEmployeeId(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(joResult);
+}
+
+async function updateFCMToken(req, res) {
+	var xJoResult;
+	var errors = null;
+
+	var xOAuthResult = await userServiceInstance.verifyToken({
+		token: req.headers['x-token'],
+		method: req.headers['x-method']
+	});
+
+	xOAuthResult = JSON.parse(xOAuthResult);
+	console.log(`>>> OAuth Result : ${JSON.stringify(xOAuthResult)}`);
+
+	if (xOAuthResult.status_code == '00') {
+		req.body.user_id = xOAuthResult.result_verify.id;
+		xJoResult = await userServiceInstance.doUpdateFCMToken(req.body);
+		xJoResult = JSON.stringify(xJoResult);
+	} else {
+		xJoResult = xOAuthResult;
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(xJoResult);
 }
