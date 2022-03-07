@@ -881,7 +881,8 @@ class UserService {
 					status: xResult.status,
 					verified_at: xResult.verified_at,
 					sanqua_company_id: xResult.sanqua_company_id,
-					company: xResult.company
+					company: xResult.company,
+					fcm_token: xResult.fcm_token
 				};
 
 				if (xResult.user_level != null) {
