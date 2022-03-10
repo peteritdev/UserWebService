@@ -440,6 +440,7 @@ async function updateFCMToken(req, res) {
 
 	if (xOAuthResult.status_code == '00') {
 		req.body.user_id = xOAuthResult.result_verify.id;
+		console.log(`>>> Body : ${JSON.stringify(req.body)}`);
 		xJoResult = await userServiceInstance.doUpdateFCMToken(req.body);
 		xJoResult = JSON.stringify(xJoResult);
 	} else {
