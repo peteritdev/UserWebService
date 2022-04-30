@@ -303,7 +303,7 @@ class UserService {
 		console.log('>>> Port : ' + config.port);
 		console.log('>>> Param : ' + JSON.stringify(param));
 		var validateEmail = await userRepoInstance.isEmailExists(param.email);
-		console.log('>>> End validation isEmailExists...');
+		console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
 		var xFlagProcess = true;
 
 		if (validateEmail != null) {
