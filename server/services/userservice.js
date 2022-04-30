@@ -384,13 +384,13 @@ class UserService {
 			} else {
 				return JSON.stringify({
 					status_code: '-99',
-					status_msg: 'Email or password not valid'
+					status_msg: 'Email or password not valid.'
 				});
 			}
 		} else {
 			return JSON.stringify({
 				status_code: '-99',
-				status_msg: 'Email or password not valid'
+				status_msg: 'Email or password not valid!'
 			});
 		}
 	}
