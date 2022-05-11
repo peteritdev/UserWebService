@@ -674,6 +674,37 @@ class UserRepository {
 
 		return joResult;
 	}
+
+	async deleteUserByEmployeeId(param) {
+		let transaction;
+		var joResult = {};
+
+		try {
+			var saved = null;
+			transaction = await sequelize.transaction();
+			saved = await _modelUser.destroy({
+				where: {
+					employee_id: param.employee_id
+				}
+			});
+
+			await transaction.commit();
+
+			joResult = {
+				status_code: '00',
+				status_msg: 'Data successfully deleted'
+			};
+		} catch (e) {
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed delete data',
+				err_msg: e
+			};
+		}
+
+		return joResult;
+	}
 }
 
 module.exports = UserRepository;

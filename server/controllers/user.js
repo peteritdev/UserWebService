@@ -30,7 +30,8 @@ module.exports = {
 	verifyToken,
 	addVendorId,
 	getUserByEmployeeId,
-	updateFCMToken
+	updateFCMToken,
+	deleteUserByEmployeeId
 };
 
 async function list(req, res) {
@@ -161,6 +162,41 @@ async function deleteUser(req, res) {
 			req.params.method = req.headers['x-method'];
 			req.params.token = req.headers['x-token'];
 			joResult = await userServiceInstance.deleteUser(req.params);
+			joResult = JSON.stringify(joResult);
+		}
+	} else {
+		joResult = oAuthResult;
+	}
+
+	console.log(req.body);
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
+}
+
+async function deleteUserByEmployeeId(req, res) {
+	var joResult;
+	var errors = null;
+
+	var oAuthResult = await userServiceInstance.verifyToken({
+		token: req.headers['x-token'],
+		method: req.headers['x-method']
+	});
+
+	if (JSON.parse(oAuthResult).status_code == '00') {
+		//Validate first
+		var errors = validationResult(req).array();
+
+		if (errors.length != 0) {
+			joResult = JSON.stringify({
+				status_code: '-99',
+				status_msg: 'Parameter value has problem',
+				error_msg: errors
+			});
+		} else {
+			req.params.method = req.headers['x-method'];
+			req.params.token = req.headers['x-token'];
+			joResult = await userServiceInstance.deleteUserByEmployeeId(req.params);
 			joResult = JSON.stringify(joResult);
 		}
 	} else {
