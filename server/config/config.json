@@ -37,7 +37,8 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://10.10.20.8:8189/api/hr/v1/employee"
+        "baseUrl": "http://localhost:8189/api/hr/v1",
+        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
       }
       
     },
@@ -93,7 +94,8 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8189/api/hr/v1/employee",
+        "baseUrl": "http://localhost:8189/api/hr/v1"
       }
       
     },
@@ -155,7 +157,8 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee",
+        "baseUrl": "http://localhost:8189/api/hr/v1"
       }
       
     },
