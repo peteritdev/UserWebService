@@ -840,7 +840,7 @@ class UserService {
 		var joResult = {};
 		var flagProcess = true;
 
-		var xDecId = await _utilInstance.decrypt(param.id);
+		var xDecId = await _utilInstance.decrypt(param.id, config.cryptoKey.hashKey);
 		if (xDecId.status_code == '00') {
 			param.id = xDecId.decrypted;
 		} else {
@@ -848,7 +848,34 @@ class UserService {
 			joResult = xDecId;
 		}
 
-		if (flagProcess) joResult = await userRepoInstance.delete(param);
+		if (flagProcess) {
+			joResult = await userRepoInstance.delete(param);
+			if (joResult.status_code == '00') {
+				// Get Detail User
+				let xUser = await userRepoInstance.getById(param.id);
+				if (xUser) {
+					if (xUser.employee_id != null) {
+						// Non Active Employee
+						var xUrlAPI = config.api.employeeService.baseUrl + '/employee/non_active';
+						console.log(xUrlAPI);
+						var xEmployeeInfo = await _utilInstance.axiosRequestPost(
+							xUrlAPI,
+							'POST',
+							{
+								id: await _utilInstance.encrypt(xUser.employee_id, config.cryptoKey.hashKey)
+							},
+							{
+								headers: {
+									'x-method': param.method,
+									'x-token': param.token
+								}
+							}
+						);
+						joResult.non_active_result = xEmployeeInfo;
+					}
+				}
+			}
+		}
 
 		return joResult;
 	}

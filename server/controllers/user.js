@@ -158,6 +158,8 @@ async function deleteUser(req, res) {
 				error_msg: errors
 			});
 		} else {
+			req.params.method = req.headers['x-method'];
+			req.params.token = req.headers['x-token'];
 			joResult = await userServiceInstance.deleteUser(req.params);
 			joResult = JSON.stringify(joResult);
 		}

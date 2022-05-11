@@ -98,7 +98,7 @@ module.exports = (app) => {
 	app.post(rootAPIPath + 'user/save', arrValidateUserSave, userController.save);
 
 	var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
-	app.post(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
+	app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
 
 	app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
 
