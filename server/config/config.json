@@ -78,8 +78,8 @@
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
 
-    "token_expire":"7",
-    "token_expire_unit":"day",
+    "token_expire":"1",
+    "token_expire_unit":"hour",
     "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
 
     "frontParam":{
