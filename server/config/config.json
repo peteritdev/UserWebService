@@ -37,6 +37,7 @@
       },
   
       "employeeService":{
+        "baseUrl": "http://10.10.20.8:8189/api/hr/v1",
         "getEmployeeInfo": "http://10.10.20.8:8189/api/hr/v1/employee"
       }
       
