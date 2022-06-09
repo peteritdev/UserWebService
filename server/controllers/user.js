@@ -257,7 +257,9 @@ async function login(req, res) {
 			error_msg: errors
 		});
 	} else {
+		req.body.device = req.headers['x-device'];
 		req.body.application_id = req.headers['x-application-id'];
+		req.body.device = req.headers['x-device'];
 		joResult = await userServiceInstance.doLogin(req.body);
 	}
 
@@ -412,7 +414,8 @@ async function verifyToken(req, res) {
 		if (req.query.token != '' && req.query.method != '') {
 			joResult = await userServiceInstance.verifyToken({
 				token: req.query.token,
-				method: req.query.method
+				method: req.query.method,
+				device: req.query.device
 			});
 		} else {
 			joResult = JSON.stringify({

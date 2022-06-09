@@ -335,9 +335,16 @@ class UserService {
 
 				if (true) {
 					// Generate JWT Token
-					let token = jwt.sign({ email: param.email, id: validateEmail.id }, config.secret, {
-						expiresIn: config.login.expireToken
-					});
+					let token = jwt.sign(
+						{ email: param.email, id: validateEmail.id, device: param.device == '' ? 'web' : param.device },
+						config.secret,
+						{
+							expiresIn:
+								param.device == 'mobile'
+									? config.login.expireToken.mobile
+									: config.login.expireToken.web
+						}
+					);
 
 					// Get Employee Info
 					var xEmployeeId =
@@ -767,6 +774,11 @@ class UserService {
 		) {
 			if (param.method == 'conventional') {
 				joResult = await jwt_utilInstance.verifyJWT(param.token);
+
+				// let xResultRefresh = await jwt_utilInstance.refreshJWT({
+				// 	token: param.token
+				// });
+				// console.log(`>>> Result Refresh: ${JSON.stringify(xResultRefresh)}`);
 
 				if (joResult.status_code == '00') {
 					//Get User Detail by ID
