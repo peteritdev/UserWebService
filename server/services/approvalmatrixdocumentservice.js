@@ -229,6 +229,63 @@ class ApprovalMatrixDocumentService {
 				var xResultAdd = this.save(pParam);
 				xJoResult = xResultAdd;
 			}
+		} else if (xAct == 'add_manual') {
+			if (pParam.hasOwnProperty('approval_matrix')) {
+				if (pParam.approval_matrix.length > 0) {
+					for (var i in pParam.approval_matrix) {
+						// Get application name
+						let xApplicationName = '';
+						let xJaApproverUser = [];
+						let xApplicationDetail = await _applicationServiceInstance.getById({
+							id: pParam.approval_matrix[i].application_id
+						});
+						if (xApplicationDetail) {
+							xApplicationName = xApplicationDetail.data.name;
+						}
+
+						// Translate approval_users from employee_id to user_id
+						for (var j in pParam.approval_matrix[i].approval_employees) {
+							let xUserDetail = await _userServiceInstance.getUserByEmployeeId(
+								pParam.approval_matrix[i].approval_employees[j]
+							);
+							if (xUserDetail.status_code == '00') {
+								xJaApproverUser.push({
+									user_id: xUserDetail.data.clear_id,
+									user_name: xUserDetail.data.name
+								});
+							}
+						}
+
+						// Lets Insert into database
+						let xParamSave = {
+							document_id: pParam.approval_matrix[i].document_id,
+							document_no: pParam.approval_matrix[i].document_no,
+							sequence: pParam.approval_matrix[i].sequence,
+							application_id: pParam.approval_matrix[i].application_id,
+							application_name: xApplicationName,
+							table_name: pParam.approval_matrix[i].table_name,
+							min_approver: pParam.approval_matrix[i].min_approver,
+							approval_matrix_document_user: xJaApproverUser
+						};
+						var xAddResult = await _repoInstance.save(xParamSave, 'add_with_detail');
+					}
+
+					xJoResult = {
+						status_code: '00',
+						status_msg: 'You have successfully add manually approval matrix'
+					};
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'No data found to add'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'You need to supply the parameter correctly'
+				};
+			}
 		}
 
 		return xJoResult;
