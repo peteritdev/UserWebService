@@ -960,6 +960,7 @@ class UserService {
 			if (xResult != null) {
 				xData = {
 					id: await _utilInstance.encrypt(xResult.id, config.cryptoKey.hashKey),
+					clear_id: xResult.id,
 					employee_id: await _utilInstance.encrypt(xResult.employee_id, config.cryptoKey.hashKey),
 					name: xResult.name,
 					email: xResult.email,

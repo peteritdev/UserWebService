@@ -18,6 +18,12 @@ const _repoInstance = new ApplicationMatrixDocumentRepository();
 const ApplicationMatrixApproverRepository = require('../repository/approvalmatrixapproverrepository.js');
 const _approvalMatrixApproverRepoInstance = new ApplicationMatrixApproverRepository();
 
+const ApplicationService = require('../services/applicationservice.js');
+const _applicationServiceInstance = new ApplicationService();
+
+const UserService = require('../services/userservice.js');
+const _userServiceInstance = new UserService();
+
 //Util
 const Utility = require('peters-globallib-v2');
 const _utilInstance = new Utility();
@@ -245,9 +251,11 @@ class ApprovalMatrixDocumentService {
 
 						// Translate approval_users from employee_id to user_id
 						for (var j in pParam.approval_matrix[i].approval_employees) {
+							console.log(`>>> Employee ID: ${pParam.approval_matrix[i].approval_employees[j]}`);
 							let xUserDetail = await _userServiceInstance.getUserByEmployeeId(
 								pParam.approval_matrix[i].approval_employees[j]
 							);
+							console.log(`>>> xUserDetail: ${JSON.stringify(xUserDetail)}`);
 							if (xUserDetail.status_code == '00') {
 								xJaApproverUser.push({
 									user_id: xUserDetail.data.clear_id,
