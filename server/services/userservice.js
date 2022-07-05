@@ -809,7 +809,7 @@ class UserService {
 					var xUrlQuery = '/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
 					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
 						headers: {
-							'x-token': token,
+							'x-token': param.token,
 							'x-method': 'conventional'
 						}
 					});
