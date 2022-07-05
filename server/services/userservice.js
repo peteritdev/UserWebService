@@ -355,8 +355,17 @@ class UserService {
 								)
 							: 0;
 					var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+					// Version 1:
+					// var xUrlQuery = '/' + xEmployeeId;
+
+					// Version 2:
 					var xUrlQuery = '/' + xEmployeeId;
-					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
+					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
+						headers: {
+							'x-token': token,
+							'x-method': 'conventional'
+						}
+					});
 
 					console.log(JSON.stringify(xEmployeeInfo));
 
