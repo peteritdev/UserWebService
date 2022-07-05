@@ -807,12 +807,12 @@ class UserService {
 					// Get Employee Info
 					var xUrlAPI = config.api.employeeService.getEmployeeInfo;
 					var xUrlQuery = '/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
-					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
-						headers: {
-							'x-token': param.token,
-							'x-method': 'conventional'
-						}
-					});
+					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
+
+					console.log(`>>> token: ${param.token}`);
+					console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
+					console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
+
 					if (xEmployeeInfo != null) {
 						if (xEmployeeInfo.status_code == '00') {
 							joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
