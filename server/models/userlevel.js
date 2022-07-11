@@ -10,6 +10,8 @@ module.exports = ( sequelize, DataTypes ) => {
         name: DataTypes.STRING,
         app: DataTypes.STRING,
         application_id: DataTypes.INTEGER,
+        is_admin: DataTypes.INTEGER, // 1: admin, 0: user
+
         is_delete: DataTypes.INTEGER,
         deleted_at: DataTypes.DATE,
         deleted_by: DataTypes.INTEGER,

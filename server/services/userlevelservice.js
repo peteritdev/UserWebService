@@ -7,163 +7,179 @@ const dateFormat = require('dateformat');
 const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 
-const env         = process.env.NODE_ENV || 'localhost';
-const config      = require(__dirname + '/../config/config.json')[env];
+const env = process.env.NODE_ENV || 'localhost';
+const config = require(__dirname + '/../config/config.json')[env];
 
 // Utility
-const Util = require('peters-globallib');
+const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 
 // Repository
-const UserLevelRepository = require( '../repository/userlevelrepository.js' );
+const UserLevelRepository = require('../repository/userlevelrepository.js');
 const _userLevelRepository = new UserLevelRepository();
 
-class UserLevelService{
-    constructor(){}
+class UserLevelService {
+	constructor() {}
 
-    async getById(pParam){
-        var xJoResult = {};
-        var xFlagProcess = true;
-        
-        var xDecId = await _utilInstance.decrypt( pParam.id, config.cryptoKey.hashKey );
-        if( xDecId.status_code == '00' ){
-            pParam.id = xDecId.decrypted;
-        }else{
-            xJoResult = xDecId;
-            xFlagProcess = false;
-        }
-        
-        if( xFlagProcess )xJoResult = await _userLevelRepository.getById(pParam);
+	async getById(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = true;
 
-        return xJoResult;
-    }
+		var xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
+		if (xDecId.status_code == '00') {
+			pParam.id = xDecId.decrypted;
+		} else {
+			xJoResult = xDecId;
+			xFlagProcess = false;
+		}
 
-    async list(pParam){
-        var xJoResult = {};
-        var xJoArrData = [];       
+		if (xFlagProcess) xJoResult = await _userLevelRepository.getById(pParam);
 
-        var xResultList = await _userLevelRepository.list(pParam);
+		return xJoResult;
+	}
 
-        console.log(JSON.stringify(xResultList));
+	async list(pParam) {
+		var xJoResult = {};
+		var xJoArrData = [];
 
-        if( xResultList.count > 0 ){
-            xJoResult.status_code = "00";
-            xJoResult.status_msg = "OK";
-            xJoResult.total_record = xResultList.count;
+		var xResultList = await _userLevelRepository.list(pParam);
 
-            var xRows = xResultList.rows;
+		console.log(JSON.stringify(xResultList));
 
-            for(var index in xRows){                
+		if (xResultList.count > 0) {
+			xJoResult.status_code = '00';
+			xJoResult.status_msg = 'OK';
+			xJoResult.total_record = xResultList.count;
 
-                xJoArrData.push({
-                    id: await _utilInstance.encrypt((xRows[index].id).toString(), config.cryptoKey.hashKey),
-                    name: xRows[index].name,
-                    application: xRows[index].application,
-                    created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),
-                    updated_at: moment(xRows[index].updatedAt).format('YYYY-MM-DD HH:mm:ss'),
-                });
-            }
+			var xRows = xResultList.rows;
 
-            xJoResult.data = xJoArrData;
-        }else{
-            xJoResult.status_code = "-99";
-            xJoResult.status_msg = "Data not found";
-            xJoResult.total_record = 0;
-            xJoResult.data = xJoArrData;
-        }
+			for (var index in xRows) {
+				xJoArrData.push({
+					id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
+					name: xRows[index].name,
+					is_admin: xRows[index].is_admin,
+					application: xRows[index].application,
+					created_at: moment(xRows[index].createdAt).format('YYYY-MM-DD HH:mm:ss'),
+					updated_at: moment(xRows[index].updatedAt).format('YYYY-MM-DD HH:mm:ss')
+				});
+			}
 
-        return (xJoResult);
-    }
+			xJoResult.data = xJoArrData;
+		} else {
+			xJoResult.status_code = '-99';
+			xJoResult.status_msg = 'Data not found';
+			xJoResult.total_record = 0;
+			xJoResult.data = xJoArrData;
+		}
 
-    async dropDownList(pParam){
-        var xJoResult = {};
-        var xJoArrData = [];       
+		return xJoResult;
+	}
 
-        var xResultList = await _userLevelRepository.list(pParam);
+	async dropDownList(pParam) {
+		var xJoResult = {};
+		var xJoArrData = [];
+		var xFlagProcess = false;
+		var xDecId = null;
 
-        if( xResultList.count > 0 ){
-            xJoResult.status_code = "00";
-            xJoResult.status_msg = "OK";
+		if (pParam.hasOwnProperty('application_id')) {
+			if (pParam.application_id != '' && pParam.application_id.length == 65) {
+				xDecId = await _utilInstance.decrypt(pParam.application_id, config.cryptoKey.hashKey);
+				if (xDecId.status_code == '00') {
+					pParam.application_id = xDecId.decrypted;
+					xFlagProcess = true;
+				} else {
+					xJoResult = xDecId;
+				}
+			} else {
+				xFlagProcess = true;
+			}
+		}
 
-            var xRows = xResultList.rows;
+		if (xFlagProcess) {
+			var xResultList = await _userLevelRepository.list(pParam);
 
-            for(var index in xRows){                
+			if (xResultList.count > 0) {
+				xJoResult.status_code = '00';
+				xJoResult.status_msg = 'OK';
 
-                xJoArrData.push({
-                    id: xRows[index].id,
-                    name: xRows[index].name,
-                });
-            }
+				var xRows = xResultList.rows;
 
-            xJoResult.data = xJoArrData;
-        }else{
-            xJoResult.status_code = "-99";
-            xJoResult.status_msg = "Data not found";
-            xJoResult.data = xJoArrData;
-        }
+				for (var index in xRows) {
+					xJoArrData.push({
+						id: xRows[index].id,
+						name: xRows[index].name
+					});
+				}
 
-        return (xJoResult);
-    }
+				xJoResult.data = xJoArrData;
+			} else {
+				xJoResult.status_code = '-99';
+				xJoResult.status_msg = 'Data not found';
+				xJoResult.data = xJoArrData;
+			}
+		}
 
-    async save( pParam ){
-        var xJoResult = {};
-        var xAct = pParam.act;
-        delete pParam.xAct;
-        var xFlagProcess = true;
+		return xJoResult;
+	}
 
-        var xDecId = await _utilInstance.decrypt( pParam.user_id, config.cryptoKey.hashKey );                 
-        if( xDecId.status_code == '00' ){
-            if( xAct == "add" ){
-                pParam.created_by = xDecId.decrypted;
-                pParam.created_by_name = pParam.user_name;
-            }else if( xAct == "update" ){
-                xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
-                if( xDecId.status_code == '00' ){
-                    pParam.id = xDecId.decrypted;
-                }else{
-                    xFlagProcess = false;
-                    xJoResult = xDecId;
-                }
-                pParam.updated_by = xDecId.decrypted;
-                pParam.updated_by_name = pParam.user_name;
-            }            
-        }else{
-            xFlagProcess = false;
-            xJoResult = xDecId;
-        }
+	async save(pParam) {
+		var xJoResult = {};
+		var xAct = pParam.act;
+		delete pParam.xAct;
+		var xFlagProcess = true;
 
-        if( xFlagProcess )xJoResult = await _userLevelRepository.save(pParam, xAct);
+		var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+		if (xDecId.status_code == '00') {
+			if (xAct == 'add') {
+				pParam.created_by = xDecId.decrypted;
+				pParam.created_by_name = pParam.user_name;
+			} else if (xAct == 'update') {
+				xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
+				if (xDecId.status_code == '00') {
+					pParam.id = xDecId.decrypted;
+				} else {
+					xFlagProcess = false;
+					xJoResult = xDecId;
+				}
+				pParam.updated_by = xDecId.decrypted;
+				pParam.updated_by_name = pParam.user_name;
+			}
+		} else {
+			xFlagProcess = false;
+			xJoResult = xDecId;
+		}
 
-        return xJoResult;
-    }
+		if (xFlagProcess) xJoResult = await _userLevelRepository.save(pParam, xAct);
 
-    async delete( pParam ){
-        var xJoResult;
-        var xFlagProcess = true;       
+		return xJoResult;
+	}
 
-        var xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
-        if( xDecId.status_code == "00" ){
-            pParam.id = xDecId.decrypted;                    
-            // xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
-            // if( xDecId.status_code == "00" ){
-            //     pParam.deleted_by = xDecId.decrypted;
-            //     pParam.deleted_by_name = pParma.user_name;
-            // }else{
-            //     xFlagProcess = false;
-            //     xJoResult = xDecId;
-            // }
-        }else{
-            xFlagProcess = false;
-            xJoResult = xDecId;
-        }
+	async delete(pParam) {
+		var xJoResult;
+		var xFlagProcess = true;
 
-        if( xFlagProcess ){
-            var xJoResult = await _userLevelRepository.delete( pParam );       
-        }
+		var xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
+		if (xDecId.status_code == '00') {
+			pParam.id = xDecId.decrypted;
+			// xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+			// if( xDecId.status_code == "00" ){
+			//     pParam.deleted_by = xDecId.decrypted;
+			//     pParam.deleted_by_name = pParma.user_name;
+			// }else{
+			//     xFlagProcess = false;
+			//     xJoResult = xDecId;
+			// }
+		} else {
+			xFlagProcess = false;
+			xJoResult = xDecId;
+		}
 
-        return xJoResult;
+		if (xFlagProcess) {
+			var xJoResult = await _userLevelRepository.delete(pParam);
+		}
 
-    }
+		return xJoResult;
+	}
 }
 
 module.exports = UserLevelService;

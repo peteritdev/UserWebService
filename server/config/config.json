@@ -1,5 +1,7 @@
 {
   "localhost": {
+    "appPort": 9189,
+    "logging": true,
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
@@ -31,17 +33,21 @@
     "api":{
       "notification": {
         "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
-        "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
+        "forgotPassword": "http://10.10.20.8:1190/api/notification/v1/forgot_password"
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "baseUrl": "http://10.10.20.8:8189/api/hr/v1",
+        "getEmployeeInfo": "http://localhost:8190/api/esanqua/hr/v1/employee/detail_wo_auth"
       }
       
     },
   
     "login":{
-      "expireToken": "24h",
+      "expireToken": {
+        "web": "1h",
+        "mobile": "48h"
+      },
       "oAuth2":{
         "google":{
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
@@ -56,11 +62,13 @@
   },
 
   "development": {
+    "appPort": 9189,
+
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
     "host": "localhost",
-    "port":5435,
+    "port":5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
@@ -73,8 +81,8 @@
       "hashKey": "51beba089ef1612152be4933ea6a9a48"
     },
 
-    "token_expire":"7",
-    "token_expire_unit":"day",
+    "token_expire":"1",
+    "token_expire_unit":"hour",
     "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
 
     "frontParam":{
@@ -89,13 +97,17 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:8190/api/esanqua/hr/v1/employee/detail_wo_auth",
+        "baseUrl": "http://localhost:8189/api/hr/v1"
       }
       
     },
   
     "login":{
-      "expireToken": "24h",
+      "expireToken": {
+        "web": "1h",
+        "mobile": "48h"
+      },
       "oAuth2":{
         "google":{
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
@@ -116,11 +128,13 @@
   },
 
   "production": {
+    "appPort": 1189,
+
     "username": "postgres",
-    "password": "SANQUAD0ck3rP912",
+    "password": "T0b3L1k3Jesus^^)ok",
     "database": "sanqua_oauthdb",
-    "host": "127.0.0.1",
-    "port":5435,
+    "host": "10.10.20.9",
+    "port":5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
@@ -149,13 +163,17 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee"
+        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee",
+        "baseUrl": "http://localhost:8189/api/hr/v1"
       }
       
     },
   
     "login":{
-      "expireToken": "24h",
+      "expireToken": {
+        "web": "1h",
+        "mobile": "48h"
+      },
       "oAuth2":{
         "google":{
           "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",

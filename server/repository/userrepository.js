@@ -3,13 +3,13 @@ var configEnv = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(configEnv.database, configEnv.username, configEnv.password, configEnv);
 const { hash } = require('bcryptjs');
-const Op = sequelize.Op;
+const Op = Sequelize.Op;
 
 //Model
 const _modelUser = require('../models').ms_users;
 const _modelCompany = require('../models').ms_companies;
 const _modelUserUserLevel = require('../models').ms_useruserlevels;
-const _modelUserLevel = require('../models').ms_userlevels;  
+const _modelUserLevel = require('../models').ms_userlevels;
 const _modelApplication = require('../models').ms_applications;
 
 //Utils
@@ -19,562 +19,692 @@ const Util = require('../utils/globalutility.js');
 const utilInstance = new Util();
 
 class UserRepository {
-    constructor(){}
+	constructor() {}
 
-    async getUserByEmployeeId( pId ){
-        var data = await _modelUser.findOne({
-            where: {
-                employee_id: pId,
-            },
-            include:[
-                {
-                    model: _modelCompany,
-                    as: 'company'
-                },
-                {
-                    attributes: ["id","name"],
-                    model: _modelUserLevel,
-                    as: 'user_level',
-                    through: {
-                        attributes: [],
-                    },
-                    include: [
-                        {
-                            attributes: ['id','name'],
-                            model: _modelApplication,
-                            as: 'application',
-                        }
-                    ]
-                }
-            ]
-        });
+	async getUserByEmployeeId(pId) {
+		var data = await _modelUser.findOne({
+			where: {
+				employee_id: pId
+			},
+			include: [
+				{
+					model: _modelCompany,
+					as: 'company'
+				},
+				{
+					attributes: [ 'id', 'name' ],
+					model: _modelUserLevel,
+					as: 'user_level',
+					through: {
+						attributes: []
+					},
+					include: [
+						{
+							attributes: [ 'id', 'name' ],
+							model: _modelApplication,
+							as: 'application'
+						}
+					]
+				}
+			]
+		});
 
-        return data;
-    }
+		return data;
+	}
 
-    async getById( pId ){
-        var data = await _modelUser.findOne({
-            where: {
-                id: pId,
-            },
-            include:[
-                {
-                    model: _modelCompany,
-                    as: 'company'
-                },
-                {
-                    attributes: ["id","name"],
-                    model: _modelUserLevel,
-                    as: 'user_level',
-                    through: {
-                        attributes: [],
-                    },
-                    include: [
-                        {
-                            attributes: ['id','name'],
-                            model: _modelApplication,
-                            as: 'application',
-                        }
-                    ]
-                }
-            ]
-        });
+	async getById(pId) {
+		var data = await _modelUser.findOne({
+			where: {
+				id: pId
+			},
+			include: [
+				{
+					model: _modelCompany,
+					as: 'company'
+				},
+				{
+					attributes: [ 'id', 'name', 'is_admin' ],
+					model: _modelUserLevel,
+					as: 'user_level',
+					through: {
+						attributes: [],
+						where: {
+							is_delete: 0
+						}
+					},
+					include: [
+						{
+							attributes: [ 'id', 'name' ],
+							model: _modelApplication,
+							as: 'application'
+						}
+					]
+				}
+			]
+		});
 
-        return data;
-    }
+		return data;
+	}
 
-    async isEmailExists( pEmail ){
-        var data = null;
+	async isEmailExists(pEmail) {
+		var data = null;
 
-        try{
-            data = await _modelUser.findOne({
-                where:{
-                    email: {
-                        [Op.like]: pEmail
-                    },
-                },
-                include:[
-                    {
-                        model: _modelCompany,
-                        as: 'company'
-                    },
-                    {
-                        attributes: ["id","name"],
-                        model: _modelUserLevel,
-                        as: 'user_level',
-                        through: {
-                            attributes: [],
-                            where: {
-                                is_delete: 0,
-                            }
-                        },
-                        include: [
-                            {
-                                attributes: ['id','name'],
-                                model: _modelApplication,
-                                as: 'application',
-                            }
-                        ]
-                    }
-                ],
-            });
-        }catch(err){
-            console.log("Exception at [UserRepository.isEmailExists]: " + err);
-        }
-        
-        
-        return data;
-    }
+		try {
+			data = await _modelUser.findOne({
+				where: {
+					email: {
+						[Op.like]: pEmail
+					}
+				},
+				include: [
+					{
+						model: _modelCompany,
+						as: 'company'
+					},
+					{
+						attributes: [ 'id', 'name', 'is_admin' ],
+						model: _modelUserLevel,
+						as: 'user_level',
+						through: {
+							attributes: [],
+							where: {
+								is_delete: 0
+							}
+						},
+						include: [
+							{
+								attributes: [ 'id', 'name' ],
+								model: _modelApplication,
+								as: 'application'
+							}
+						]
+					}
+				]
+			});
+		} catch (err) {
+			console.log('Exception at [UserRepository.isEmailExists]: ' + err);
+		}
 
-    async list( param ){
+		return data;
+	}
 
-        var jWhereCompany = {};
+	async list(param) {
+		var jWhereCompany = {};
 
-        if( param.company_id != "" && param.company_id != null ){
-            jWhereCompany = {
-                "$company.id$": param.company_id
-            }
-        }
+		if (param.company_id != '' && param.company_id != null) {
+			jWhereCompany = {
+				'$company.id$': param.company_id
+			};
+		}
 
-        var data = await _modelUser.findAndCountAll({
-            where: {
-                [Op.or]:[
-                    {
-                        name:{
-                            [Op.like]: '%' + param.keyword + '%'
-                        }
-                    },
-                    {
-                        email:{
-                            [Op.like]: '%' + param.keyword + '%'
-                        }
-                    }
-                ],
-                [Op.and]:[
-                    {
-                        // type: 1
-                        // '$user_app.is_delete$': 0,
-                    },jWhereCompany
-                ]
+		var data = await _modelUser.findAndCountAll({
+			where: {
+				[Op.or]: [
+					{
+						name: {
+							[Op.like]: '%' + param.keyword + '%'
+						}
+					},
+					{
+						email: {
+							[Op.like]: '%' + param.keyword + '%'
+						}
+					}
+				],
+				[Op.and]: [
+					{
+						// type: 1
+						// '$user_app.is_delete$': 0,
+					},
+					jWhereCompany
+				]
+			},
+			include: [
+				{
+					model: _modelCompany,
+					as: 'company'
+				},
+				{
+					attributes: [ 'id', 'name' ],
+					model: _modelUserLevel,
+					as: 'user_level',
+					through: {
+						attributes: []
+					},
+					include: [
+						{
+							attributes: [ 'id', 'name' ],
+							model: _modelApplication,
+							as: 'application'
+						}
+					]
+				}
+			],
+			limit: param.limit,
+			offset: param.offset
+		});
 
-            },
-            include:[
-                {
-                    model: _modelCompany,
-                    as: 'company'
-                },
-                {
-                    attributes: ["id","name"],
-                    model: _modelUserLevel,
-                    as: 'user_level',
-                    through: {
-                        attributes: [],
-                    },
-                    include: [
-                        {
-                            attributes: ['id','name'],
-                            model: _modelApplication,
-                            as: 'application',
-                        }
-                    ]
-                }
-            ],
-            limit: param.limit,
-            offset: param.offset
-        });
+		return {
+			status_code: '00',
+			status_msg: 'OK',
+			data: data
+		};
+	}
 
-        return {
-            "status_code": "00",
-            "status_msg": "OK",
-            "data": data
-        };
-    }
+	async verifyVerificationCode(pEmail, pId) {
+		var data = await _modelUser.findOne({
+			where: {
+				email: pEmail,
+				id: pId
+			}
+		});
 
-    async verifyVerificationCode( pEmail, pId ){
-        var data = await _modelUser.findOne({
-            where:{
-                email: pEmail,
-                id: pId
-            }
-        });
-        
-        return data;
-    }
+		return data;
+	}
 
-    async registerUser( param ){
-        let transaction;
-        var joResult = {};
-        var hashedPassword = '';
+	async registerUser(param) {
+		let transaction;
+		var joResult = {};
+		var hashedPassword = '';
 
-        try{
-            transaction = await sequelize.transaction();           
-            hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
+		try {
+			transaction = await sequelize.transaction();
+			hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
 
-            var created = null;
+			var created = null;
 
-            if( param.method == 'conventional' ){
-                created = await _modelUser.create({
-                    name: param.name,
-                    email: param.email,
-                    password: hashedPassword,
-                    is_first_login: 1,
-                    status: param.status,
-                    register_with: param.method,
-                    type: param.type,
-                    sanqua_company_id: param.company_id,
-                    employee_id: param.employee_id,
-                },{transaction});
-            }else if( param.method == 'google' ){
-                created = await _modelUser.create({
-                    name: param.name,
-                    email: param.email,
-                    password: hashedPassword,
-                    is_first_login: 1,
-                    status: 1,
-                    google_token: param.google_token,
-                    google_token_expire: param.google_token_expire,
-                    google_token_id: param.google_token_id,
-                    register_with: param.method
-                },{transaction});
-            }
-            
-            await transaction.commit();
+			if (param.method == 'conventional') {
+				created = await _modelUser.create(
+					{
+						name: param.name,
+						email: param.email,
+						password: hashedPassword,
+						is_first_login: 1,
+						status: param.status,
+						register_with: param.method,
+						type: param.type,
+						sanqua_company_id: param.company_id,
+						employee_id: param.employee_id
+					},
+					{ transaction }
+				);
+			} else if (param.method == 'google') {
+				created = await _modelUser.create(
+					{
+						name: param.name,
+						email: param.email,
+						password: hashedPassword,
+						is_first_login: 1,
+						status: 1,
+						google_token: param.google_token,
+						google_token_expire: param.google_token_expire,
+						google_token_id: param.google_token_id,
+						register_with: param.method
+					},
+					{ transaction }
+				);
+			}
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully add to database",
-                created_id: created.id,
-                clear_password: param.password,
-                google_token: param.google_token,
-                google_token_expire: param.google_token_expire,
-                google_token_id: param.google_token_id
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.RegisterUser] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = JSON.stringify({
-                "status_code": "-99",
-                "status_msg": "Failed add user to database",
-                "err_msg": err
-            });
-            return joResult;
-        }
+			await transaction.commit();
 
-        
-    }
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully add to database',
+				created_id: created.id,
+				clear_password: param.password,
+				google_token: param.google_token,
+				google_token_expire: param.google_token_expire,
+				google_token_id: param.google_token_id
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.RegisterUser] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = JSON.stringify({
+				status_code: '-99',
+				status_msg: 'Failed add user to database',
+				err_msg: err
+			});
+			return joResult;
+		}
+	}
 
-    async save( param ){
-        let transaction;
-        var joResult = {};
-        var hashedPassword = '';
+	async saveGeneral(pParam, pAct) {
+		var xJoResult = {};
+		let xTransaction;
+		var xSaved = null;
 
-        // console.log(">>> Update from user : ");
-        // console.log(JSON.stringify(param));
+		try {
+			var xSaved = null;
+			xTransaction = await sequelize.transaction();
 
-        try{
-            transaction = await sequelize.transaction();  
-            
-            if( param.act == "update" || param.act == "update_from_employee" || param.act == "add_from_employee" ){
-                var joDataUpdate = {
-                    name: param.name,
-                    email: param.email,
-                    status: param.status,
-                    sanqua_company_id: param.company_id,
-                    updated_by: param.user_id,
-                    employee_id: param.id,
-                    user_level_id: param.user_level_id,
-                };
+			if (pAct == 'batch_add') {
+				xSaved = await _modelDb.bulkCreate(pParam, {
+					transaction: xTransaction
+				});
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully saved'
+				};
+				await xTransaction.commit();
+			} else if (pAct == 'add') {
+				xSaved = await _modelDb.create(pParam, { transaction: xTransaction });
+				if (xSaved.id != null) {
+					await xTransaction.commit();
+					xJoResult = {
+						status_code: '00',
+						status_msg: 'Data has been successfully saved',
+						created_id: await _utilInstance.encrypt(xSaved.id.toString(), config.cryptoKey.hashKey),
+						clear_id: xSaved.id
+					};
+				}
+			} else if (pAct == 'update') {
+				var xId = pParam.id;
+				delete pParam.id;
+				var xWhere = {
+					where: {
+						id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelUser.update(pParam, xWhere);
 
-                console.log(">>> Update REpo Param : ");
-                console.log(">>> param.act : " + JSON.stringify(param));
-                console.log(JSON.stringify(joDataUpdate));
+				await xTransaction.commit();
 
-                if( param.password != '' && param.hasOwnProperty('password') ){
-                    hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
-                    joDataUpdate.password = hashedPassword;
-                }               
-    
-                var saved = null;
-                var xWhere = {};
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			} else if (pAct == 'update_by_id') {
+				var xId = pParam.id;
+				delete pParam.id;
+				var xWhere = {
+					where: {
+						id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelDb.update(pParam, xWhere);
 
-                if( param.act == "update" ){
-                    xWhere = {
-                        id: param.id,
-                    };
-                }else if(  param.act == "update_from_employee" ){
-                    xWhere = {
-                        employee_id: param.id,
-                    }
-                }
-                
-                if( param.act == "update" || param.act == "update_from_employee"  ){
-                    saved = await _modelUser.update(joDataUpdate,
-                        {
-                            where: xWhere,
-                        },
-                        {transaction});
-                }else if( param.act == "add_from_employee" ){
-                    saved = await _modelUser.create(joDataUpdate,{transaction});
-                }              
-                
-            }       
-                       
-            await transaction.commit();
+				await xTransaction.commit();
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully update to database",
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.SaveUser] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                "status_code": "-99",
-                "status_msg": "Failed update user to database",
-                "err_msg": err
-            };
-            return joResult;
-        }
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			}
+		} catch (e) {
+			if (xTransaction) await xTransaction.rollback();
+			xJoResult = {
+				status_code: '-99',
+				status_msg: 'Failed save or update data. Error : ' + e,
+				err_msg: e
+			};
+		}
 
-        
-    }
+		return xJoResult;
+	}
 
-    async activateUser( id ){
-        let transaction;
-        var joResult = {};
-        var currDateTime = await utilInstance.getCurrDateTime();
+	async save(param) {
+		let transaction;
+		var joResult = {};
+		var hashedPassword = '';
 
-        try{
-            transaction = await sequelize.transaction();
-            
-            var updated = await _modelUser.update({
-                "status": 1,
-                "verified_at": currDateTime
-            },{
-                where:{
-                    id: id
-                }
-            },{transaction});
+		// console.log(">>> Update from user : ");
+		// console.log(JSON.stringify(param));
 
-            await transaction.commit();
+		try {
+			transaction = await sequelize.transaction();
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully activated"
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.ActivateUser] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed to activate user",
-                err_msg: err
-            };
-            return joResult;
-        }
-    }
+			if (param.act == 'update' || param.act == 'update_from_employee' || param.act == 'add_from_employee') {
+				var joDataUpdate = {
+					name: param.name,
+					email: param.email,
+					status: param.status,
+					sanqua_company_id: param.company_id,
+					updated_by: param.user_id,
+					employee_id: param.id,
+					user_level_id: param.user_level_id
+				};
 
-    async forgotPassword( pEmail, pNewPassword, pMethod ){
-        let transaction;
-        var joResult = {};
-        var currDateTime = await utilInstance.getCurrDateTime();
+				console.log('>>> Update REpo Param : ');
+				console.log('>>> param.act : ' + JSON.stringify(param));
+				console.log(JSON.stringify(joDataUpdate));
 
-        try{
-            transaction = await sequelize.transaction();
-            
-            var xUpdateParam = {};
-            if( pMethod == 'link_verification' ){
-                xUpdateParam = {
-                    "status": 2,
-                    "forgot_password_at": currDateTime
-                };
-            }else if( pMethod == 'generate_new_password' ){
-                xUpdateParam = {
-                    "forgot_password_at": currDateTime,
-                    "password": pNewPassword,
-                };
-            }
+				if (param.password != '' && param.hasOwnProperty('password')) {
+					hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
+					joDataUpdate.password = hashedPassword;
+				}
 
-            var updated = await _modelUser.update(xUpdateParam,{
-                where:{
-                    email: pEmail
-                }
-            },{transaction});
+				var saved = null;
+				var xWhere = {};
 
-            await transaction.commit();
+				if (param.act == 'update') {
+					xWhere = {
+						id: param.id
+					};
+				} else if (param.act == 'update_from_employee') {
+					xWhere = {
+						employee_id: param.id
+					};
+				}
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully did forgot password"
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.ForgotPassword] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed to forgot password process",
-                err_msg: err
-            };
-            return joResult;
-        }
-    }
+				if (param.act == 'update' || param.act == 'update_from_employee') {
+					saved = await _modelUser.update(
+						joDataUpdate,
+						{
+							where: xWhere
+						},
+						{ transaction }
+					);
+				} else if (param.act == 'add_from_employee') {
+					saved = await _modelUser.create(joDataUpdate, { transaction });
+				}
+			}
 
-    async changePassword( pNewPassword, pEmail, pId ){
-        let transaction;
-        var joResult = {};
-        var currDateTime = await utilInstance.getCurrDateTime();
+			await transaction.commit();
 
-        try{
-            transaction = await sequelize.transaction();
-            
-            var updated = await _modelUser.update({
-                "status": 1,
-                "password": pNewPassword
-            },{
-                where:{
-                    email: pEmail,
-                    id: pId
-                }
-            },{transaction});
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully update to database'
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.SaveUser] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed update user to database',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
 
-            await transaction.commit();
+	async activateUser(id) {
+		let transaction;
+		var joResult = {};
+		var currDateTime = await utilInstance.getCurrDateTime();
 
-            if( updated == 0 ){
-                joResult = {
-                    status_code: "-98",
-                    err_msg: "Verification Code and Id doesn't match. Please check again"
-                };
-            }else{
-                joResult = {
-                    status_code: "00",
-                    status_msg: "You've successfully change password."
-                };
-            }
-            
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.ChangePassword] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed to change password process",
-                err_msg: err
-            };
-            return joResult;
-        }
-    }
+		try {
+			transaction = await sequelize.transaction();
 
-    async updateGoogleToken( pEmail, pToken, pIdToken, pExpire ){
-        let transaction;
-        var joResult = {};
-        var currDateTime = await utilInstance.getCurrDateTime();
+			var updated = await _modelUser.update(
+				{
+					status: 1,
+					verified_at: currDateTime
+				},
+				{
+					where: {
+						id: id
+					}
+				},
+				{ transaction }
+			);
 
-        try{
-            transaction = await sequelize.transaction();
-            
-            var updated = await _modelUser.update({
-                "google_token": pToken,
-                "google_token_expire": pExpire,
-                "google_token_id": pIdToken,
-                "last_login": currDateTime
-            },{
-                where:{
-                    email: pEmail
-                }
-            },{transaction});
+			await transaction.commit();
 
-            await transaction.commit();
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully activated'
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.ActivateUser] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed to activate user',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully login with Google Account",
-                google_token: pToken,
-                google_token_expire: pExpire,
-                google_token_id: pIdToken
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.UpdateGoogleToken] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed to login with Google Account process",
-                err_msg: err
-            };
-            return joResult;
-        }
-    }
+	async forgotPassword(pEmail, pNewPassword, pMethod) {
+		let transaction;
+		var joResult = {};
+		var currDateTime = await utilInstance.getCurrDateTime();
 
-    async updateVendorID(pId, pVendorId){
-        let transaction;
-        var joResult = {};
-        var currDateTime = await utilInstance.getCurrDateTime();
+		try {
+			transaction = await sequelize.transaction();
 
-        try{
-            transaction = await sequelize.transaction();
-            
-            var updated = await _modelUser.update({
-                vendor_id: pVendorId,
-            },{
-                where:{
-                    id: pId
-                }
-            },{transaction});
+			var xUpdateParam = {};
+			if (pMethod == 'link_verification') {
+				xUpdateParam = {
+					status: 2,
+					forgot_password_at: currDateTime
+				};
+			} else if (pMethod == 'generate_new_password') {
+				xUpdateParam = {
+					forgot_password_at: currDateTime,
+					password: pNewPassword
+				};
+			}
 
-            await transaction.commit();
+			var updated = await _modelUser.update(
+				xUpdateParam,
+				{
+					where: {
+						email: pEmail
+					}
+				},
+				{ transaction }
+			);
 
-            joResult = {
-                status_code: "00",
-                status_msg: "User successfully with Vendor ID",
-            };
-            return joResult;
-        }catch(err){
-            console.log("ERROR [UserRepository.UpdateVendorID] " + err);
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed to update user with Vendor ID",
-                err_msg: err
-            };
-            return joResult;
-        }
-    }
+			await transaction.commit();
 
-    async delete( param ){
-        let transaction;
-        var joResult = {};
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully did forgot password'
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.ForgotPassword] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed to forgot password process',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
 
-        try{
-		
+	async changePassword(pNewPassword, pEmail, pId) {
+		let transaction;
+		var joResult = {};
+		var currDateTime = await utilInstance.getCurrDateTime();
+
+		try {
+			transaction = await sequelize.transaction();
+
+			var updated = await _modelUser.update(
+				{
+					status: 1,
+					password: pNewPassword
+				},
+				{
+					where: {
+						email: pEmail,
+						id: pId
+					}
+				},
+				{ transaction }
+			);
+
+			await transaction.commit();
+
+			if (updated == 0) {
+				joResult = {
+					status_code: '-98',
+					err_msg: "Verification Code and Id doesn't match. Please check again"
+				};
+			} else {
+				joResult = {
+					status_code: '00',
+					status_msg: "You've successfully change password."
+				};
+			}
+
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.ChangePassword] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed to change password process',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
+
+	async updateGoogleToken(pEmail, pToken, pIdToken, pExpire) {
+		let transaction;
+		var joResult = {};
+		var currDateTime = await utilInstance.getCurrDateTime();
+
+		try {
+			transaction = await sequelize.transaction();
+
+			var updated = await _modelUser.update(
+				{
+					google_token: pToken,
+					google_token_expire: pExpire,
+					google_token_id: pIdToken,
+					last_login: currDateTime
+				},
+				{
+					where: {
+						email: pEmail
+					}
+				},
+				{ transaction }
+			);
+
+			await transaction.commit();
+
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully login with Google Account',
+				google_token: pToken,
+				google_token_expire: pExpire,
+				google_token_id: pIdToken
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.UpdateGoogleToken] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed to login with Google Account process',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
+
+	async updateVendorID(pId, pVendorId) {
+		let transaction;
+		var joResult = {};
+		var currDateTime = await utilInstance.getCurrDateTime();
+
+		try {
+			transaction = await sequelize.transaction();
+
+			var updated = await _modelUser.update(
+				{
+					vendor_id: pVendorId
+				},
+				{
+					where: {
+						id: pId
+					}
+				},
+				{ transaction }
+			);
+
+			await transaction.commit();
+
+			joResult = {
+				status_code: '00',
+				status_msg: 'User successfully with Vendor ID'
+			};
+			return joResult;
+		} catch (err) {
+			console.log('ERROR [UserRepository.UpdateVendorID] ' + err);
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed to update user with Vendor ID',
+				err_msg: err
+			};
+			return joResult;
+		}
+	}
+
+	async delete(param) {
+		let transaction;
+		var joResult = {};
+
+		try {
 			var saved = null;
-            transaction = await sequelize.transaction();
-            saved = await _modelUser.destroy({
-                where: {
-                    id: param.id
-                }
-            });
+			transaction = await sequelize.transaction();
+			saved = await _modelUser.destroy({
+				where: {
+					id: param.id
+				}
+			});
 
-            await transaction.commit();
+			await transaction.commit();
 
-            joResult = {
-                status_code: "00",
-                status_msg: "Data successfully deleted"
-            }
-        }catch(e){
-            if( transaction ) await transaction.rollback();
-            joResult = {
-                status_code: "-99",
-                status_msg: "Failed delete data",
-                err_msg: e
-            }
-        }
+			joResult = {
+				status_code: '00',
+				status_msg: 'Data successfully deleted'
+			};
+		} catch (e) {
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed delete data',
+				err_msg: e
+			};
+		}
 
-        return joResult;
-    }
-};
+		return joResult;
+	}
+
+	async deleteUserByEmployeeId(param) {
+		let transaction;
+		var joResult = {};
+
+		try {
+			var saved = null;
+			transaction = await sequelize.transaction();
+			saved = await _modelUser.destroy({
+				where: {
+					employee_id: param.employee_id
+				}
+			});
+
+			await transaction.commit();
+
+			joResult = {
+				status_code: '00',
+				status_msg: 'Data successfully deleted'
+			};
+		} catch (e) {
+			if (transaction) await transaction.rollback();
+			joResult = {
+				status_code: '-99',
+				status_msg: 'Failed delete data',
+				err_msg: e
+			};
+		}
+
+		return joResult;
+	}
+}
 
 module.exports = UserRepository;
