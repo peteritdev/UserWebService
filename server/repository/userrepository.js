@@ -345,6 +345,72 @@ class UserRepository {
 		return xJoResult;
 	}
 
+	async save_new(pParam, pAct) {
+		var xJoResult = {};
+		let xTransaction;
+		var xSaved = null;
+
+		try {
+			var xSaved = null;
+			xTransaction = await sequelize.transaction();
+
+			if (pAct == 'add') {
+				xSaved = await _modelUser.create(pParam, { transaction: xTransaction });
+				if (xSaved.id != null) {
+					await xTransaction.commit();
+					xJoResult = {
+						status_code: '00',
+						status_msg: 'Data has been successfully saved',
+						created_id: await _utilInstance.encrypt(xSaved.id.toString(), config.cryptoKey.hashKey),
+						clear_id: xSaved.id
+					};
+				}
+			} else if (pAct == 'update') {
+				var xId = pParam.id;
+				delete pParam.id;
+				var xWhere = {
+					where: {
+						id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelUser.update(pParam, xWhere);
+
+				await xTransaction.commit();
+
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			} else if (pAct == 'update_by_employee_id') {
+				var xId = pParam.id;
+				delete pParam.id;
+				var xWhere = {
+					where: {
+						employee_id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelUser.update(pParam, xWhere);
+
+				await xTransaction.commit();
+
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			}
+		} catch (e) {
+			if (xTransaction) await xTransaction.rollback();
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Failed save or update data. Error : ` + e.message
+			};
+		}
+
+		return xJoResult;
+	}
+
 	async save(param) {
 		let transaction;
 		var joResult = {};

@@ -5,8 +5,8 @@
     "username": "postgres",
     "password": "P455uu0rd^^ok",
     "database": "sanqua_oauthdb",
-    "host": "10.10.20.8",
-    "port":5435,
+    "host": "10.10.20.5",
+    "port":5432,
     "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,

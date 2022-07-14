@@ -31,7 +31,8 @@ module.exports = {
 	addVendorId,
 	getUserByEmployeeId,
 	updateFCMToken,
-	deleteUserByEmployeeId
+	deleteUserByEmployeeId,
+	nonActiveByEmployeeId
 };
 
 async function list(req, res) {
@@ -132,6 +133,28 @@ async function save(req, res) {
 		//req.body.user_id = JSON.parse(oAuthResult).result_verify.id;
 		console.log('>>> Body : ' + JSON.stringify(req.body));
 		joResult = await userServiceInstance.save(req.body);
+		joResult = JSON.stringify(joResult);
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
+}
+
+async function nonActiveByEmployeeId(req, res) {
+	var joResult;
+	var errors = null;
+
+	//Validate first
+	var errors = validationResult(req).array();
+
+	if (errors.length != 0) {
+		joResult = JSON.stringify({
+			status_code: '-99',
+			status_msg: 'Parameter value has problem',
+			error_msg: errors
+		});
+	} else {
+		joResult = await userServiceInstance.nonActiveByEmployeeId(req.body);
 		joResult = JSON.stringify(joResult);
 	}
 

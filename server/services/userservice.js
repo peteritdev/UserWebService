@@ -32,6 +32,7 @@ const JwtUtil = require('../utils/jwtutil.js');
 const jwt_utilInstance = new JwtUtil();
 
 const LocalUtil = require('../utils/globalutility.js');
+const { updateFCMToken } = require('../controllers/user');
 const _localUtilInstance = new LocalUtil();
 
 class UserService {
@@ -168,6 +169,42 @@ class UserService {
 		}
 	}
 
+	async nonActiveByEmployeeId(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = false;
+		var xDecId = null;
+
+		try {
+			if (pParam.hasOwnProperty('employee_id')) {
+				if (pParam.employee_id != '') {
+					xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
+					if (xDecId.status_code == '00') {
+						pParam.employee_id = xDecId.decrypted;
+						xFlagProcess = true;
+					} else {
+						xJoResult = xDecId;
+					}
+				}
+			}
+
+			if (xFlagProcess) {
+				let xParamUpdate = {
+					id: pParam.employee_id,
+					status: -1,
+					act: 'update_from_employee'
+				};
+				xJoResult = await userRepoInstance.save_new(xParamUpdate, 'update_by_employee_id');
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <UserService.nonActive>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
 	async save(param) {
 		var joResult;
 		var checkDuplicateResult = await userRepoInstance.isEmailExists(param.email);
@@ -296,112 +333,123 @@ class UserService {
 	}
 
 	async doLogin(param) {
-		console.log('>>> Start validation isEmailExists...');
-		console.log('>>> Username : ' + config.username);
-		console.log('>>> Password : ' + config.password);
-		console.log('>>> IP : ' + config.host);
-		console.log('>>> Port : ' + config.port);
-		console.log('>>> Param : ' + JSON.stringify(param));
+		// console.log('>>> Start validation isEmailExists...');
+		// console.log('>>> Username : ' + config.username);
+		// console.log('>>> Password : ' + config.password);
+		// console.log('>>> IP : ' + config.host);
+		// console.log('>>> Port : ' + config.port);
+		// console.log('>>> Param : ' + JSON.stringify(param));
 		var validateEmail = await userRepoInstance.isEmailExists(param.email);
-		console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
+		// console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
 		var xFlagProcess = true;
 
 		if (validateEmail != null) {
-			var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
-			if (validatePassword) {
-				// Check if this user has privilege based on assigned application_id
-				if (param.application_id != '') {
-					// Check if administrator
-					var xTempFilterAdministrator = validateEmail.user_level.filter((x) => x.application.id == 1);
-					if (xTempFilterAdministrator.length == 0) {
-						// Check if non administrator
-						var xTempFilter = validateEmail.user_level.filter(
-							(x) => x.application.id == param.application_id
-						);
-						if (xTempFilter.length == 0) {
-							return JSON.stringify({
-								status_code: '-99',
-								status_msg: "You don't have privilege to access this page"
-							});
-						}
-					}
-				} else {
-					xFlagProcess = false;
-					return JSON.stringify({
-						status_code: '-99',
-						status_msg: 'You need to supply application id to use this api'
-					});
-				}
-
-				if (true) {
-					// Generate JWT Token
-					let token = jwt.sign(
-						{ email: param.email, id: validateEmail.id, device: param.device == '' ? 'web' : param.device },
-						config.secret,
-						{
-							expiresIn:
-								param.device == 'mobile'
-									? config.login.expireToken.mobile
-									: config.login.expireToken.web
-						}
-					);
-
-					// Get Employee Info
-					var xEmployeeId =
-						validateEmail.employee_id != null
-							? await _utilInstance.encrypt(
-									validateEmail.employee_id.toString(),
-									config.cryptoKey.hashKey
-								)
-							: 0;
-					var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-					// Version 1:
-					// var xUrlQuery = '/' + xEmployeeId;
-
-					// Version 2:
-					var xUrlQuery = '/' + xEmployeeId;
-					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
-						headers: {
-							'x-token': token,
-							'x-method': 'conventional'
-						}
-					});
-
-					console.log(JSON.stringify(xEmployeeInfo));
-
-					return JSON.stringify({
-						status_code: '00',
-						status_msg: 'Login successfully',
-						token: token,
-						user_id:
-							validateEmail.id != null
-								? await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey)
-								: 0,
-						level: validateEmail.user_level,
-						vendor_id:
-							validateEmail.vendor_id != null
-								? await _utilInstance.encrypt(
-										validateEmail.vendor_id.toString(),
-										config.cryptoKey.hashKey
-									)
-								: 0,
-						user_type: validateEmail.type,
-						sanqua_company_id:
-							validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
-						sanqua_company_name:
-							validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
-								? validateEmail.company.alias
-								: '',
-						username: validateEmail.name,
-						employee_id: xEmployeeId,
-						employee: xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null
-					});
-				}
-			} else {
+			if (validateEmail.status == -1) {
 				return JSON.stringify({
 					status_code: '-99',
-					status_msg: 'Email or password not valid.'
+					status_msg: 'Sory, your account has been non active. Please contact MIS Department.'
 				});
+			} else {
+				var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
+				if (validatePassword) {
+					// Check if this user has privilege based on assigned application_id
+					if (param.application_id != '') {
+						// Check if administrator
+						var xTempFilterAdministrator = validateEmail.user_level.filter((x) => x.application.id == 1);
+						if (xTempFilterAdministrator.length == 0) {
+							// Check if non administrator
+							var xTempFilter = validateEmail.user_level.filter(
+								(x) => x.application.id == param.application_id
+							);
+							if (xTempFilter.length == 0) {
+								return JSON.stringify({
+									status_code: '-99',
+									status_msg: "You don't have privilege to access this page"
+								});
+							}
+						}
+					} else {
+						xFlagProcess = false;
+						return JSON.stringify({
+							status_code: '-99',
+							status_msg: 'You need to supply application id to use this api'
+						});
+					}
+
+					if (true) {
+						// Generate JWT Token
+						let token = jwt.sign(
+							{
+								email: param.email,
+								id: validateEmail.id,
+								device: param.device == '' ? 'web' : param.device
+							},
+							config.secret,
+							{
+								expiresIn:
+									param.device == 'mobile'
+										? config.login.expireToken.mobile
+										: config.login.expireToken.web
+							}
+						);
+
+						// Get Employee Info
+						var xEmployeeId =
+							validateEmail.employee_id != null
+								? await _utilInstance.encrypt(
+										validateEmail.employee_id.toString(),
+										config.cryptoKey.hashKey
+									)
+								: 0;
+						var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+						// Version 1:
+						// var xUrlQuery = '/' + xEmployeeId;
+
+						// Version 2:
+						var xUrlQuery = '/' + xEmployeeId;
+						var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
+							headers: {
+								'x-token': token,
+								'x-method': 'conventional'
+							}
+						});
+
+						console.log(JSON.stringify(xEmployeeInfo));
+
+						return JSON.stringify({
+							status_code: '00',
+							status_msg: 'Login successfully',
+							token: token,
+							user_id:
+								validateEmail.id != null
+									? await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey)
+									: 0,
+							level: validateEmail.user_level,
+							vendor_id:
+								validateEmail.vendor_id != null
+									? await _utilInstance.encrypt(
+											validateEmail.vendor_id.toString(),
+											config.cryptoKey.hashKey
+										)
+									: 0,
+							user_type: validateEmail.type,
+							sanqua_company_id:
+								validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
+							sanqua_company_name:
+								validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
+									? validateEmail.company.alias
+									: '',
+							username: validateEmail.name,
+							employee_id: xEmployeeId,
+							employee: xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null
+						});
+					}
+				} else {
+					return JSON.stringify({
+						status_code: '-99',
+						status_msg: 'Email or password not valid.'
+					});
+				}
 			}
 		} else {
 			return JSON.stringify({
