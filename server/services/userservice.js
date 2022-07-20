@@ -1006,6 +1006,8 @@ class UserService {
 		var xFlagProcess = true;
 		var xData = {};
 
+		console.log(`>>> pId : ${pId}`);
+
 		if (pId.length == 65) {
 			xDecId = await _utilInstance.decrypt(pId, config.cryptoKey.hashKey);
 			if (xDecId.status_code == '00') {
@@ -1017,6 +1019,7 @@ class UserService {
 		}
 
 		if (xFlagProcess) {
+			console.log(`>>> pId : ${pId}`);
 			var xResult = await userRepoInstance.getUserByEmployeeId(pId);
 
 			if (xResult != null) {

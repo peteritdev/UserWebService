@@ -3,7 +3,7 @@ var config = require(__dirname + '/../config/config.json')[env];
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 const { hash } = require('bcryptjs');
-const Op = sequelize.Op;
+const Op = Sequelize.Op;
 
 //Model
 const _modelDb = require('../models').ms_approvalmatrixapprovers;
@@ -20,7 +20,7 @@ class ApprovalMatrixApproverRepository {
 	constructor() {}
 
 	async list(pParam) {
-		var xWhere = {};
+		var xWhere = [];
 		var xWhereAnd = [];
 
 		var xOrder = [ 'id', 'ASC' ];
@@ -85,7 +85,12 @@ class ApprovalMatrixApproverRepository {
 			is_delete: 0
 		});
 
-		xWhere.$and = xWhereAnd;
+		// xWhere.$and = xWhereAnd;
+		if (xWhereAnd.length > 0) {
+			xWhere.push({
+				[Op.and]: xWhereAnd
+			});
+		}
 
 		if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
 			xOrder = [ pParam.order_by, pParam.order_type == 'desc' ? 'DESC' : 'ASC' ];
@@ -110,7 +115,7 @@ class ApprovalMatrixApproverRepository {
 	}
 
 	async getById(pParam) {
-		var xWhere = {};
+		var xWhere = [];
 		var xWhereAnd = [];
 		var xOrder = [ 'sequence', 'ASC' ];
 
@@ -196,7 +201,12 @@ class ApprovalMatrixApproverRepository {
 			}
 		}
 
-		xWhere.$and = xWhereAnd;
+		// xWhere.$and = xWhereAnd;
+		if (xWhereAnd.length > 0) {
+			xWhere.push({
+				[Op.and]: xWhereAnd
+			});
+		}
 
 		var xData = await _modelDb.findAndCountAll({
 			where: xWhere,
