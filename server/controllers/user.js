@@ -283,6 +283,7 @@ async function login(req, res) {
 		req.body.device = req.headers['x-device'];
 		req.body.application_id = req.headers['x-application-id'];
 		req.body.device = req.headers['x-device'];
+		req.body.device_id = req.headers['x-device-id'];
 		joResult = await userServiceInstance.doLogin(req.body);
 	}
 

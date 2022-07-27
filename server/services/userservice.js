@@ -6,6 +6,7 @@ const sequelize = require('sequelize');
 const dateFormat = require('dateformat');
 const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
+const CryptoLib = require('peters-cryptolib');
 
 var env = process.env.NODE_ENV || 'localhost';
 var config = require(__dirname + '/../config/config.json')[env];
@@ -20,6 +21,8 @@ const userRepoInstance = new UserRepository();
 // Services
 const NotificationService = require('../services/notificationservice.js');
 const _notificationServiceInstance = new NotificationService();
+
+const _cryptoLib = new CryptoLib();
 
 // Utility
 const Util = require('peters-globallib-v2');
@@ -341,7 +344,8 @@ class UserService {
 		// console.log('>>> Param : ' + JSON.stringify(param));
 		var validateEmail = await userRepoInstance.isEmailExists(param.email);
 		// console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
-		var xFlagProcess = true;
+		var xFlagProcess = false;
+		var xJoResult = {};
 
 		if (validateEmail != null) {
 			if (validateEmail.status == -1) {
@@ -414,35 +418,58 @@ class UserService {
 							}
 						});
 
-						console.log(JSON.stringify(xEmployeeInfo));
+						if (xEmployeeInfo) {
+							if (xEmployeeInfo.status_code == '00') {
+								if (xEmployeeInfo.token_data.data.app_status == 1) {
+									if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
+										xJoResult = {
+											status_code: '-99',
+											status_msg: 'You not allowed to login using current device.'
+										};
+									} else {
+										xFlagProcess = true;
+									}
+								} else {
+									xFlagProcess = true;
+								}
+							}
+						}
 
-						return JSON.stringify({
-							status_code: '00',
-							status_msg: 'Login successfully',
-							token: token,
-							user_id:
-								validateEmail.id != null
-									? await _utilInstance.encrypt(validateEmail.id.toString(), config.cryptoKey.hashKey)
-									: 0,
-							level: validateEmail.user_level,
-							vendor_id:
-								validateEmail.vendor_id != null
-									? await _utilInstance.encrypt(
-											validateEmail.vendor_id.toString(),
-											config.cryptoKey.hashKey
-										)
-									: 0,
-							user_type: validateEmail.type,
-							sanqua_company_id:
-								validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
-							sanqua_company_name:
-								validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
-									? validateEmail.company.alias
-									: '',
-							username: validateEmail.name,
-							employee_id: xEmployeeId,
-							employee: xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null
-						});
+						if (xFlagProcess) {
+							return JSON.stringify({
+								status_code: '00',
+								status_msg: 'Login successfully',
+								token: token,
+
+								user_id:
+									validateEmail.id != null
+										? await _utilInstance.encrypt(
+												validateEmail.id.toString(),
+												config.cryptoKey.hashKey
+											)
+										: 0,
+								level: validateEmail.user_level,
+								vendor_id:
+									validateEmail.vendor_id != null
+										? await _utilInstance.encrypt(
+												validateEmail.vendor_id.toString(),
+												config.cryptoKey.hashKey
+											)
+										: 0,
+								user_type: validateEmail.type,
+								sanqua_company_id:
+									validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
+								sanqua_company_name:
+									validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
+										? validateEmail.company.alias
+										: '',
+								username: validateEmail.name,
+								employee_id: xEmployeeId,
+								employee: xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null
+							});
+						} else {
+							return JSON.stringify(xJoResult);
+						}
 					}
 				} else {
 					return JSON.stringify({
