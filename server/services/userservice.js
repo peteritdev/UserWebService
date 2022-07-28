@@ -435,7 +435,8 @@ class UserService {
 							}
 						}
 
-						if (xFlagProcess) {
+						// if (xFlagProcess) {
+						if (true) {
 							let xEmployeeDetail =
 								xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
 							delete xEmployeeInfo.token_data.data.enc_key;
