@@ -436,6 +436,9 @@ class UserService {
 						}
 
 						if (xFlagProcess) {
+							let xEmployeeDetail =
+								xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
+							delete xEmployeeInfo.token_data.data.enc_key;
 							return JSON.stringify({
 								status_code: '00',
 								status_msg: 'Login successfully',
@@ -465,7 +468,7 @@ class UserService {
 										: '',
 								username: validateEmail.name,
 								employee_id: xEmployeeId,
-								employee: xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null
+								employee: xEmployeeDetail
 							});
 						} else {
 							return JSON.stringify(xJoResult);
