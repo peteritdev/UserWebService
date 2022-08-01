@@ -10,6 +10,7 @@ const approvalMatrixApprover = require('./approvalmatrixapprover');
 const approvalMatrixApproverUser = require('./approvalmatrixapproveruser');
 const approvalMatrixDocument = require('./approvalmatrixdocument');
 const notificationTemplate = require('./notificationtemplate');
+const clientApplication = require('./clientapplication');
 
 const thirdPartyUser = require('./thirdpartyuser');
 
@@ -27,5 +28,6 @@ module.exports = {
 	approvalMatrixDocument,
 	notificationTemplate,
 
-	thirdPartyUser
+	thirdPartyUser,
+	clientApplication
 };
