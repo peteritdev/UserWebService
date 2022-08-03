@@ -280,6 +280,8 @@ class ClientApplicationService {
 
 		return xJoResult;
 	}
+
+	async validatePageOAuthLogin()
 }
 
 module.exports = ClientApplicationService;
