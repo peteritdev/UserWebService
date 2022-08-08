@@ -1096,6 +1096,8 @@ class UserService {
 		var xFlagProcess = false;
 		var xDecId = null;
 
+		console.log(`>>> pParam <doUpdateFCMToken>: ${JSON.stringify(pParam)} `);
+
 		try {
 			if (pParam.hasOwnProperty('user_id')) {
 				if (pParam.user_id != '') {
