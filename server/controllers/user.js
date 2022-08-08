@@ -495,6 +495,9 @@ async function updateFCMToken(req, res) {
 	var xJoResult;
 	var errors = null;
 
+	console.log(`>>> pParam <updateFCMToken>: ${req.headers['x-method']} `);
+	console.log(`>>> pParam <updateFCMToken>: ${req.headers['x-token']} `);
+
 	var xOAuthResult = await userServiceInstance.verifyToken({
 		token: req.headers['x-token'],
 		method: req.headers['x-method']
