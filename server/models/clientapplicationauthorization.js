@@ -10,10 +10,12 @@ module.exports = (sequelize, DataTypes) => {
 			autoIncrement: true
 		},
 		client_application_id: DataTypes.INTEGER,
+		client_id: DataTypes.STRING,
+		state: DataTypes.STRING,
 		code: DataTypes.STRING,
 		token: DataTypes.STRING,
 		refresh_token: DataTypes.STRING,
-		expire_in: DataTypes.INTEGER,
+		code_expire_in: DataTypes.INTEGER,
 		scope: DataTypes.STRING,
 
 		is_delete: DataTypes.INTEGER,

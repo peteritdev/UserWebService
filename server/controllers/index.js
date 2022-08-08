@@ -14,6 +14,8 @@ const clientApplication = require('./clientapplication');
 
 const thirdPartyUser = require('./thirdpartyuser');
 
+const oAuth = require('./oauth2');
+
 module.exports = {
 	user,
 	userLevel,
@@ -29,5 +31,7 @@ module.exports = {
 	notificationTemplate,
 
 	thirdPartyUser,
-	clientApplication
+	clientApplication,
+
+	oAuth
 };

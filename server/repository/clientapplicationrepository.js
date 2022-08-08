@@ -8,8 +8,9 @@ const Op = Sequelize.Op;
 // Model
 const _modelDb = require('../models').ms_clientapplications;
 
+const _modelApplicationAuthorization = require('../models').log_clientapplicationauthorizations;
+
 const Utility = require('peters-globallib-v2');
-const clientapplication = require('../models/clientapplication');
 const _utilInstance = new Utility();
 
 class ClientApplicationRepository {
@@ -206,6 +207,110 @@ class ClientApplicationRepository {
 		return xJoResult;
 	}
 
+	async getByClientIdAndState(pParam) {
+		var xJoResult = {};
+		var xWhere = {};
+
+		console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
+
+		try {
+			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('state')) {
+				if (pParam.client_id != '' && pParam.state != '') {
+					xWhere = {
+						client_id: pParam.client_id,
+						state: pParam.state
+					};
+
+					var xData = await _modelApplicationAuthorization.findOne({
+						where: xWhere
+					});
+
+					if (xData != null) {
+						xJoResult = {
+							status_code: '00',
+							status_msg: 'OK',
+							data: xData
+						};
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Data not found'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Param not valid'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Param not valid'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: 'Exception Error. Error : ' + e,
+				err_msg: e
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async getLogByClientIdAndCode(pParam) {
+		var xJoResult = {};
+		var xWhere = {};
+
+		try {
+			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
+				if (pParam.client_id != '' && pParam.code != '') {
+					xWhere = {
+						client_id: pParam.client_id,
+						code: pParam.code
+					};
+
+					var xData = await _modelApplicationAuthorization.findOne({
+						where: xWhere
+					});
+
+					if (xData != null) {
+						xJoResult = {
+							status_code: '00',
+							status_msg: 'OK',
+							data: xData
+						};
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Data not found'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Param not valid'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Param not valid'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: 'Exception Error. Error : ' + e,
+				err_msg: e
+			};
+		}
+
+		return xJoResult;
+	}
+
 	async save(pParam, pAct) {
 		var xJoResult = {};
 		let xTransaction;
@@ -236,6 +341,74 @@ class ClientApplicationRepository {
 					transaction: xTransaction
 				};
 				xSaved = await _modelDb.update(pParam, xWhere);
+
+				await xTransaction.commit();
+
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			}
+		} catch (e) {
+			if (xTransaction) await xTransaction.rollback();
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Failed save or update data. Error : ` + e.message
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async saveClientApplicationAuthorization(pParam, pAct) {
+		var xJoResult = {};
+		let xTransaction;
+		var xSaved = null;
+
+		try {
+			var xSaved = null;
+			xTransaction = await sequelize.transaction();
+
+			if (pAct == 'add') {
+				xSaved = await _modelApplicationAuthorization.create(pParam, { transaction: xTransaction });
+				if (xSaved.id != null) {
+					await xTransaction.commit();
+					xJoResult = {
+						status_code: '00',
+						status_msg: 'Data has been successfully saved',
+						created_id: await _utilInstance.encrypt(xSaved.id.toString(), config.cryptoKey.hashKey),
+						clear_id: xSaved.id
+					};
+				}
+			} else if (pAct == 'update') {
+				var xId = pParam.id;
+				delete pParam.id;
+				var xWhere = {
+					where: {
+						id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelApplicationAuthorization.update(pParam, xWhere);
+
+				await xTransaction.commit();
+
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Data has been successfully updated'
+				};
+			} else if (pAct == 'update_by_client_id_and_code') {
+				var xClientId = pParam.client_id;
+				delete pParam.client_id;
+				var xCode = pParam.client_id;
+				delete pParam.client_id;
+				var xWhere = {
+					where: {
+						id: xId
+					},
+					transaction: xTransaction
+				};
+				xSaved = await _modelApplicationAuthorization.update(pParam, xWhere);
 
 				await xTransaction.commit();
 

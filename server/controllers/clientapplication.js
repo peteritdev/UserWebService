@@ -49,28 +49,32 @@ async function save(req, res) {
 
 async function list(req, res) {
 	var xJoResult;
-	var xOAuthResult = await _oAuthServiceInstance.verifyToken(req.headers['x-token'], req.headers['x-method']);
+	var xOAuthResult = await _oAuthServiceInstance.verifyToken({
+		method: req.headers['x-method'],
+		token: req.headers['x-token']
+	});
+
+	// console.log(xOAuthResult);
+
+	xOAuthResult = JSON.parse(xOAuthResult);
 
 	if (xOAuthResult.status_code == '00') {
-		if (xOAuthResult.token_data.status_code == '00') {
-			// Validate first
-			var errors = validationResult(req).array();
+		// if (xOAuthResult.token_data.status_code == '00') {
+		// Validate first
+		var errors = validationResult(req).array();
 
-			if (errors.length != 0) {
-				xJoResult = JSON.stringify({
-					status_code: '-99',
-					status_msg: 'Parameter value has problem',
-					error_msg: errors
-				});
-			} else {
-				xJoResult = await _serviceInstance.list(req.query);
-				xJoResult = JSON.stringify(xJoResult);
-			}
+		if (errors.length != 0) {
+			xJoResult = JSON.stringify({
+				status_code: '-99',
+				status_msg: 'Parameter value has problem',
+				error_msg: errors
+			});
 		} else {
-			xJoResult = JSON.stringify(xOAuthResult);
+			xJoResult = await _serviceInstance.list(req.query);
+			xJoResult = JSON.stringify(xJoResult);
 		}
 	} else {
-		xJoResult = JSON.stringify(oAuthResult);
+		xJoResult = JSON.stringify(xOAuthResult);
 	}
 
 	res.setHeader('Content-Type', 'application/json');
@@ -79,28 +83,32 @@ async function list(req, res) {
 
 async function detail(req, res) {
 	var xJoResult;
-	var xOAuthResult = await _oAuthServiceInstance.verifyToken(req.headers['x-token'], req.headers['x-method']);
+	var xOAuthResult = await _oAuthServiceInstance.verifyToken({
+		method: req.headers['x-method'],
+		token: req.headers['x-token']
+	});
+
+	// console.log(xOAuthResult);
+
+	xOAuthResult = JSON.parse(xOAuthResult);
 
 	if (xOAuthResult.status_code == '00') {
-		if (xOAuthResult.token_data.status_code == '00') {
-			// Validate first
-			var errors = validationResult(req).array();
+		// if (xOAuthResult.token_data.status_code == '00') {
+		// Validate first
+		var errors = validationResult(req).array();
 
-			if (errors.length != 0) {
-				xJoResult = JSON.stringify({
-					status_code: '-99',
-					status_msg: 'Parameter value has problem',
-					error_msg: errors
-				});
-			} else {
-				xJoResult = await _serviceInstance.detail(req.params);
-				xJoResult = JSON.stringify(xJoResult);
-			}
+		if (errors.length != 0) {
+			xJoResult = JSON.stringify({
+				status_code: '-99',
+				status_msg: 'Parameter value has problem',
+				error_msg: errors
+			});
 		} else {
-			xJoResult = JSON.stringify(xOAuthResult);
+			xJoResult = await _serviceInstance.getById(req.params);
+			xJoResult = JSON.stringify(xJoResult);
 		}
 	} else {
-		xJoResult = JSON.stringify(oAuthResult);
+		xJoResult = JSON.stringify(xOAuthResult);
 	}
 
 	res.setHeader('Content-Type', 'application/json');

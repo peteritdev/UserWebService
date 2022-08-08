@@ -18,6 +18,7 @@ const _utilInstance = new Utility();
 // Repository
 const Repository = require('../repository/clientapplicationrepository.js');
 const { Client } = require('pg');
+const { BULKDELETE } = require('sequelize/dist/lib/query-types.js');
 const _repoInstance = new Repository();
 
 class ClientApplicationService {
@@ -49,14 +50,102 @@ class ClientApplicationService {
 
 				if (xDetail) {
 					if (xDetail.status_code == '00') {
+						let xClientSecretClear = '';
+						if (xDetail.data.client_secret != '') {
+							xDecId = await _utilInstance.decrypt(
+								Buffer.from(xDetail.data.client_secret, 'base64').toString('ascii'),
+								config.cryptoKey.hashKey
+							);
+							if (xDecId.status_code == '00') {
+								xClientSecretClear = xDecId.decrypted;
+							} else {
+								xFlagProccess = false;
+								xJoResult = xDecId;
+							}
+						}
+
+						if (xFlagProccess) {
+							xJoData = {
+								id: await _utilInstance.encrypt(xDetail.data.id.toString(), config.cryptoKey.hashKey),
+								name: xDetail.data.name,
+								host: xDetail.data.host,
+								redirect_uri: xDetail.data.redirect_uri,
+								client_id: xDetail.data.client_id,
+								client_secret: xClientSecretClear,
+								status: xDetail.data.status,
+								created_by_name: xDetail.data.created_by_name,
+								created_at:
+									xDetail.data.createdAt != null
+										? moment(xDetail.data.createdAt).format('DD-MM-YYYY HH:mm:ss')
+										: null,
+								updated_by_name: xDetail.data.updated_by_name,
+								updated_at:
+									xDetail.data.updatedAt != null
+										? moment(xDetail.data.updatedAt).format('DD-MM-YYYY HH:mm:ss')
+										: null
+							};
+							xJoResult = {
+								status_code: '00',
+								status_msg: 'OK',
+								data: xJoData
+							};
+						}
+					} else {
+						xJoResult = xDetail;
+					}
+				}
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationService.getById>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async getByClientId(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = false;
+		var xDecId = null;
+		var xEncId = null;
+		var xJoData = {};
+
+		try {
+			let xDetail = await _repoInstance.getByClientID(pParam);
+			console.log(`>>> xDetail :${JSON.stringify(xDetail)}`);
+
+			if (xDetail) {
+				if (xDetail.status_code == '00') {
+					let xClientSecretClear = '';
+					// console.log(`>>> Client Secret: ${xDetail.data.client_secret}`);
+					if (xDetail.data.client_secret != '') {
+						xDecId = await _utilInstance.decrypt(
+							Buffer.from(xDetail.data.client_secret, 'base64').toString('ascii'),
+							config.cryptoKey.hashKey
+						);
+						// console.log(`>>> xDecId: ${JSON.stringify(xDecId)}`);
+						if (xDecId.status_code == '00') {
+							xClientSecretClear = xDecId.decrypted;
+
+							xFlagProcess = true;
+						} else {
+							xJoResult = xDecId;
+						}
+					}
+
+					// console.log(`>>> xFlagProcess : ${xFlagProcess}`);
+
+					if (xFlagProcess) {
 						xJoData = {
-							id: await _utilInstance.encrypt(xDetail.id.toString(), config.cryptoKey.hashKey),
-							name: xDetail.name,
-							host: xDetail.host,
-							redirect_uri: xDetail.redirect_uri,
-							client_id: xDetail.client_id,
-							client_secret: xDetail.client_secret,
-							status: xDetail.status,
+							id: xDetail.data.id,
+							name: xDetail.data.name,
+							host: xDetail.data.host,
+							redirect_uri: xDetail.data.redirect_uri,
+							client_id: xDetail.data.client_id,
+							client_secret: xClientSecretClear,
+							status: xDetail.data.status,
 							created_by_name: xDetail.data.created_by_name,
 							created_at:
 								xDetail.data.createdAt != null
@@ -73,9 +162,9 @@ class ClientApplicationService {
 							status_msg: 'OK',
 							data: xJoData
 						};
-					} else {
-						xJoResult = xDetail;
 					}
+				} else {
+					xJoResult = xDetail;
 				}
 			}
 		} catch (e) {
@@ -231,7 +320,9 @@ class ClientApplicationService {
 					characters: [ generatePassword.lower, generatePassword.upper, generatePassword.digits ]
 				})}`;
 
-				let xClientSecret = crypto.createHash('sha256').update(xClientSecretClear).digest('base64');
+				// let xClientSecret = crypto.createHash('sha256').update(xClientSecretClear).digest('base64');
+				let xClientSecret = await _utilInstance.encrypt(xClientSecretClear, config.cryptoKey.hashKey);
+				xClientSecret = Buffer.from(xClientSecret).toString('base64');
 
 				xJoResult = {
 					status_code: '00',
@@ -281,7 +372,94 @@ class ClientApplicationService {
 		return xJoResult;
 	}
 
-	async validatePageOAuthLogin()
+	async saveClientApplicationAuthorization(pParam) {
+		var xJoResult;
+		var xAct = pParam.act;
+		delete pParam.act;
+		var xFlagProcess = false;
+		var xAddResult = {};
+
+		try {
+			if (xAct == 'add') {
+				if (pParam.hasOwnProperty('client_application_id')) {
+					if (pParam.client_application_id != '') {
+						// Check by client_id and state
+						let xCheckByClientIdAndState = await _repoInstance.getByClientIdAndState(pParam);
+						console.log(`>>> xCheckByClientIdAndState: ${JSON.stringify(xCheckByClientIdAndState)}`);
+						let xParamSave = {
+							client_application_id: pParam.client_application_id,
+							client_id: pParam.client_id,
+							state: pParam.state,
+							code: pParam.code,
+							scope: pParam.scope,
+							code_expire_in: pParam.code_expire_in
+						};
+						if (xCheckByClientIdAndState.status_code == '00') {
+							xParamSave.id = xCheckByClientIdAndState.data.id;
+							xAddResult = await _repoInstance.saveClientApplicationAuthorization(xParamSave, 'update');
+						} else {
+							xAddResult = await _repoInstance.saveClientApplicationAuthorization(xParamSave, 'add');
+						}
+
+						xJoResult = xAddResult;
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Parameter client_application_id can not be empty'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Parameter not valid'
+					};
+				}
+			} else if (xAct == 'update_by_client_id_and_code') {
+				if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
+					let xParamUpdate = {
+						token: pParam.id,
+						code: pParam.code,
+						client_id: pParam.client_id,
+						refresh_token: pParam.refresh_token
+					};
+					xUpdateResult = await _repoInstance.saveClientApplicationAuthorization(xParamUpdate, xAct);
+					xJoResult = xUpdateResult;
+				}
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationService.saveClientApplicationState>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async getLogByClientIdAndCode(pParam) {
+		var xJoResult = {};
+
+		try {
+			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
+				if (pParam.client_id != '' && pParam.code != '') {
+					let xLogResult = await _repoInstance.getLogByClientIdAndCode({
+						client_id: pParam.client_id,
+						code: pParam.code
+					});
+					xJoResult = xLogResult;
+				}
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationService.getByClientIdAndState>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	// async validatePageOAuthLogin()
 }
 
 module.exports = ClientApplicationService;
