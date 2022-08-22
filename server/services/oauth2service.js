@@ -100,14 +100,14 @@ class OAuth2Service {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <UserService.doLogin>: ${e.message}`
+				status_msg: `Exception error <OAuth2Service.doLogin>: ${e.message}`
 			};
 		}
 
 		return xJoResult;
 	}
 
-	async generateAccessToken(pParam) {
+	async token(pParam) {
 		var xJoResult = {};
 
 		try {
@@ -130,37 +130,120 @@ class OAuth2Service {
 						status_msg: 'Invalid redirect_uri value. Please make sure use valid redirect_uri'
 					};
 				} else {
-					// Validate authorization_code with client_id
-					let xLogAuthorization = await _clientApplicationServiceInstance.getLogByClientIdAndCode({
-						client_id: pParam.client_id,
-						code: pParam.code
-					});
-					if (xLogAuthorization.status_code == '00') {
-						let xToken = jwt.sign(
-							{
-								client_id: pParam.client_id,
-								code: pParam.code,
-								scope: pParam.scope
-							},
-							config.login.oAuth2.simpeg.secret,
-							{
-								expiresIn: config.login.oAuth2.simpeg.expireAccessToken
-							}
-						);
-
-						// Update token into database
-					} else {
-						xJoResult = {
-							status_code: '-99',
-							status_msg: 'Invalid authorization_code value. Please make sure use valid value'
-						};
+					if (pParam.grant_type == 'authorization_code') {
+						xJoResult = await this.generateAccessTokenByAuthCode(pParam);
 					}
 				}
 			}
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <UserService.generateAccessToken>: ${e.message}`
+				status_msg: `Exception error <OAuth2Service.token>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async generateAccessTokenByAuthCode(pParam) {
+		var xJoResult = {};
+
+		try {
+			// Validate authorization_code with client_id
+			let xLogAuthorization = await _clientApplicationServiceInstance.getLogByClientIdAndCode({
+				client_id: pParam.client_id,
+				code: pParam.code
+			});
+			if (xLogAuthorization.status_code == '00') {
+				if (pParam.scope == xLogAuthorization.data.scope) {
+					let xExpireTokenIn = moment().add(config.login.oAuth2.simpeg.expireAccessToken, 'hours').unix();
+					let xToken = jwt.sign(
+						{
+							iss: 'https://simpeg.komisiyudisial.go.id',
+							aud: pParam.client_id,
+							code: pParam.code,
+							scope: pParam.scope,
+							nip: pParam.nip,
+							iat: moment().unix()
+						},
+						config.login.oAuth2.simpeg.secret,
+						{
+							expiresIn: config.login.oAuth2.simpeg.expireAccessToken
+						}
+					);
+
+					// Update token into database
+					let xParamUpdate = {
+						code: pParam.code,
+						client_id: pParam.client_id,
+						token: xToken,
+						act: 'update_by_client_id_and_code'
+					};
+					let xResultUpdate = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
+						xParamUpdate
+					);
+					if (xResultUpdate.status_code == '00') {
+						xJoResult = {
+							status_code: '00',
+							status_msg: 'Accepted',
+							token_type: 'Bearer',
+							expires_in: xExpireTokenIn,
+							access_token: xToken,
+							scope: pParam.scope
+						};
+					} else {
+						xJoResult = xResultUpdate;
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Authorization code not valid for this scope'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Invalid authorization_code value. Please make sure use valid value'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <OAuth2Service.generateAccessToken>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async tokenInfo(pParam) {
+		var xJoResult = {};
+
+		try {
+			if (pParam.hasOwnProperty('access_token')) {
+				if (pParam.access_token != '') {
+					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.simpeg.secret);
+					xJoResult = {
+						status_code: '00',
+						status_msg: 'OK',
+						verify: xResultVerify
+					};
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Parameter access_token is required'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Parameter not valid'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <OAuth2Service.tokenInfo>: ${e.message}`
 			};
 		}
 

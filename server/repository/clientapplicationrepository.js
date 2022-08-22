@@ -400,11 +400,12 @@ class ClientApplicationRepository {
 			} else if (pAct == 'update_by_client_id_and_code') {
 				var xClientId = pParam.client_id;
 				delete pParam.client_id;
-				var xCode = pParam.client_id;
-				delete pParam.client_id;
+				var xCode = pParam.code;
+				delete pParam.code;
 				var xWhere = {
 					where: {
-						id: xId
+						client_id: xClientId,
+						code: xCode
 					},
 					transaction: xTransaction
 				};

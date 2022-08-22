@@ -205,7 +205,9 @@ class ClientApplicationService {
 						status_code: '00',
 						status_msg: 'OK',
 						total_record: xResultList.total_record,
-						data: xJoArrData
+						data: xJoArrData,
+						now: moment().unix(),
+						added: moment().add(5, 'hours').unix()
 					};
 				} else {
 					xJoResult = xResultList;
@@ -417,12 +419,12 @@ class ClientApplicationService {
 			} else if (xAct == 'update_by_client_id_and_code') {
 				if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
 					let xParamUpdate = {
-						token: pParam.id,
+						token: pParam.token,
 						code: pParam.code,
 						client_id: pParam.client_id,
 						refresh_token: pParam.refresh_token
 					};
-					xUpdateResult = await _repoInstance.saveClientApplicationAuthorization(xParamUpdate, xAct);
+					let xUpdateResult = await _repoInstance.saveClientApplicationAuthorization(xParamUpdate, xAct);
 					xJoResult = xUpdateResult;
 				}
 			}
