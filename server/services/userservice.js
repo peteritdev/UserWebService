@@ -1064,7 +1064,8 @@ class UserService {
 					verified_at: xResult.verified_at,
 					sanqua_company_id: xResult.sanqua_company_id,
 					company: xResult.company,
-					fcm_token: xResult.fcm_token
+					fcm_token: xResult.fcm_token,
+					fcm_token_web: xResult.fcm_token_web
 				};
 
 				if (xResult.user_level != null) {
@@ -1115,7 +1116,8 @@ class UserService {
 				xJoResult = await userRepoInstance.saveGeneral(
 					{
 						id: pParam.user_id,
-						fcm_token: pParam.fcm_token
+						fcm_token: pParam.fcm_token,
+						fcm_token_web: pParam.fcm_token_web
 					},
 					'update'
 				);
