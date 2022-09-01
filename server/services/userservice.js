@@ -883,7 +883,9 @@ class UserService {
 				console.log(`>>> joResult.result_verify: ${JSON.stringify(joResult.result_verify)}`);
 
 				if (joResult.status_code == '00') {
-					if (joResult.result_verify.device == param.device) {
+					// Temporary :
+					// pParam.device == '' --> handle for temporary when all esanqua not add device yet
+					if (joResult.result_verify.device == param.device || pParam.device == '') {
 						//Get User Detail by ID
 						var xDecId = await _utilInstance.decrypt(joResult.result_verify.id, config.cryptoKey.hashKey);
 
