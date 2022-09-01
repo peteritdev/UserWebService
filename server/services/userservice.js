@@ -421,7 +421,8 @@ class UserService {
 							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
 								headers: {
 									'x-token': token,
-									'x-method': 'conventional'
+									'x-method': 'conventional',
+									'x-device': param.device
 								}
 							});
 
