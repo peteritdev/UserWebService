@@ -105,8 +105,8 @@
   
     "login":{
       "expireToken": {
-        "web": "1h",
-        "mobile": "48h"
+        "web": "24h",
+        "mobile": "168h"
       },
       "oAuth2":{
         "google":{

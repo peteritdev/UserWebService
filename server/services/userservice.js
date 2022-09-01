@@ -342,150 +342,163 @@ class UserService {
 		// console.log('>>> IP : ' + config.host);
 		// console.log('>>> Port : ' + config.port);
 		// console.log('>>> Param : ' + JSON.stringify(param));
-		var validateEmail = await userRepoInstance.isEmailExists(param.email);
-		// console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
-		var xFlagProcess = false;
-		var xJoResult = {};
 
-		if (validateEmail != null) {
-			if (validateEmail.status == -1) {
-				return JSON.stringify({
-					status_code: '-99',
-					status_msg: 'Sory, your account has been non active. Please contact MIS Department.'
-				});
-			} else {
-				var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
-				if (validatePassword) {
-					// Check if this user has privilege based on assigned application_id
-					if (param.application_id != '') {
-						// Check if administrator
-						var xTempFilterAdministrator = validateEmail.user_level.filter((x) => x.application.id == 1);
-						if (xTempFilterAdministrator.length == 0) {
-							// Check if non administrator
-							var xTempFilter = validateEmail.user_level.filter(
-								(x) => x.application.id == param.application_id
+		if (param.device == 'mobile' || param.device == 'web') {
+			var validateEmail = await userRepoInstance.isEmailExists(param.email);
+			// console.log(`>>> End validation isEmailExists...: ${JSON.stringify(validateEmail)}`);
+			var xFlagProcess = false;
+			var xJoResult = {};
+
+			if (validateEmail != null) {
+				if (validateEmail.status == -1) {
+					return JSON.stringify({
+						status_code: '-99',
+						status_msg: 'Sory, your account has been non active. Please contact MIS Department.'
+					});
+				} else {
+					var validatePassword = await bcrypt.compare(param.password, validateEmail.password);
+					if (validatePassword) {
+						// Check if this user has privilege based on assigned application_id
+						if (param.application_id != '') {
+							// Check if administrator
+							var xTempFilterAdministrator = validateEmail.user_level.filter(
+								(x) => x.application.id == 1
 							);
-							if (xTempFilter.length == 0) {
-								return JSON.stringify({
-									status_code: '-99',
-									status_msg: "You don't have privilege to access this page"
-								});
+							if (xTempFilterAdministrator.length == 0) {
+								// Check if non administrator
+								var xTempFilter = validateEmail.user_level.filter(
+									(x) => x.application.id == param.application_id
+								);
+								if (xTempFilter.length == 0) {
+									return JSON.stringify({
+										status_code: '-99',
+										status_msg: "You don't have privilege to access this page"
+									});
+								}
 							}
+						} else {
+							xFlagProcess = false;
+							return JSON.stringify({
+								status_code: '-99',
+								status_msg: 'You need to supply application id to use this api'
+							});
 						}
-					} else {
-						xFlagProcess = false;
-						return JSON.stringify({
-							status_code: '-99',
-							status_msg: 'You need to supply application id to use this api'
-						});
-					}
 
-					if (true) {
-						// Generate JWT Token
-						let token = jwt.sign(
-							{
-								email: param.email,
-								id: validateEmail.id,
-								device: param.device == '' ? 'web' : param.device
-							},
-							config.secret,
-							{
-								expiresIn:
-									param.device == 'mobile'
-										? config.login.expireToken.mobile
-										: config.login.expireToken.web
+						if (true) {
+							// Generate JWT Token
+							let token = '';
+							if (param.device == 'mobile' || param.device == 'web') {
+								token = jwt.sign(
+									{
+										email: param.email,
+										id: validateEmail.id,
+										device: param.device == '' ? 'web' : param.device
+									},
+									config.secret,
+									{
+										expiresIn:
+											param.device == 'mobile'
+												? config.login.expireToken.mobile
+												: config.login.expireToken.web
+									}
+								);
 							}
-						);
 
-						// Get Employee Info
-						var xEmployeeId =
-							validateEmail.employee_id != null
-								? await _utilInstance.encrypt(
-										validateEmail.employee_id.toString(),
-										config.cryptoKey.hashKey
-									)
-								: 0;
-						var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-						// Version 1:
-						// var xUrlQuery = '/' + xEmployeeId;
+							// Get Employee Info
+							var xEmployeeId =
+								validateEmail.employee_id != null
+									? await _utilInstance.encrypt(
+											validateEmail.employee_id.toString(),
+											config.cryptoKey.hashKey
+										)
+									: 0;
+							var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+							// Version 1:
+							// var xUrlQuery = '/' + xEmployeeId;
 
-						// Version 2:
-						var xUrlQuery = '/' + xEmployeeId;
-						var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
-							headers: {
-								'x-token': token,
-								'x-method': 'conventional'
-							}
-						});
+							// Version 2:
+							var xUrlQuery = '/' + xEmployeeId;
+							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
+								headers: {
+									'x-token': token,
+									'x-method': 'conventional'
+								}
+							});
 
-						if (xEmployeeInfo) {
-							if (xEmployeeInfo.status_code == '00') {
-								if (xEmployeeInfo.token_data.data.app_status == 1) {
-									if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
-										xJoResult = {
-											status_code: '-99',
-											status_msg: 'You not allowed to login using current device.'
-										};
+							if (xEmployeeInfo) {
+								if (xEmployeeInfo.status_code == '00') {
+									if (xEmployeeInfo.token_data.data.app_status == 1) {
+										if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
+											xJoResult = {
+												status_code: '-99',
+												status_msg: 'You not allowed to login using current device.'
+											};
+										} else {
+											xFlagProcess = true;
+										}
 									} else {
 										xFlagProcess = true;
 									}
-								} else {
-									xFlagProcess = true;
 								}
 							}
-						}
 
-						// if (xFlagProcess) {
-						if (true) {
-							let xEmployeeDetail =
-								xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
-							delete xEmployeeInfo.token_data.data.enc_key;
-							return JSON.stringify({
-								status_code: '00',
-								status_msg: 'Login successfully',
-								token: token,
+							// if (xFlagProcess) {
+							if (true) {
+								let xEmployeeDetail =
+									xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
+								delete xEmployeeInfo.token_data.data.enc_key;
+								return JSON.stringify({
+									status_code: '00',
+									status_msg: 'Login successfully',
+									token: token,
 
-								user_id:
-									validateEmail.id != null
-										? await _utilInstance.encrypt(
-												validateEmail.id.toString(),
-												config.cryptoKey.hashKey
-											)
-										: 0,
-								level: validateEmail.user_level,
-								vendor_id:
-									validateEmail.vendor_id != null
-										? await _utilInstance.encrypt(
-												validateEmail.vendor_id.toString(),
-												config.cryptoKey.hashKey
-											)
-										: 0,
-								user_type: validateEmail.type,
-								sanqua_company_id:
-									validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
-								sanqua_company_name:
-									validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
-										? validateEmail.company.alias
-										: '',
-								username: validateEmail.name,
-								employee_id: xEmployeeId,
-								employee: xEmployeeDetail
-							});
-						} else {
-							return JSON.stringify(xJoResult);
+									user_id:
+										validateEmail.id != null
+											? await _utilInstance.encrypt(
+													validateEmail.id.toString(),
+													config.cryptoKey.hashKey
+												)
+											: 0,
+									level: validateEmail.user_level,
+									vendor_id:
+										validateEmail.vendor_id != null
+											? await _utilInstance.encrypt(
+													validateEmail.vendor_id.toString(),
+													config.cryptoKey.hashKey
+												)
+											: 0,
+									user_type: validateEmail.type,
+									sanqua_company_id:
+										validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
+									sanqua_company_name:
+										validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
+											? validateEmail.company.alias
+											: '',
+									username: validateEmail.name,
+									employee_id: xEmployeeId,
+									employee: xEmployeeDetail
+								});
+							} else {
+								return JSON.stringify(xJoResult);
+							}
 						}
+					} else {
+						return JSON.stringify({
+							status_code: '-99',
+							status_msg: 'Email or password not valid.'
+						});
 					}
-				} else {
-					return JSON.stringify({
-						status_code: '-99',
-						status_msg: 'Email or password not valid.'
-					});
 				}
+			} else {
+				return JSON.stringify({
+					status_code: '-99',
+					status_msg: 'Email or password not valid!'
+				});
 			}
 		} else {
 			return JSON.stringify({
 				status_code: '-99',
-				status_msg: 'Email or password not valid!'
+				status_msg: 'Parameter device not valid'
 			});
 		}
 	}
@@ -866,38 +879,46 @@ class UserService {
 				// let xResultRefresh = await jwt_utilInstance.refreshJWT({
 				// 	token: param.token
 				// });
-				// console.log(`>>> Result Refresh: ${JSON.stringify(xResultRefresh)}`);
+				console.log(`>>> joResult.result_verify: ${JSON.stringify(joResult.result_verify)}`);
 
 				if (joResult.status_code == '00') {
-					//Get User Detail by ID
-					var xDecId = await _utilInstance.decrypt(joResult.result_verify.id, config.cryptoKey.hashKey);
+					if (joResult.result_verify.device == param.device) {
+						//Get User Detail by ID
+						var xDecId = await _utilInstance.decrypt(joResult.result_verify.id, config.cryptoKey.hashKey);
 
-					if (xDecId.status_code == '00') {
-						var xUserId = xDecId.decrypted;
-						var xObjUser = await userRepoInstance.getById(xUserId);
-						if (xObjUser != null) {
-							joResult.result_verify.name = xObjUser.name;
-							joResult.result_verify.user_level_id = xObjUser.user_level_id;
-							joResult.result_verify.user_level = xObjUser.user_level;
-							joResult.result_verify.company = xObjUser.company;
+						if (xDecId.status_code == '00') {
+							var xUserId = xDecId.decrypted;
+							var xObjUser = await userRepoInstance.getById(xUserId);
+							if (xObjUser != null) {
+								joResult.result_verify.name = xObjUser.name;
+								joResult.result_verify.user_level_id = xObjUser.user_level_id;
+								joResult.result_verify.user_level = xObjUser.user_level;
+								joResult.result_verify.company = xObjUser.company;
+							}
 						}
-					}
 
-					// Get Employee Info
-					var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-					var xUrlQuery = '/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
-					var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
+						// Get Employee Info
+						var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+						var xUrlQuery =
+							'/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
+						var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
 
-					console.log(`>>> token: ${param.token}`);
-					console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
-					console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
+						// console.log(`>>> token: ${param.token}`);
+						// console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
+						// console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
 
-					if (xEmployeeInfo != null) {
-						if (xEmployeeInfo.status_code == '00') {
-							joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
+						if (xEmployeeInfo != null) {
+							if (xEmployeeInfo.status_code == '00') {
+								joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
+							}
+						} else {
+							joResult.result_verify.employee_info = null;
 						}
 					} else {
-						joResult.result_verify.employee_info = null;
+						joResult = {
+							status_code: '-99',
+							status_msg: 'Parameter device not valid'
+						};
 					}
 				}
 			} else if (param.method == 'google') {
