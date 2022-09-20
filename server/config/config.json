@@ -62,7 +62,7 @@
   },
 
   "development": {
-    "appPort": 9189,
+    "appPort": 5189,
 
     "username": "postgres",
     "password": "P455uu0rd^^ok",
