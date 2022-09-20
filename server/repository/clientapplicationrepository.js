@@ -211,8 +211,6 @@ class ClientApplicationRepository {
 		var xJoResult = {};
 		var xWhere = {};
 
-		console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
-
 		try {
 			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('state')) {
 				if (pParam.client_id != '' && pParam.state != '') {

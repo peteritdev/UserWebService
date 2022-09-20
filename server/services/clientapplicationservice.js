@@ -387,14 +387,14 @@ class ClientApplicationService {
 					if (pParam.client_application_id != '') {
 						// Check by client_id and state
 						let xCheckByClientIdAndState = await _repoInstance.getByClientIdAndState(pParam);
-						console.log(`>>> xCheckByClientIdAndState: ${JSON.stringify(xCheckByClientIdAndState)}`);
 						let xParamSave = {
 							client_application_id: pParam.client_application_id,
 							client_id: pParam.client_id,
 							state: pParam.state,
 							code: pParam.code,
 							scope: pParam.scope,
-							code_expire_in: pParam.code_expire_in
+							code_expire_in: pParam.code_expire_in,
+							email: pParam.email
 						};
 						if (xCheckByClientIdAndState.status_code == '00') {
 							xParamSave.id = xCheckByClientIdAndState.data.id;

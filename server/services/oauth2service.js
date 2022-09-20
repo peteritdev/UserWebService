@@ -58,6 +58,8 @@ class OAuth2Service {
 
 								let xExpireTime = moment().add(config.login.oAuth2.simpeg.expireToken, 'hours').unix();
 
+								console.log(`>>> Scope : ${pParam.scope}`);
+
 								let xResultSave = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
 									{
 										client_application_id: xClientDetail.data.id,
@@ -66,6 +68,7 @@ class OAuth2Service {
 										code: xAuthCode,
 										scope: pParam.scope,
 										code_expire_in: xExpireTime,
+										email: pParam.email,
 										act: 'add'
 									}
 								);
@@ -159,11 +162,12 @@ class OAuth2Service {
 					let xExpireTokenIn = moment().add(config.login.oAuth2.simpeg.expireAccessToken, 'hours').unix();
 					let xToken = jwt.sign(
 						{
-							iss: 'https://simpeg.komisiyudisial.go.id',
-							aud: pParam.client_id,
+							issued_to: pParam.client_id,
+							audience: pParam.client_id,
 							code: pParam.code,
 							scope: pParam.scope,
-							nip: pParam.nip,
+							user_id: xLogAuthorization.data.email,
+							email: xLogAuthorization.data.email,
 							iat: moment().unix()
 						},
 						config.login.oAuth2.simpeg.secret,

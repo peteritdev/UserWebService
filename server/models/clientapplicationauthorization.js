@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 		refresh_token: DataTypes.STRING,
 		code_expire_in: DataTypes.INTEGER,
 		scope: DataTypes.STRING,
+		email: DataTypes.STRING,
 
 		is_delete: DataTypes.INTEGER,
 		deleted_at: DataTypes.DATE,
