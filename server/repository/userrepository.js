@@ -226,7 +226,7 @@ class UserRepository {
 						sanqua_company_id: param.company_id,
 						employee_id: param.employee_id
 					},
-					{ transaction }
+					{ transaction: transaction }
 				);
 			} else if (param.method == 'google') {
 				created = await _modelUser.create(
