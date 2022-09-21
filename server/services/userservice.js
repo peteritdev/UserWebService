@@ -164,6 +164,19 @@ class UserService {
 				});
 			}
 		} else {
+			// Note: This line is only for firsttime import, not for publish
+			// By: Peter
+			// At: 21/09/2022
+			if (param.mode == 'import') {
+				// Update by employee_id
+				let xParamUpdate = {
+					id: result.id,
+					employee_id: param.employee_id
+				};
+				let xResultUpdate = await userRepoInstance.save_new(xParamUpdate, 'update');
+				console.log(`>>> employee_id: ${param.employee_id}`);
+				console.log(`>>> xResultUpdate: ${JSON.stringify(xResultUpdate)}`);
+			}
 			return JSON.stringify({
 				status_code: '-99',
 				status_msg: 'Email already registered',
