@@ -4,7 +4,7 @@
     "logging": true,
     "username": "postgres",
     "password": "P455uu0rd^^ok",
-    "database": "staging_sanqua_oauthdb",
+    "database": "sanqua_oauthdb",
     "host": "10.10.20.5",
     "port":5432,
     "dialect": "postgres",
