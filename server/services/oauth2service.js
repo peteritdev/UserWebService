@@ -10,6 +10,10 @@ const bcrypt = require('bcrypt');
 var env = process.env.NODE_ENV || 'localhost';
 var config = require(__dirname + '/../config/config.json')[env];
 
+// Service
+const UserService = require('../services/userservice.js');
+const userServiceInstance = new UserService();
+
 //Repository
 const UserRepository = require('../repository/userrepository.js');
 const userRepoInstance = new UserRepository();
@@ -68,7 +72,7 @@ class OAuth2Service {
 										code: xAuthCode,
 										scope: pParam.scope,
 										code_expire_in: xExpireTime,
-										email: pParam.email,
+										email: xValidateEmail.email,
 										act: 'add'
 									}
 								);
@@ -193,7 +197,8 @@ class OAuth2Service {
 							token_type: 'Bearer',
 							expires_in: xExpireTokenIn,
 							access_token: xToken,
-							scope: pParam.scope
+							scope: pParam.scope,
+							email: xLogAuthorization.data.email
 						};
 					} else {
 						xJoResult = xResultUpdate;
@@ -232,6 +237,61 @@ class OAuth2Service {
 						status_msg: 'OK',
 						verify: xResultVerify
 					};
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Parameter access_token is required'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Parameter not valid'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <OAuth2Service.tokenInfo>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async tokenProfile(pParam) {
+		var xJoResult = {};
+
+		try {
+			if (pParam.hasOwnProperty('access_token')) {
+				if (pParam.access_token != '') {
+					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.simpeg.secret);
+					if (xResultVerify) {
+						let xUserDetail = await userServiceInstance.isEmailExists({
+							email: xResultVerify.email
+						});
+
+						console.log(`>>> xUserDetail : ${JSON.stringify(xUserDetail)}`);
+						if (xUserDetail) {
+							var xSplittedName = xUserDetail.name.split(' ');
+							xJoResult = {
+								status_code: '00',
+								status_msg: 'OK',
+								data: {
+									id: xUserDetail.id,
+									email: xUserDetail.email,
+									verified_email: true,
+									name: xUserDetail.name,
+									given_name: xSplittedName[0],
+									family_name: xSplittedName[1]
+								}
+							};
+						} else {
+							return {};
+						}
+					} else {
+						xJoResult = xResultVerify;
+					}
 				} else {
 					xJoResult = {
 						status_code: '-99',

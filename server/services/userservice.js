@@ -107,6 +107,10 @@ class UserService {
 		return joResult;
 	}
 
+	async isEmailExists(pParam) {
+		return await userRepoInstance.isEmailExists(pParam.email);
+	}
+
 	async doRegister(param) {
 		var joResult;
 		var result = await userRepoInstance.isEmailExists(param.email);

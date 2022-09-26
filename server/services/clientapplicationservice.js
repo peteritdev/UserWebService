@@ -17,8 +17,8 @@ const _utilInstance = new Utility();
 
 // Repository
 const Repository = require('../repository/clientapplicationrepository.js');
-const { Client } = require('pg');
-const { BULKDELETE } = require('sequelize/dist/lib/query-types.js');
+// const { Client } = require('pg');
+// const { BULKDELETE } = require('sequelize/dist/lib/query-types.js');
 const _repoInstance = new Repository();
 
 class ClientApplicationService {
