@@ -446,23 +446,26 @@ class UserService {
 
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {
-									if (xEmployeeInfo.token_data.data.app_status == 1) {
-										if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
-											xJoResult = {
-												status_code: '-99',
-												status_msg: 'You not allowed to login using current device.'
-											};
+									console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
+									if (xEmployeeInfo.token_data.status_code == '00') {
+										if (xEmployeeInfo.token_data.data.app_status == 1) {
+											if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
+												xJoResult = {
+													status_code: '-99',
+													status_msg: 'You not allowed to login using current device.'
+												};
+											} else {
+												xFlagProcess = true;
+											}
 										} else {
 											xFlagProcess = true;
 										}
-									} else {
-										xFlagProcess = true;
 									}
 								}
 							}
 
 							// if (xFlagProcess) {
-							if (true) {
+							if (xFlagProcess) {
 								let xEmployeeDetail =
 									xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
 								delete xEmployeeInfo.token_data.data.enc_key;
