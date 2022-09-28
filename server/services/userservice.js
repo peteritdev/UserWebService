@@ -1177,7 +1177,8 @@ class UserService {
 					{
 						id: pParam.user_id,
 						fcm_token: pParam.fcm_token,
-						fcm_token_web: pParam.fcm_token_web
+						fcm_token_web: pParam.fcm_token_web,
+						fcm_token_expedition: pParam.fcm_token_expedition
 					},
 					'update'
 				);

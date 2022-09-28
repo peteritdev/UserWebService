@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 		user_level_id: DataTypes.INTEGER,
 		fcm_token: DataTypes.STRING,
 		fcm_token_web: DataTypes.STRING,
+		fcm_token_expedition: DataTypes.STRING,
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.literal('NOW()'),
