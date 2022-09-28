@@ -284,6 +284,7 @@ async function login(req, res) {
 		req.body.application_id = req.headers['x-application-id'];
 		req.body.device = req.headers['x-device'] == null ? 'web' : req.headers['x-device'];
 		req.body.device_id = req.headers['x-device-id'];
+		console.log(`>>> PARAM : ${JSON.stringify(req.body)}`);
 		joResult = await userServiceInstance.doLogin(req.body);
 	}
 
