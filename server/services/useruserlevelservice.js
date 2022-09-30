@@ -132,6 +132,8 @@ class UserUserLevelService {
 
 		delete pParam.act;
 
+		console.log(`>>> UserUserLevelService.save: ${JSON.stringify(pParam)}`);
+
 		if (xAct == 'add') {
 			// User Id
 			var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
