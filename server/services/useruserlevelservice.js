@@ -161,6 +161,7 @@ class UserUserLevelService {
 						xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
 						if (xDecId.status_code == '00') {
 							// Get User ID by employee_id
+							console.log(`>>> Employee_id: ${xDecId.decrypted}`);
 							var xUserData = await _userRepoInstance.getUserByEmployeeId(xDecId.decrypted);
 							pParam.user_id = xUserData.id;
 							delete pParam.employee_id;
