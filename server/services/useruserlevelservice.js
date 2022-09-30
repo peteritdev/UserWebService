@@ -156,7 +156,7 @@ class UserUserLevelService {
 				}
 
 				if (pParam.hasOwnProperty('employee_id')) {
-					if (pParam.employee_user_id != '') {
+					if (pParam.employee_id != '') {
 						// employee_id
 						xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
 						if (xDecId.status_code == '00') {
