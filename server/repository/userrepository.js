@@ -429,7 +429,7 @@ class UserRepository {
 					status: param.status,
 					sanqua_company_id: param.company_id,
 					updated_by: param.user_id,
-					employee_id: param.id,
+					// employee_id: param.id,
 					user_level_id: param.user_level_id
 				};
 
