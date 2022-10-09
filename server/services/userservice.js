@@ -17,6 +17,9 @@ const modelUser = require('../models').ms_users;
 const UserRepository = require('../repository/userrepository.js');
 const userRepoInstance = new UserRepository();
 
+const UserUserLevelRepository = require('../repository/useruserlevelrepository.js');
+const userUserLevelRepoInstance = new UserUserLevelRepository();
+
 // Services
 const NotificationService = require('../services/notificationservice.js');
 const _notificationServiceInstance = new NotificationService();
@@ -113,62 +116,113 @@ class UserService {
 
 	async doRegister(param) {
 		var joResult;
-		var result = await userRepoInstance.isEmailExists(param.email);
+		var result = await userRepoInstance.isEmailExists(param);
 		var xClearPassword = '';
 		var xNotificationRegistration = {};
 
-		if (result == null) {
-			joResult = await userRepoInstance.registerUser(param);
+		console.log(`>>> PARAM : ${JSON.stringify(param)}`);
 
-			if (joResult.status_code == '00') {
-				xClearPassword = joResult.clear_password;
-				delete joResult.clear_password;
-				var resultNotify = null;
+		if (!param.is_sync) {
+			if (result == null) {
+				joResult = await userRepoInstance.registerUser(param);
 
-				//Prepare to send notification if registration method using conventional
-				if (param.method == 'conventional') {
-					if (param.type == 1) {
-						param.status = 1;
+				if (joResult.status_code == '00') {
+					xClearPassword = joResult.clear_password;
+					delete joResult.clear_password;
+					var resultNotify = null;
 
-						var xParamNotif = {
-							name: param.name,
-							email: param.email,
-							password: xClearPassword
-						};
-						// This line used for notify to user that his/her account already created and inform them the login information
-						xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
-							xParamNotif
-						);
-					} else if (param.type == 2) {
-						var notifyParam = {
-							email: param.email,
-							id: joResult.created_id,
-							name: param.name
-						};
-						resultNotify = await _utilInstance.axiosRequest(
-							config.api.notification.emailVerification,
-							'POST',
-							notifyParam
-						);
+					//Prepare to send notification if registration method using conventional
+					if (param.method == 'conventional') {
+						if (param.type == 1) {
+							param.status = 1;
+
+							var xParamNotif = {
+								username: param.username,
+								name: param.name,
+								email: param.email,
+								password: xClearPassword
+							};
+							// This line used for notify to user that his/her account already created and inform them the login information
+							// xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
+							// 	xParamNotif
+							// );
+						} else if (param.type == 2) {
+							var notifyParam = {
+								email: param.email,
+								id: joResult.created_id,
+								name: param.name
+							};
+							resultNotify = await _utilInstance.axiosRequest(
+								config.api.notification.emailVerification,
+								'POST',
+								notifyParam
+							);
+						}
+
+						// auto add to user level default = 3 => employee
+						if (param.hasOwnProperty('is_add_user_level')) {
+							if (param.is_add_user_level) {
+								let xAddUserLevel = await userUserLevelRepoInstance.save(
+									{
+										user_id: joResult.created_id,
+										user_level_id: 3,
+										status: 1,
+										is_delete: 0
+									},
+									'add'
+								);
+								console.log(`>>> Result Add User Level : ${JSON.stringify(xAddUserLevel)}`);
+							}
+						}
 					}
-				}
 
+					return JSON.stringify({
+						status_code: '00',
+						status_msg: joResult.status_msg,
+						data: param,
+						result_check_email: result,
+						result_add: joResult,
+						result_send_email_verification: resultNotify !== null ? resultNotify.data : null,
+						result_notif_registration: xNotificationRegistration
+					});
+				}
+			} else {
 				return JSON.stringify({
-					status_code: '00',
-					status_msg: joResult.status_msg,
-					data: param,
-					result_check_email: result,
-					result_add: joResult,
-					result_send_email_verification: resultNotify !== null ? resultNotify.data : null,
-					result_notif_registration: xNotificationRegistration
+					status_code: '-99',
+					status_msg: 'NIP or Email already registered',
+					data: param
 				});
 			}
 		} else {
-			return JSON.stringify({
-				status_code: '-99',
-				status_msg: 'Email already registered',
-				data: param
-			});
+			if (result != null) {
+				// Update existing
+				let xUpdateResult = await userRepoInstance.save({
+					name: param.name,
+					username: param.username,
+					email: param.email,
+					password: param.password,
+					id: param.employee_id,
+					act: 'update_from_employee'
+				});
+				return JSON.stringify(xUpdateResult);
+			} else {
+				joResult = await userRepoInstance.registerUser(param);
+				// auto add to user level default = 3 => employee
+				if (param.hasOwnProperty('is_add_user_level')) {
+					if (param.is_add_user_level) {
+						let xAddUserLevel = await userUserLevelRepoInstance.save(
+							{
+								user_id: joResult.created_id,
+								user_level_id: 3,
+								status: 1,
+								is_delete: 0
+							},
+							'add'
+						);
+					}
+				}
+				return joResult;
+			}
 		}
 	}
 
@@ -300,8 +354,16 @@ class UserService {
 	}
 
 	async doLogin(param) {
-		var validateEmail = await userRepoInstance.isEmailExists(param.email);
-		// console.log('>>> End validation isEmailExists...');
+		console.log('>>> Start validation isEmailExists...');
+		console.log('>>> Username : ' + config.username);
+		console.log('>>> Password : ' + config.password);
+		console.log('>>> IP : ' + config.host);
+		console.log('>>> Port : ' + config.port);
+		console.log('>>> Param : ' + JSON.stringify(param));
+		var validateEmail = await userRepoInstance.isEmailExists({
+			email: param.email
+		});
+		console.log('>>> End validation isEmailExists...');
 		var xFlagProcess = true;
 
 		if (validateEmail != null) {

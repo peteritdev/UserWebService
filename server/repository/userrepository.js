@@ -86,7 +86,7 @@ class UserRepository {
 		return data;
 	}
 
-	async isEmailExists(pEmail) {
+	async isEmailExists(pParam) {
 		var data = null;
 
 		try {
@@ -94,13 +94,18 @@ class UserRepository {
 				where: {
 					[Op.or]: [
 						{
-							username: {
-								[Op.like]: pEmail
+							email: {
+								[Op.like]: pParam.email
 							}
 						},
 						{
-							email: {
-								[Op.like]: pEmail
+							username: {
+								[Op.like]: pParam.username
+							}
+						},
+						{
+							username: {
+								[Op.like]: pParam.email
 							}
 						}
 					]
@@ -233,7 +238,8 @@ class UserRepository {
 						register_with: param.method,
 						type: param.type,
 						sanqua_company_id: param.company_id,
-						employee_id: param.employee_id
+						employee_id: param.employee_id,
+						username: param.username
 					},
 					{ transaction }
 				);
@@ -293,16 +299,13 @@ class UserRepository {
 				var joDataUpdate = {
 					name: param.name,
 					email: param.email,
-					status: param.status,
-					sanqua_company_id: param.company_id,
-					updated_by: param.user_id,
-					employee_id: param.id,
-					user_level_id: param.user_level_id
+					username: param.username
+					// status: param.status,
+					// sanqua_company_id: param.company_id,
+					// updated_by: param.user_id,
+					// employee_id: param.id,
+					// user_level_id: param.user_level_id
 				};
-
-				console.log('>>> Update REpo Param : ');
-				console.log('>>> param.act : ' + JSON.stringify(param));
-				console.log(JSON.stringify(joDataUpdate));
 
 				if (param.password != '' && param.hasOwnProperty('password')) {
 					hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
