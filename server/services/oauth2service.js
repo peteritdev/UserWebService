@@ -117,6 +117,7 @@ class OAuth2Service {
 
 	async token(pParam) {
 		var xJoResult = {};
+		console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
 
 		try {
 			// Validate Client ID and Client Secret
