@@ -29,10 +29,11 @@ class OAuth2Service {
 	constructor() {}
 
 	async doLogin(pParam) {
+		console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
 		var xJoResult = {};
 
 		try {
-			var xValidateEmail = await userRepoInstance.isEmailExists(pParam.email);
+			var xValidateEmail = await userRepoInstance.isEmailExists(pParam);
 			var xFlagProcess = true;
 
 			if (xValidateEmail != null) {
