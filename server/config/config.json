@@ -151,8 +151,19 @@
           "redirect": "http://sanquawater.co.id",
           "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo",
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
+        },
+        "simpeg": {
+          "expireToken": 1,
+          "secret": "NSB3TLi6WJcF58DLTeGZe6YpMusm9ccH",
+          "expireAccessToken": "24h"
         }
       }
+    },
+    "thirdPartyConfig":{
+      "expireToken": "72h",
+      "expireRefreshToken": "5s",
+      "secret": "FDF948F31687ED6543B6AD2C1F4A2",
+      "refreshSecret": "CAA34F88EE51CF7645179FFCAE1C1"
     }
   }
 }
