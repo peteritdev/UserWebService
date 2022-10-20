@@ -22,7 +22,7 @@ module.exports = (app) => {
 
 	var arrValidateRegister = [
 		check('name').not().isEmpty().withMessage('Name is required'),
-		check('email', 'Email is required').isEmail(),
+		// check('email', 'Email is required').isEmail(),
 		check('password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];
 	app.post(rootAPIPath + 'user/register', arrValidateRegister, userController.register);
@@ -62,13 +62,14 @@ module.exports = (app) => {
 
 	var arrValidateChangePassword = [
 		check('code').not().isEmpty().withMessage('Code is required'),
-		check('email').isEmail().withMessage('Invalid email format'),
+		check('email').not().isEmpty().withMessage('Email is required'),
+		// check('email').isEmail().withMessage('Invalid email format'),
 		check('new_password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];
 	app.post(rootAPIPath + 'user/change_password', arrValidateChangePassword, userController.changePassword);
 
 	var arrValidateChangePassword = [
-		check('email').isEmail().withMessage('Invalid email format'),
+		check('email').not().isEmpty().withMessage('Email is required'),
 		check('new_password', 'Password is required or format is invalid').isLength({ min: 6 }),
 		check('old_password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];

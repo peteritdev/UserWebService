@@ -763,9 +763,10 @@ class UserService {
 		var xDecId = {};
 
 		// Validate old password
-		var validateEmail = await userRepoInstance.isEmailExists(param.email);
+		var validateEmail = await userRepoInstance.isEmailExists({ email: param.email });
 		if (validateEmail != null) {
 			var validatePassword = await bcrypt.compare(param.old_password, validateEmail.password);
+			// console.log(`>>> Validate Password : ${validatePassword}`);
 			if (validatePassword) {
 			} else {
 				xFlagProcess = false;
@@ -774,6 +775,7 @@ class UserService {
 					status_msg: 'Incorrect old password. Please try again using correct old password'
 				};
 			}
+		} else {
 		}
 
 		if (xFlagProcess) {
@@ -788,6 +790,7 @@ class UserService {
 			}
 
 			if (xFlagProcess) {
+				console.log(`>>> param: ${JSON.stringify(param)}`);
 				//Encrypt the new password
 				var encryptedNewPassword = await utilSecureInstance.generateEncryptedPassword(param.new_password);
 

@@ -462,11 +462,11 @@ class UserRepository {
 				},
 				{
 					where: {
-						email: pEmail,
+						username: pEmail,
 						id: pId
-					}
-				},
-				{ transaction }
+					},
+					transaction: transaction
+				}
 			);
 
 			await transaction.commit();
