@@ -196,7 +196,7 @@ class UserService {
 		} else {
 			if (result != null) {
 				// Update existing
-				if (pParam.is_reset_password_to_default) {
+				if (param.is_reset_password_to_default) {
 					let xUpdateResult = await userRepoInstance.save({
 						name: param.name,
 						username: param.username,
