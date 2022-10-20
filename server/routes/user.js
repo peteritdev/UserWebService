@@ -23,7 +23,7 @@ module.exports = (app) => {
 	var arrValidateRegister = [
 		check('name').not().isEmpty().withMessage('Name is required'),
 		// check('email', 'Email is required').isEmail(),
-		check('password', 'Password is required or format is invalid').isLength({ min: 6 })
+		check('password', 'Password is required or format is invalid').isLength({ min: 3 })
 	];
 	app.post(rootAPIPath + 'user/register', arrValidateRegister, userController.register);
 
