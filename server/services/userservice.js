@@ -196,15 +196,26 @@ class UserService {
 		} else {
 			if (result != null) {
 				// Update existing
-				let xUpdateResult = await userRepoInstance.save({
-					name: param.name,
-					username: param.username,
-					email: param.email,
-					password: param.password,
-					id: param.employee_id,
-					act: 'update_from_employee'
-				});
-				return JSON.stringify(xUpdateResult);
+				if (pParam.is_reset_password_to_default) {
+					let xUpdateResult = await userRepoInstance.save({
+						name: param.name,
+						username: param.username,
+						email: param.email,
+						password: param.username,
+						id: param.employee_id,
+						act: 'update_from_employee'
+					});
+					return JSON.stringify(xUpdateResult);
+				} else {
+					let xUpdateResult = await userRepoInstance.save({
+						name: param.name,
+						username: param.username,
+						email: param.email,
+						id: param.employee_id,
+						act: 'update_from_employee'
+					});
+					return JSON.stringify(xUpdateResult);
+				}
 			} else {
 				joResult = await userRepoInstance.registerUser(param);
 				// auto add to user level default = 3 => employee
