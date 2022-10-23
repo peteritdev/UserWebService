@@ -312,6 +312,8 @@ class UserRepository {
 						hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
 						joDataUpdate.password = hashedPassword;
 					}
+				} else {
+					joDataUpdate.password = param.password;
 				}
 
 				var saved = null;
