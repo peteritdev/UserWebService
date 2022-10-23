@@ -210,6 +210,7 @@ class UserService {
 					let xUpdateResult = await userRepoInstance.save({
 						name: param.name,
 						username: param.username,
+						password: param.password,
 						email: param.email,
 						id: param.employee_id,
 						act: 'update_from_employee'
