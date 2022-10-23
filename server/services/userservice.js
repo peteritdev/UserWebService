@@ -213,7 +213,8 @@ class UserService {
 						password: param.password,
 						email: param.email,
 						id: param.employee_id,
-						act: 'update_from_employee'
+						act: 'update_from_employee',
+						is_sync_password: param.is_sync_password
 					});
 					return JSON.stringify(xUpdateResult);
 				}

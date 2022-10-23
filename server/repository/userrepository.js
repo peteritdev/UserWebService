@@ -307,9 +307,11 @@ class UserRepository {
 					// user_level_id: param.user_level_id
 				};
 
-				if (param.password != '' && param.hasOwnProperty('password')) {
-					hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
-					joDataUpdate.password = hashedPassword;
+				if (!param.is_sync_password) {
+					if (param.password != '' && param.hasOwnProperty('password')) {
+						hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
+						joDataUpdate.password = hashedPassword;
+					}
 				}
 
 				var saved = null;
