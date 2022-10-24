@@ -444,6 +444,8 @@ class UserService {
 								}
 							});
 
+							console.log(`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`);
+
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {
 									// console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
