@@ -229,8 +229,8 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:8190/api/hr/v1/employee",
-        "baseUrl": "http://localhost:8190/api/hr/v1"
+        "getEmployeeInfo": "http://localhost:8190/api/esanqua/hr/v1/employee/detail_wo_auth",
+        "baseUrl": "http://localhost:8189/api/hr/v1"
       }
       
     },
