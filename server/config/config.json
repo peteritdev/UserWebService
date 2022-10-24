@@ -194,11 +194,11 @@
   },
 
   "production": {
-    "appPort": 1189,
+    "appPort": 9189,
 
-    "username": "postgres",
-    "password": "T0b3L1k3Jesus^^)ok",
-    "database": "sanqua_oauthdb",
+    "username": "eSanqua",
+    "password": "eS@nQu4189*123#2022",
+    "database": "live_sanqua_oauthdb",
     "host": "10.10.20.9",
     "port":5432,
     "dialect": "postgres",
@@ -229,16 +229,16 @@
       },
   
       "employeeService":{
-        "getEmployeeInfo": "http://localhost:2189/api/hr/v1/employee",
-        "baseUrl": "http://localhost:8189/api/hr/v1"
+        "getEmployeeInfo": "http://localhost:8190/api/hr/v1/employee",
+        "baseUrl": "http://localhost:8190/api/hr/v1"
       }
       
     },
   
     "login":{
       "expireToken": {
-        "web": "1h",
-        "mobile": "48h"
+        "web": "24h",
+        "mobile": "168h"
       },
       "oAuth2":{
         "google":{
