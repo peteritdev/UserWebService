@@ -428,7 +428,37 @@ class UserService {
 						}
 					});
 
-					console.log(JSON.stringify(xEmployeeInfo));
+					if (xEmployeeInfo) {
+						if (xEmployeeInfo.status_code == '00') {
+							// console.log(`y(xEmployeeInfo)}`);
+							if (xEmployeeInfo.token_data.status_code == '00') {
+								if (xEmployeeInfo.token_data.data.app_status == 1) {
+									if (param.device == 'mobile') {
+										//if (param.hasOwnProperty('device_id')) {
+										if (param.device_id != '' && param.device_id != null) {
+											if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
+												xJoResult = {
+													status_code: '-99',
+													status_msg: 'You not allowed to login using current device.'
+												};
+											} else {
+												xFlagProcess = true;
+											}
+										} else {
+											xFlagProcess = true;
+										}
+										// } else {
+										// 	xFlagProcess = true;
+										// }
+									} else {
+										xFlagProcess = true;
+									}
+								} else {
+									xFlagProcess = true;
+								}
+							}
+						}
+					}
 
 					return JSON.stringify({
 						status_code: '00',
@@ -464,13 +494,13 @@ class UserService {
 			} else {
 				return JSON.stringify({
 					status_code: '-99',
-					status_msg: 'Email or password not valid'
+					status_msg: 'NIP or password not valid'
 				});
 			}
 		} else {
 			return JSON.stringify({
 				status_code: '-99',
-				status_msg: 'Email or password not valid'
+				status_msg: 'NIP or password not valid'
 			});
 		}
 	}
