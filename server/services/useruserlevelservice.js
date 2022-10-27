@@ -155,16 +155,15 @@ class UserUserLevelService {
 					}
 				}
 
-				if (pParam.hasOwnProperty('id')) {
-					if (pParam.id != '') {
+				if (pParam.hasOwnProperty('user_id')) {
+					if (pParam.user_id != '') {
 						// employee_id
-						xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
+						xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
 						if (xDecId.status_code == '00') {
 							// Get User ID by employee_id
-							console.log(`>>> id: ${xDecId.decrypted}`);
+							console.log(`>>> user_id: ${xDecId.decrypted}`);
 							// var xUserData = await _userRepoInstance.getUserByEmployeeId(xDecId.decrypted);
 							pParam.user_id = xDecId.decrypted;
-							delete pParam.employee_id;
 						} else {
 							xFlagProcess = false;
 							xJoResult = xDecId;
