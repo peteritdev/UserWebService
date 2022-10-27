@@ -55,6 +55,19 @@ class UserUserLevelService {
 			}
 		}
 
+		if (pParam.hasOwnProperty('user_id')) {
+			if (pParam.user_id != '') {
+				var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+				// console.log(JSON.stringify(xDecId));
+				if (xDecId.status_code == '00') {
+					pParam.user_id = xDecId.decrypted;
+				} else {
+					xFlagProcess = false;
+					xJoResult = xDecId;
+				}
+			}
+		}
+
 		if (xFlagProcess) {
 			var xResultList = await _repoInstance.list(pParam);
 			if (xResultList.count > 0) {
@@ -206,15 +219,15 @@ class UserUserLevelService {
 					}
 
 					// Employee_id
-					if (pParam.hasOwnProperty('employee_id')) {
-						if (pParam.employee_id != '') {
-							// employee_id
-							xDecId = await _utilInstance.decrypt(pParam.employee_id, config.cryptoKey.hashKey);
+					if (pParam.hasOwnProperty('user_id')) {
+						if (pParam.user_id != '') {
+							// user_id
+							xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
 							if (xDecId.status_code == '00') {
 								// Get User ID by employee_id
-								var xUserData = await _userRepoInstance.getUserByEmployeeId(xDecId.decrypted);
-								pParam.user_id = xUserData.id;
-								delete pParam.employee_id;
+								// var xUserData = await _userRepoInstance.getUserByEmployeeId(xDecId.decrypted);
+								pParam.user_id = xDecId.decrypted;
+								// delete pParam.employee_id;
 							} else {
 								console.log('>>> Here 3');
 								xFlagProcess = false;

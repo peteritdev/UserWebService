@@ -54,6 +54,14 @@ class UserUserLevelRepository {
 			}
 		}
 
+		if (pParam.hasOwnProperty('user_id')) {
+			if (pParam.user_id != '') {
+				xWhere = {
+					user_id: pParam.user_id
+				};
+			}
+		}
+
 		if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
 			xOrder = [ pParam.order_by, pParam.order_type == 'desc' ? 'DESC' : 'ASC' ];
 		}
