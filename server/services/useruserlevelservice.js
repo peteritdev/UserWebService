@@ -164,7 +164,7 @@ class UserUserLevelService {
 							console.log(`>>> id: ${xDecId.decrypted}`);
 							// var xUserData = await _userRepoInstance.getUserByEmployeeId(xDecId.decrypted);
 							pParam.user_id = xDecId.decrypted;
-							// delete pParam.employee_id;
+							delete pParam.employee_id;
 						} else {
 							xFlagProcess = false;
 							xJoResult = xDecId;
