@@ -106,8 +106,8 @@ async function userUserLevel_Save(req, res) {
 				error_msg: errors
 			});
 		} else {
-			req.body.user_id = xOAuthResult.result_verify.id;
-			req.body.user_name = xOAuthResult.result_verify.name;
+			req.body.logged_user_id = xOAuthResult.result_verify.id;
+			req.body.logged_user_name = xOAuthResult.result_verify.name;
 			joResult = await _serviceInstance.save(req.body);
 			joResult = JSON.stringify(joResult);
 		}

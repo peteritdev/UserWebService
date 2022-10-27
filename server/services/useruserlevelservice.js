@@ -149,10 +149,10 @@ class UserUserLevelService {
 
 		if (xAct == 'add') {
 			// User Id
-			var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+			var xDecId = await _utilInstance.decrypt(pParam.logged_user_id, config.cryptoKey.hashKey);
 			if (xDecId.status_code == '00') {
 				pParam.created_by = xDecId.decrypted;
-				pParam.created_by_name = pParam.user_name;
+				pParam.created_by_name = pParam.logged_user_name;
 
 				if (pParam.hasOwnProperty('employee_user_id')) {
 					if (pParam.employee_user_id != '') {
@@ -198,7 +198,7 @@ class UserUserLevelService {
 			var xDecId = await _utilInstance.decrypt(pParam.id, config.cryptoKey.hashKey);
 			if (xDecId.status_code == '00') {
 				pParam.id = xDecId.decrypted;
-				xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+				xDecId = await _utilInstance.decrypt(pParam.logged_user_id, config.cryptoKey.hashKey);
 				if (xDecId.status_code == '00') {
 					pParam.updated_by = xDecId.decrypted;
 					pParam.updated_by_name = pParam.user_name;
