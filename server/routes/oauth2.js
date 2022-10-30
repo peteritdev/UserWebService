@@ -45,4 +45,11 @@ module.exports = (app) => {
 	arrValidate = [];
 	app.get(_rootAPIPath + 'tokeninfo', arrValidate, _oAuthController.tokenInfo);
 	app.get(_rootAPIPath + 'tokenprofile', arrValidate, _oAuthController.tokenProfile);
+
+	var arrValidate = [
+		check('client_id').not().isEmpty().withMessage('Parameter email is required'),
+		check('redirect_uri').not().isEmpty().withMessage('Parameter password is required'),
+		check('state').not().isEmpty().withMessage('Parameter response_type is required')
+	];
+	app.post(_rootAPIPath + 'client/check_credential', arrValidate, _oAuthController.checkClientCredential);
 };

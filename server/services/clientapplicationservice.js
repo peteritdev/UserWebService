@@ -461,6 +461,78 @@ class ClientApplicationService {
 		return xJoResult;
 	}
 
+	async checkClientCredential(pParam) {
+		var xJoResult = {};
+		var xCheck = {};
+
+		try {
+			if (pParam.hasOwnProperty('client_id')) {
+				if (pParam.client_id != '') {
+					xCheck = await _repoInstance.checkClientCredential({
+						client_id: pParam.client_id
+					});
+					if (xCheck.status_code == '00') {
+						xCheck = await _repoInstance.checkClientCredential({
+							client_id: pParam.client_id,
+							redirect_uri: pParam.redirect_uri
+						});
+						if (xCheck.status_code == '00') {
+							xCheck = await _repoInstance.checkAvailableState({
+								client_id: pParam.client_id,
+								state: pParam.state
+							});
+							if (xCheck.status_code == '00') {
+								// Check expiration of state, if expire will response need generate new one
+								let xCurrTime = moment().unix();
+								console.log(`>>> xCurrTime: ${xCurrTime}`);
+								console.log(`>>> xCheck.code_expire_in: ${xCheck.data.code_expire_in}`);
+								console.log(xCurrTime >> xCheck.code_expire_in);
+								if (parseInt(xCurrTime) >> xCheck.code_expire_in) {
+									xJoResult = {
+										status_code: '-99',
+										status_msg: 'State has expire. Please use another state.'
+									};
+								} else {
+									xJoResult = {
+										status_code: '00',
+										status_msg: 'Credential valid.'
+									};
+								}
+							} else {
+								xJoResult = {
+									status_code: '00',
+									status_msg: 'Credential valid.'
+								};
+							}
+						} else {
+							xJoResult = {
+								status_code: '-99',
+								status_msg: 'Redirect URI not valid'
+							};
+						}
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Client ID not registered'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Client ID must not be empty'
+					};
+				}
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationService.checkClientCredential>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
 	// async validatePageOAuthLogin()
 }
 

@@ -524,6 +524,125 @@ class ClientApplicationRepository {
 
 		return xJoResult;
 	}
+
+	async checkClientCredential(pParam) {
+		var xJoResult = {};
+
+		try {
+			var xInclude = [];
+			var xWhereOr = [];
+			var xWhereAnd = [];
+			var xWhere = [];
+			var xAttributes = [];
+			var xJoResult = {};
+
+			xInclude = [];
+
+			if (pParam.hasOwnProperty('client_id')) {
+				if (pParam.client_id != '') {
+					xWhereAnd.push({
+						client_id: pParam.client_id
+					});
+				}
+			}
+
+			if (pParam.hasOwnProperty('redirect_uri')) {
+				if (pParam.redirect_uri != '') {
+					xWhereAnd.push({
+						redirect_uri: pParam.redirect_uri
+					});
+				}
+			}
+
+			if (xWhereAnd.length > 0) {
+				xWhere.push({
+					[Op.and]: xWhereAnd
+				});
+			}
+
+			var xData = await _modelDb.findOne({
+				where: xWhere,
+				include: xInclude,
+				subQuery: false
+			});
+
+			if (xData) {
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'OK',
+					data: xData
+				};
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Data not found'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationRepository.checkCredentialClient>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async checkAvailableState(pParam) {
+		var xJoResult = {};
+
+		try {
+			var xInclude = [];
+			var xWhereOr = [];
+			var xWhereAnd = [];
+			var xWhere = [];
+			var xAttributes = [];
+			var xJoResult = {};
+
+			xInclude = [];
+
+			if (pParam.hasOwnProperty('state') && pParam.hasOwnProperty('client_id')) {
+				if (pParam.state != '' && pParam.client_id != '') {
+					xWhereAnd.push({
+						client_id: pParam.client_id,
+						state: pParam.state
+					});
+				}
+			}
+
+			if (xWhereAnd.length > 0) {
+				xWhere.push({
+					[Op.and]: xWhereAnd
+				});
+			}
+
+			var xData = await _modelApplicationAuthorization.findOne({
+				where: xWhere,
+				include: xInclude,
+				subQuery: false
+			});
+
+			if (xData) {
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'OK',
+					data: xData
+				};
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Data not found'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <ClientApplicationRepository.checkAvailableState>: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
 }
 
 module.exports = ClientApplicationRepository;
