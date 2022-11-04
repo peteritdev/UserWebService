@@ -254,7 +254,7 @@ class OAuth2Service {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <OAuth2Service.tokenInfo>: ${e.message}`
+				status_msg: `Token not valid. ${e.message}`
 			};
 		}
 
@@ -309,7 +309,7 @@ class OAuth2Service {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <OAuth2Service.tokenInfo>: ${e.message}`
+				status_msg: `Token not valid. ${e.message}`
 			};
 		}
 
