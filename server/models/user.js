@@ -63,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
 			as: 'user_level',
 			foreignKey: 'user_id'
 		});
+
+		User.hasMany(models.ms_useruserlevels, {
+			as: 'user_user_level',
+			foreignKey: 'user_id'
+		});
 	};
 
 	return User;

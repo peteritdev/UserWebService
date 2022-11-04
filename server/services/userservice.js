@@ -7,6 +7,7 @@ const dateFormat = require('dateformat');
 const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 const CryptoLib = require('peters-cryptolib');
+const _groupBy = require('json-groupby');
 
 var env = process.env.NODE_ENV || 'localhost';
 var config = require(__dirname + '/../config/config.json')[env];
@@ -57,10 +58,30 @@ class UserService {
 			var xRows = xResultList.data.rows;
 
 			for (var index in xRows) {
+				let xUserLevel = [];
+				let xApplicationArr = [];
+				for (var j in xRows[index].user_level) {
+					xUserLevel.push({
+						id: xRows[index].user_level[j].id,
+						name: xRows[index].user_level[j].name,
+						application:
+							xRows[index].user_level[j].application != null
+								? xRows[index].user_level[j].application.name
+								: ''
+					});
+				}
+
+				let xApplicationTemp = JSON.parse(JSON.stringify(_groupBy(xUserLevel, [ 'application' ])));
+				for (var key in xApplicationTemp) {
+					xApplicationArr.push(key);
+				}
+
 				joArrData.push({
 					id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
 					name: xRows[index].name,
-					user_level: xRows[index].user_level == null ? null : xRows[index].user_level,
+					// user_level: xRows[index].user_level == null ? null : xRows[index].user_level,
+					user_level: xUserLevel,
+					application: xApplicationArr,
 					email: xRows[index].email,
 					company_id: xRows[index].company != null ? xRows[index].company.id : null,
 					company_name: xRows[index].company != null ? xRows[index].company.name : '',
@@ -118,6 +139,7 @@ class UserService {
 		var xNotificationRegistration = {};
 
 		if (result == null) {
+			console.log(`>>> param: ${JSON.stringify(param)}`);
 			joResult = await userRepoInstance.registerUser(param);
 
 			if (joResult.status_code == '00') {
@@ -136,9 +158,9 @@ class UserService {
 							password: xClearPassword
 						};
 						// This line used for notify to user that his/her account already created and inform them the login information
-						xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
-							xParamNotif
-						);
+						// xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
+						// 	xParamNotif
+						// );
 					} else if (param.type == 2) {
 						var notifyParam = {
 							email: param.email,
@@ -443,6 +465,8 @@ class UserService {
 									'x-device': param.device
 								}
 							});
+
+							console.log(`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`);
 
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {

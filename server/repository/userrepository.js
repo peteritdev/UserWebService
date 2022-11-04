@@ -214,6 +214,20 @@ class UserRepository {
 			var created = null;
 
 			if (param.method == 'conventional') {
+				let xJoinedTable = {};
+				let xJoinIncludedTable = [];
+				if (param.hasOwnProperty('user_user_level')) {
+					if (param.user_user_level.length > 0) {
+						console.log(`>>> Push Here...`);
+						xJoinIncludedTable.push({
+							model: _modelUserUserLevel,
+							as: 'user_user_level'
+						});
+					}
+				}
+				xJoinedTable = {
+					include: xJoinIncludedTable
+				};
 				created = await _modelUser.create(
 					{
 						name: param.name,
@@ -224,8 +238,10 @@ class UserRepository {
 						register_with: param.method,
 						type: param.type,
 						sanqua_company_id: param.company_id,
-						employee_id: param.employee_id
+						employee_id: param.employee_id,
+						user_user_level: param.user_user_level
 					},
+					xJoinedTable,
 					{ transaction: transaction }
 				);
 			} else if (param.method == 'google') {

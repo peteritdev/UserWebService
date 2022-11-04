@@ -238,6 +238,7 @@ class ApprovalMatrixDocumentService {
 		} else if (xAct == 'add_manual') {
 			if (pParam.hasOwnProperty('approval_matrix')) {
 				if (pParam.approval_matrix.length > 0) {
+					let xArrResult = [];
 					for (var i in pParam.approval_matrix) {
 						// Get application name
 						let xApplicationName = '';
@@ -275,12 +276,16 @@ class ApprovalMatrixDocumentService {
 							min_approver: pParam.approval_matrix[i].min_approver,
 							approval_matrix_document_user: xJaApproverUser
 						};
+						console.log(`>>> Param Save: ${xParamSave}`);
 						var xAddResult = await _repoInstance.save(xParamSave, 'add_with_detail');
+
+						xArrResult.push(xAddResult);
 					}
 
 					xJoResult = {
 						status_code: '00',
-						status_msg: 'You have successfully add manually approval matrix'
+						status_msg: 'You have successfully add manually approval matrix',
+						approval_matrix_result: xArrResult
 					};
 				} else {
 					xJoResult = {
