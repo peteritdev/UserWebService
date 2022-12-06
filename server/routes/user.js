@@ -33,7 +33,7 @@ module.exports = (app) => {
 	app.post(rootAPIPath + 'user/verify_account', arrValidateVerify, userController.verifyAccount);
 
 	var arrValidateLogin = [
-		check('nip').not().isEmpty().withMessage('NIP is required'),
+		check('email').not().isEmpty().withMessage('Email is required'),
 		check('password').not().isEmpty().withMessage('Password is required')
 	];
 	app.post(rootAPIPath + 'user/login', arrValidateLogin, userController.login);
