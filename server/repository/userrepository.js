@@ -89,8 +89,6 @@ class UserRepository {
 	async isEmailExists(pParam) {
 		var data = null;
 
-		console.log(`>>> pParam : ${JSON.stringify(pParam)}`);
-
 		try {
 			data = await _modelUser.findOne({
 				where: {
