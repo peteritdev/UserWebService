@@ -2,7 +2,7 @@ const userController = require('../controllers').user;
 
 const { check, validationResult } = require('express-validator');
 
-var rootAPIPath = '/api/oauth/v1/';
+var rootAPIPath = '/simpeg/oauth/v1/';
 
 module.exports = (app) => {
 	app.get(rootAPIPath, (req, res) =>
@@ -49,7 +49,7 @@ module.exports = (app) => {
 	];
 	app.get(rootAPIPath + 'user/verify_token', arrValidateVerifyToken, userController.verifyToken);
 
-	var arrValidateForgotPassword = [ check('nip').not().isEmpty().withMessage('Nip is required') ];
+	var arrValidateForgotPassword = [ check('email').isEmail().withMessage('Invalid email format') ];
 	app.post(rootAPIPath + 'user/forgot_password', arrValidateForgotPassword, userController.forgotPassword);
 
 	var arrValidateVerifyForgotPassword = [ check('code').not().isEmpty().withMessage('Code is required') ];
@@ -97,28 +97,28 @@ module.exports = (app) => {
 	];
 	app.post(rootAPIPath + 'user/save', arrValidateUserSave, userController.save);
 
-	// arrValidateUserSave = [];
-	// arrValidateUserSave = [ check('employee_id').not().isEmpty().withMessage('Parameter employee_id is required') ];
-	// app.post(rootAPIPath + 'user/non_active_by_employee', arrValidateUserSave, userController.nonActiveByEmployeeId);
+	arrValidateUserSave = [];
+	arrValidateUserSave = [ check('employee_id').not().isEmpty().withMessage('Parameter employee_id is required') ];
+	app.post(rootAPIPath + 'user/non_active_by_employee', arrValidateUserSave, userController.nonActiveByEmployeeId);
 
-	// var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
-	// app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
+	var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
+	app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
 
-	// var arrValidateUserDelete = [ check('employee_id').not().isEmpty().withMessage('employee_id is required') ];
-	// app.delete(
-	// 	rootAPIPath + 'user/delete_by_employee/:employee_id',
-	// 	arrValidateUserDelete,
-	// 	userController.deleteUserByEmployeeId
-	// );
+	var arrValidateUserDelete = [ check('employee_id').not().isEmpty().withMessage('employee_id is required') ];
+	app.delete(
+		rootAPIPath + 'user/delete_by_employee/:employee_id',
+		arrValidateUserDelete,
+		userController.deleteUserByEmployeeId
+	);
 
 	app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
 
-	// var arrValidateFCMToken = [
-	// 	check('id').not().isEmpty().withMessage('Parameter id can not be empty'),
-	// 	check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
-	// ];
-	// app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
+	var arrValidateFCMToken = [
+		check('id').not().isEmpty().withMessage('Parameter id can not be empty'),
+		check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
+	];
+	app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
 
-	// arrValidateChangePassword = [];
-	// app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
+	arrValidateChangePassword = [];
+	app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
 };
