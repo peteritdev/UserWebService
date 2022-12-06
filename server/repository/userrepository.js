@@ -107,6 +107,11 @@ class UserRepository {
 							username: {
 								[Op.like]: pParam.email
 							}
+						},
+						{
+							username: {
+								[Op.like]: pParam.nip
+							}
 						}
 					]
 				},

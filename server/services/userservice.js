@@ -642,7 +642,7 @@ class UserService {
 	}
 
 	async doForgotPasswordWithGenerateNew(param) {
-		var validateEmail = await userRepoInstance.isEmailExists(param.email);
+		var validateEmail = await userRepoInstance.isEmailExists(param.nip);
 		if (validateEmail != null) {
 			//Generate new Password
 			var xNewPassword = await _utilInstance.generateRandomPassword();
