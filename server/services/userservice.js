@@ -651,7 +651,7 @@ class UserService {
 
 			//Prepare parameter and send to notification service
 			var notifyParam = {
-				email: param.email,
+				email: validateEmail.email,
 				name: validateEmail.name,
 				new_password: xNewPassword
 			};
@@ -668,7 +668,7 @@ class UserService {
 			if (resultNotify.status_code == '00') {
 				//Update status in database
 				var resultUpdate = await userRepoInstance.forgotPassword(
-					validateEmail.email,
+					param.nip,
 					await utilSecureInstance.generateEncryptedPassword(xNewPassword),
 					'generate_new_password'
 				);
