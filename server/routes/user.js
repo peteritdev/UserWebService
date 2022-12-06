@@ -2,7 +2,7 @@ const userController = require('../controllers').user;
 
 const { check, validationResult } = require('express-validator');
 
-var rootAPIPath = '/simpeg/oauth/v1/';
+var rootAPIPath = '/api/oauth/v1/';
 
 module.exports = (app) => {
 	app.get(rootAPIPath, (req, res) =>
@@ -22,8 +22,8 @@ module.exports = (app) => {
 
 	var arrValidateRegister = [
 		check('name').not().isEmpty().withMessage('Name is required'),
-		// check('email', 'Email is required').isEmail(),
-		check('password', 'Password is required or format is invalid').isLength({ min: 3 })
+		check('email', 'Email is required').isEmail(),
+		check('password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];
 	app.post(rootAPIPath + 'user/register', arrValidateRegister, userController.register);
 
@@ -33,8 +33,7 @@ module.exports = (app) => {
 	app.post(rootAPIPath + 'user/verify_account', arrValidateVerify, userController.verifyAccount);
 
 	var arrValidateLogin = [
-		// check("email").isEmail().withMessage("Invalid email format"),
-		check('email').not().isEmpty().withMessage('Email is required'),
+		check('email').isEmail().withMessage('Invalid email format'),
 		check('password').not().isEmpty().withMessage('Password is required')
 	];
 	app.post(rootAPIPath + 'user/login', arrValidateLogin, userController.login);
@@ -50,7 +49,7 @@ module.exports = (app) => {
 	];
 	app.get(rootAPIPath + 'user/verify_token', arrValidateVerifyToken, userController.verifyToken);
 
-	var arrValidateForgotPassword = [];
+	var arrValidateForgotPassword = [ check('email').isEmail().withMessage('Invalid email format') ];
 	app.post(rootAPIPath + 'user/forgot_password', arrValidateForgotPassword, userController.forgotPassword);
 
 	var arrValidateVerifyForgotPassword = [ check('code').not().isEmpty().withMessage('Code is required') ];
@@ -62,14 +61,13 @@ module.exports = (app) => {
 
 	var arrValidateChangePassword = [
 		check('code').not().isEmpty().withMessage('Code is required'),
-		check('email').not().isEmpty().withMessage('Email is required'),
-		// check('email').isEmail().withMessage('Invalid email format'),
+		check('email').isEmail().withMessage('Invalid email format'),
 		check('new_password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];
 	app.post(rootAPIPath + 'user/change_password', arrValidateChangePassword, userController.changePassword);
 
 	var arrValidateChangePassword = [
-		check('email').not().isEmpty().withMessage('Email is required'),
+		check('email').isEmail().withMessage('Invalid email format'),
 		check('new_password', 'Password is required or format is invalid').isLength({ min: 6 }),
 		check('old_password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];
@@ -99,13 +97,28 @@ module.exports = (app) => {
 	];
 	app.post(rootAPIPath + 'user/save', arrValidateUserSave, userController.save);
 
+	arrValidateUserSave = [];
+	arrValidateUserSave = [ check('employee_id').not().isEmpty().withMessage('Parameter employee_id is required') ];
+	app.post(rootAPIPath + 'user/non_active_by_employee', arrValidateUserSave, userController.nonActiveByEmployeeId);
+
 	var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
-	app.post(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
+	app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
+
+	var arrValidateUserDelete = [ check('employee_id').not().isEmpty().withMessage('employee_id is required') ];
+	app.delete(
+		rootAPIPath + 'user/delete_by_employee/:employee_id',
+		arrValidateUserDelete,
+		userController.deleteUserByEmployeeId
+	);
 
 	app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
 
-	app.post(rootAPIPath + 'user/encrypt_password', userController.getEncryptedPassword);
+	var arrValidateFCMToken = [
+		check('id').not().isEmpty().withMessage('Parameter id can not be empty'),
+		check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
+	];
+	app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
 
-	var arrValidate = [];
-	app.post(rootAPIPath + 'user/generate_credentials', arrValidate, userController.generateClientIDAndClientSecret);
+	arrValidateChangePassword = [];
+	app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
 };
