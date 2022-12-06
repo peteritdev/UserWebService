@@ -668,7 +668,7 @@ class UserService {
 			if (resultNotify.status_code == '00') {
 				//Update status in database
 				var resultUpdate = await userRepoInstance.forgotPassword(
-					param.nip,
+					validateEmail.email,
 					await utilSecureInstance.generateEncryptedPassword(xNewPassword),
 					'generate_new_password'
 				);
