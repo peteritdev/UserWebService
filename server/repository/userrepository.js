@@ -431,7 +431,7 @@ class UserRepository {
 				xUpdateParam,
 				{
 					where: {
-						email: pEmail
+						nip: pEmail
 					}
 				},
 				{ transaction }
