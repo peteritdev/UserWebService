@@ -423,7 +423,8 @@ class UserRepository {
 			} else if (pMethod == 'generate_new_password') {
 				xUpdateParam = {
 					forgot_password_at: currDateTime,
-					password: pNewPassword
+					password: pNewPassword,
+					is_first_login: 1
 				};
 			}
 
@@ -467,7 +468,8 @@ class UserRepository {
 			var updated = await _modelUser.update(
 				{
 					status: 1,
-					password: pNewPassword
+					password: pNewPassword,
+					is_first_login: 0
 				},
 				{
 					where: {
