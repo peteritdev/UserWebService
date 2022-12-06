@@ -118,4 +118,7 @@ module.exports = (app) => {
 		check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
 	];
 	app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
+
+	arrValidateChangePassword = [];
+	app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
 };

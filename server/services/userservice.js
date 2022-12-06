@@ -1213,6 +1213,27 @@ class UserService {
 
 		return xJoResult;
 	}
+
+	async encryptPassword(pParam) {
+		var xJoResult = {};
+
+		try {
+			//Encrypt the new password
+			var encryptedNewPassword = await utilSecureInstance.generateEncryptedPassword(pParam.password);
+			xJoResult = {
+				status_code: '00',
+				status_msg: 'OK',
+				encrypted_password: encryptedNewPassword
+			};
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `[UserService.encryptPassword] Exception: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
 }
 
 module.exports = UserService;

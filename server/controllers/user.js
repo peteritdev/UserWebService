@@ -32,7 +32,8 @@ module.exports = {
 	getUserByEmployeeId,
 	updateFCMToken,
 	deleteUserByEmployeeId,
-	nonActiveByEmployeeId
+	nonActiveByEmployeeId,
+	encryptPassword
 };
 
 async function list(req, res) {
@@ -516,4 +517,23 @@ async function updateFCMToken(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
+}
+
+async function encryptPassword(req, res) {
+	var joResult;
+	var errors = null;
+
+	var oAuthResult = await userServiceInstance.verifyToken({
+		token: req.headers['x-token'],
+		method: req.headers['x-method']
+	});
+	if (JSON.parse(oAuthResult).status_code == '00') {
+		joResult = await userServiceInstance.encryptPassword(req.body);
+		joResult = JSON.stringify(joResult);
+	} else {
+		joResult = oAuthResult;
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
 }
