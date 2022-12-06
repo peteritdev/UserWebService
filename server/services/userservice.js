@@ -485,6 +485,7 @@ class UserService {
 								: '',
 						username: validateEmail.name,
 						employee_id: xEmployeeId,
+						is_first_login: validateEmail.is_first_login,
 						data:
 							xEmployeeInfo.status_code == '00'
 								? xEmployeeInfo.token_data.status_code == '00' ? xEmployeeInfo.token_data.data : null
