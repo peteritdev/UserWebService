@@ -104,12 +104,12 @@ module.exports = (app) => {
 	var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
 	app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
 
-	var arrValidateUserDelete = [ check('employee_id').not().isEmpty().withMessage('employee_id is required') ];
-	app.delete(
-		rootAPIPath + 'user/delete_by_employee/:employee_id',
-		arrValidateUserDelete,
-		userController.deleteUserByEmployeeId
-	);
+	// var arrValidateUserDelete = [ check('employee_id').not().isEmpty().withMessage('employee_id is required') ];
+	// app.delete(
+	// 	rootAPIPath + 'user/delete_by_employee/:employee_id',
+	// 	arrValidateUserDelete,
+	// 	userController.deleteUserByEmployeeId
+	// );
 
 	app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
 
