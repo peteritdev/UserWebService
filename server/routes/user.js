@@ -97,9 +97,9 @@ module.exports = (app) => {
 	];
 	app.post(rootAPIPath + 'user/save', arrValidateUserSave, userController.save);
 
-	arrValidateUserSave = [];
-	arrValidateUserSave = [ check('employee_id').not().isEmpty().withMessage('Parameter employee_id is required') ];
-	app.post(rootAPIPath + 'user/non_active_by_employee', arrValidateUserSave, userController.nonActiveByEmployeeId);
+	// arrValidateUserSave = [];
+	// arrValidateUserSave = [ check('employee_id').not().isEmpty().withMessage('Parameter employee_id is required') ];
+	// app.post(rootAPIPath + 'user/non_active_by_employee', arrValidateUserSave, userController.nonActiveByEmployeeId);
 
 	var arrValidateUserDelete = [ check('id').not().isEmpty().withMessage('Id is required') ];
 	app.delete(rootAPIPath + 'user/delete/:id', arrValidateUserDelete, userController.deleteUser);
@@ -113,12 +113,12 @@ module.exports = (app) => {
 
 	app.get(rootAPIPath + 'user/e/:employeeId', [], userController.getUserByEmployeeId);
 
-	var arrValidateFCMToken = [
-		check('id').not().isEmpty().withMessage('Parameter id can not be empty'),
-		check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
-	];
-	app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
+	// var arrValidateFCMToken = [
+	// 	check('id').not().isEmpty().withMessage('Parameter id can not be empty'),
+	// 	check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
+	// ];
+	// app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
 
-	arrValidateChangePassword = [];
-	app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
+	// arrValidateChangePassword = [];
+	// app.post(rootAPIPath + 'user/encrypt_password', arrValidateChangePassword, userController.encryptPassword);
 };
