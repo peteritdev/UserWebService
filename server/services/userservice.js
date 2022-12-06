@@ -642,6 +642,7 @@ class UserService {
 	}
 
 	async doForgotPasswordWithGenerateNew(param) {
+		console.log(`>>> param : ${JSON.stringify(param)}`);
 		var validateEmail = await userRepoInstance.isEmailExists(param.nip);
 		if (validateEmail != null) {
 			//Generate new Password
