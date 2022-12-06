@@ -50,7 +50,7 @@ module.exports = (app) => {
 	];
 	app.get(rootAPIPath + 'user/verify_token', arrValidateVerifyToken, userController.verifyToken);
 
-	var arrValidateForgotPassword = [ check('email').isEmail().withMessage('Invalid email format') ];
+	var arrValidateForgotPassword = [];
 	app.post(rootAPIPath + 'user/forgot_password', arrValidateForgotPassword, userController.forgotPassword);
 
 	var arrValidateVerifyForgotPassword = [ check('code').not().isEmpty().withMessage('Code is required') ];
