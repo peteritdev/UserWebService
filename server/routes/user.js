@@ -67,7 +67,7 @@ module.exports = (app) => {
 	app.post(rootAPIPath + 'user/change_password', arrValidateChangePassword, userController.changePassword);
 
 	var arrValidateChangePassword = [
-		check('email').isEmail().withMessage('Invalid email format'),
+		check('email').not().isEmpty().withMessage('Email is required'),
 		check('new_password', 'Password is required or format is invalid').isLength({ min: 6 }),
 		check('old_password', 'Password is required or format is invalid').isLength({ min: 6 })
 	];

@@ -807,7 +807,7 @@ class UserService {
 		var xDecId = {};
 
 		// Validate old password
-		var validateEmail = await userRepoInstance.isEmailExists({ email: param.email });
+		var validateEmail = await userRepoInstance.isEmailExists({ nip: param.email });
 		if (validateEmail != null) {
 			var validatePassword = await bcrypt.compare(param.old_password, validateEmail.password);
 			// console.log(`>>> Validate Password : ${validatePassword}`);
