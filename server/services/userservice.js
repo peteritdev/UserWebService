@@ -1131,7 +1131,6 @@ class UserService {
 		}
 
 		if (xFlagProcess) {
-			console.log(`>>> pId : ${pId}`);
 			var xResult = await userRepoInstance.getUserByEmployeeId(pId);
 
 			if (xResult != null) {
