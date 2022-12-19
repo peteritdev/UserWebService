@@ -117,10 +117,16 @@ async function detail(req, res) {
 
 async function deletePermanent(req, res) {
 	var xJoResult;
-	var xOAuthResult = await _oAuthServiceInstance.verifyToken(req.headers['x-token'], req.headers['x-method']);
+	var xOAuthResult = await _oAuthServiceInstance.verifyToken({
+		method: req.headers['x-method'],
+		token: req.headers['x-token']
+	});
+	xOAuthResult = JSON.parse(xOAuthResult);
+
+	console.log(`>>> xOAuthResult: ${JSON.stringify(xOAuthResult)}`);
 
 	if (xOAuthResult.status_code == '00') {
-		if (xOAuthResult.token_data.status_code == '00') {
+		if (xOAuthResult.status_code == '00') {
 			// Validate first
 			var errors = validationResult(req).array();
 
@@ -131,9 +137,9 @@ async function deletePermanent(req, res) {
 					error_msg: errors
 				});
 			} else {
-				req.params.logged_user_level = xOAuthResult.token_data.result_verify.user_level;
-				req.params.logged_user_id = xOAuthResult.token_data.result_verify.id;
-				req.params.logged_user_name = xOAuthResult.token_data.result_verify.name;
+				req.params.logged_user_level = xOAuthResult.result_verify.user_level;
+				req.params.logged_user_id = xOAuthResult.result_verify.id;
+				req.params.logged_user_name = xOAuthResult.result_verify.name;
 				xJoResult = await _serviceInstance.delete(req.params);
 				xJoResult = JSON.stringify(xJoResult);
 			}
@@ -141,7 +147,7 @@ async function deletePermanent(req, res) {
 			xJoResult = JSON.stringify(xOAuthResult);
 		}
 	} else {
-		xJoResult = JSON.stringify(oAuthResult);
+		xJoResult = xOAuthResult;
 	}
 
 	res.setHeader('Content-Type', 'application/json');

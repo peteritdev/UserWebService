@@ -78,17 +78,23 @@ class ClientApplicationRepository {
 
 			if (pParam.hasOwnProperty('keyword')) {
 				if (pParam.keyword != '') {
-					xWhereOr.push({
-						name: {
-							[Op.iLike]: '%' + pParam.keyword + '%'
+					xWhereOr.push(
+						{
+							name: {
+								[Op.iLike]: '%' + pParam.keyword + '%'
+							}
 						},
-						host: {
-							[Op.iLike]: '%' + pParam.keyword + '%'
+						{
+							host: {
+								[Op.iLike]: '%' + pParam.keyword + '%'
+							}
 						},
-						client_id: {
-							[Op.iLike]: '%' + pParam.keyword + '%'
+						{
+							client_id: {
+								[Op.iLike]: '%' + pParam.keyword + '%'
+							}
 						}
-					});
+					);
 				}
 			}
 

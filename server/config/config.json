@@ -1,5 +1,6 @@
 {
   "localhost": {
+    "applicationId": 2,
     "appPort": 9189,
     "username": "postgres",
     "password": "O91o88juli83^^ok",
@@ -108,6 +109,7 @@
     }
   },
   "development": {
+    "applicationId": 2,
     "appPort": 9189,
     "username": "dika",
     "password": "P0stgr33sqlKyr1",

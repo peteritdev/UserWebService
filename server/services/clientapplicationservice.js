@@ -192,7 +192,9 @@ class ClientApplicationService {
 							name: xRows[index].name,
 							host: xRows[index].host,
 							client_id: xRows[index].client_id,
+							client_secret: xRows[index].client_secret,
 							status: xRows[index].status,
+							redirect_uri: xRows[index].redirect_uri,
 
 							created_at: moment(xRows[index].createdAt).format('DD MMM YYYY HH:mm:ss'),
 							created_by_name: xRows[index].created_by_name,
@@ -233,6 +235,8 @@ class ClientApplicationService {
 		var xAct = pParam.act;
 		delete pParam.act;
 		var xFlagProcess = false;
+
+		console.log(`>>> REsult : ${JSON.stringify(pParam)}`);
 
 		try {
 			if (xAct == 'add') {
@@ -297,6 +301,8 @@ class ClientApplicationService {
 				status_msg: `Exception error <ClientApplicationService.save>: ${e.message}`
 			};
 		}
+
+		console.log(`>>> REsult : ${JSON.stringify(xJoResult)}`);
 
 		return xJoResult;
 	}
@@ -472,26 +478,38 @@ class ClientApplicationService {
 						client_id: pParam.client_id
 					});
 					if (xCheck.status_code == '00') {
-						xCheck = await _repoInstance.checkClientCredential({
-							client_id: pParam.client_id,
-							redirect_uri: pParam.redirect_uri
-						});
-						if (xCheck.status_code == '00') {
-							xCheck = await _repoInstance.checkAvailableState({
+						if (xCheck.data.status == 0) {
+							xJoResult = {
+								status_code: '-99',
+								status_msg: 'Client ID is inactive status. Please contact administrator'
+							};
+						} else {
+							xCheck = await _repoInstance.checkClientCredential({
 								client_id: pParam.client_id,
-								state: pParam.state
+								redirect_uri: pParam.redirect_uri
 							});
 							if (xCheck.status_code == '00') {
-								// Check expiration of state, if expire will response need generate new one
-								let xCurrTime = moment().unix();
-								console.log(`>>> xCurrTime: ${xCurrTime}`);
-								console.log(`>>> xCheck.code_expire_in: ${xCheck.data.code_expire_in}`);
-								console.log(xCurrTime >> xCheck.code_expire_in);
-								if (parseInt(xCurrTime) >> xCheck.code_expire_in) {
-									xJoResult = {
-										status_code: '-99',
-										status_msg: 'State has expire. Please use another state.'
-									};
+								xCheck = await _repoInstance.checkAvailableState({
+									client_id: pParam.client_id,
+									state: pParam.state
+								});
+								if (xCheck.status_code == '00') {
+									// Check expiration of state, if expire will response need generate new one
+									let xCurrTime = moment().unix();
+									console.log(`>>> xCurrTime: ${xCurrTime}`);
+									console.log(`>>> xCheck.code_expire_in: ${xCheck.data.code_expire_in}`);
+									console.log(xCurrTime >> xCheck.code_expire_in);
+									if (parseInt(xCurrTime) >> xCheck.code_expire_in) {
+										xJoResult = {
+											status_code: '-99',
+											status_msg: 'State has expire. Please use another state.'
+										};
+									} else {
+										xJoResult = {
+											status_code: '00',
+											status_msg: 'Credential valid.'
+										};
+									}
 								} else {
 									xJoResult = {
 										status_code: '00',
@@ -500,15 +518,10 @@ class ClientApplicationService {
 								}
 							} else {
 								xJoResult = {
-									status_code: '00',
-									status_msg: 'Credential valid.'
+									status_code: '-99',
+									status_msg: 'Redirect URI not valid'
 								};
 							}
-						} else {
-							xJoResult = {
-								status_code: '-99',
-								status_msg: 'Redirect URI not valid'
-							};
 						}
 					} else {
 						xJoResult = {

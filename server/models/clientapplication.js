@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 		client_secret: DataTypes.STRING,
 		redirect_uri: DataTypes.STRING,
 
+		status: DataTypes.INTEGER,
 		is_delete: DataTypes.INTEGER,
 		deleted_at: DataTypes.DATE,
 		deleted_by: DataTypes.INTEGER,
