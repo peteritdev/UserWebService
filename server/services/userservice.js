@@ -1146,7 +1146,8 @@ class UserService {
 					sanqua_company_id: xResult.sanqua_company_id,
 					company: xResult.company,
 					fcm_token: xResult.fcm_token,
-					fcm_token_web: xResult.fcm_token_web
+					fcm_token_web: xResult.fcm_token_web,
+					fcm_token_expedition: xResult.fcm_token_expedition
 				};
 
 				if (xResult.user_level != null) {
