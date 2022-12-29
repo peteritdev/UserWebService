@@ -92,8 +92,8 @@ module.exports = (app) => {
 		check('name').not().isEmpty().withMessage('Name is required'),
 		check('email').isEmail().withMessage('Invalid email format'),
 		// check("password").isEmpty().withMessage("Password is required"),
-		check('status', 'Status must be a number').not().isEmpty().isInt(),
-		check('company_id', 'Company Id must be a number').not().isEmpty().isInt()
+		check('status', 'Status must be a number').not().isEmpty().isInt()
+		// check('company_id', 'Company Id must be a number').not().isEmpty().isInt()
 	];
 	app.post(rootAPIPath + 'user/save', arrValidateUserSave, userController.save);
 
