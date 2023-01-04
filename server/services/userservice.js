@@ -8,6 +8,7 @@ const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 const CryptoLib = require('peters-cryptolib');
 const _groupBy = require('json-groupby');
+const fs = require('fs');
 
 var env = process.env.NODE_ENV || 'localhost';
 var config = require(__dirname + '/../config/config.json')[env];
@@ -377,6 +378,8 @@ class UserService {
 		// console.log('>>> IP : ' + config.host);
 		// console.log('>>> Port : ' + config.port);
 		// console.log('>>> Param : ' + JSON.stringify(param));
+		console.log(__dirname);
+		let xPrivateKey = fs.readFileSync(__dirname + '/../../private.pem');
 
 		if (param.device == 'mobile' || param.device == 'web') {
 			var validateEmail = await userRepoInstance.isEmailExists(param.email);
@@ -434,14 +437,17 @@ class UserService {
 										id: validateEmail.id,
 										device: param.device == '' ? 'web' : param.device
 									},
-									config.secret,
+									// config.secret,
+									xPrivateKey,
 									{
 										expiresIn:
 											param.device == 'mobile'
 												? config.login.expireToken.mobile
-												: config.login.expireToken.web
+												: config.login.expireToken.web,
+										algorithm: 'RS256'
 									}
 								);
+								console.log(`>>> Token: ${token}`);
 							}
 
 							// Get Employee Info
@@ -932,6 +938,7 @@ class UserService {
 			param.method != 'undefined'
 		) {
 			if (param.method == 'conventional') {
+				console.log(`>>> Verify Token : ${param.token}`);
 				joResult = await jwt_utilInstance.verifyJWT(param.token);
 
 				// let xResultRefresh = await jwt_utilInstance.refreshJWT({
@@ -1146,7 +1153,8 @@ class UserService {
 					sanqua_company_id: xResult.sanqua_company_id,
 					company: xResult.company,
 					fcm_token: xResult.fcm_token,
-					fcm_token_web: xResult.fcm_token_web
+					fcm_token_web: xResult.fcm_token_web,
+					fcm_token_expedition: xResult.fcm_token_expedition
 				};
 
 				if (xResult.user_level != null) {
