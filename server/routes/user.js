@@ -43,10 +43,7 @@ module.exports = (app) => {
 	var arrValidateParseQueryGoogle = [ check('code').not().isEmpty().withMessage('Code is required') ];
 	app.post(rootAPIPath + 'user/parse_google_code', arrValidateParseQueryGoogle, userController.parseQueryGoogle);
 
-	var arrValidateVerifyToken = [
-		check('token').not().isEmpty().withMessage('Token is required'),
-		check('method').not().isEmpty().withMessage('Method is required')
-	];
+	var arrValidateVerifyToken = [];
 	app.get(rootAPIPath + 'user/verify_token', arrValidateVerifyToken, userController.verifyToken);
 
 	var arrValidateForgotPassword = [ check('nip').not().isEmpty().withMessage('NIP is required') ];
