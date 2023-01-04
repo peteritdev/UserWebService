@@ -359,15 +359,22 @@ async function verifyToken(req, res) {
 			error_msg: errors
 		});
 	} else {
-		if (req.query.token != '' && req.query.method != '') {
-			joResult = await userServiceInstance.verifyToken({
-				token: req.query.token,
-				method: req.query.method
-			});
+		if (req.query.hasOwnProperty('token') && req.query.hasOwnProperty('method')) {
+			if (req.query.token != '' && req.query.method != '') {
+				joResult = await userServiceInstance.verifyToken({
+					token: req.query.token,
+					method: req.query.method
+				});
+			} else {
+				joResult = JSON.stringify({
+					status_code: '-99',
+					status_msg: 'Invalid parameter token and method'
+				});
+			}
 		} else {
-			joResult = JSON.stringify({
-				status_code: '-99',
-				status_msg: 'Invalid parameter token and method'
+			joResult = await userServiceInstance.verifyToken({
+				token: req.headers['x-token'],
+				method: req.headers['x-method']
 			});
 		}
 	}
