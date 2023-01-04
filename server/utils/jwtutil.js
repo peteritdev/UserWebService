@@ -3,6 +3,7 @@ const jwtRefresh = require('jsonwebtoken-refresh');
 const env = process.env.NODE_ENV || 'localhost';
 const config = require(__dirname + '/../config/config.json')[env];
 const { json } = require('sequelize');
+const fs = require('fs');
 
 //Utility
 const Util = require('../utils/globalutility.js');
@@ -13,6 +14,7 @@ class JwtUtil {
 
 	async verifyJWT(pToken) {
 		var jsonResult;
+		let xPublicKey = fs.readFileSync(__dirname + '/../../public.pem');
 
 		if (pToken.startsWith('Bearer ')) {
 			pToken = pToken.slice(7, pToken.length);
@@ -20,7 +22,7 @@ class JwtUtil {
 
 		if (pToken) {
 			try {
-				var resultVerify = await jwt.verify(pToken, config.secret);
+				var resultVerify = await jwt.verify(pToken, xPublicKey, { algorithms: [ 'RS256' ] });
 				var xEncId = await utilInstance.encrypt(resultVerify.id);
 				resultVerify.id = xEncId;
 				jsonResult = {
