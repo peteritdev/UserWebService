@@ -168,6 +168,11 @@ class ApprovalMatrixDocumentService {
 						xParamFilter.department_id = pParam.department_id;
 					}
 				}
+				if (pParam.hasOwnProperty('ecatalogue_fpb_category_item')) {
+					if (pParam.ecatalogue_fpb_category_item != '') {
+						xParamFilter.ecatalogue_fpb_category_item = pParam.ecatalogue_fpb_category_item;
+					}
+				}
 				var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
 				console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
 
@@ -211,6 +216,11 @@ class ApprovalMatrixDocumentService {
 						status_code: '00',
 						status_msg: 'Data has been successfully saved',
 						approvers: xResultApprover4Notification
+					};
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Approval matrix not found.'
 					};
 				}
 			}
