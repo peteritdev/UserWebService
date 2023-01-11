@@ -189,6 +189,18 @@ class ApprovalMatrixApproverRepository {
 			}
 		}
 
+		if (pParam.hasOwnProperty('ecatalogue_fpb_category_item')) {
+			if (pParam.ecatalogue_fpb_category_item != null) {
+				xWhereAnd.push({
+					'$approval_matrix.ecatalogue_fpb_category_item$': pParam.ecatalogue_fpb_category_item
+				});
+			} else {
+				xWhereAnd.push({
+					'$approval_matrix.ecatalogue_fpb_category_item$': pParam.ecatalogue_fpb_category_item
+				});
+			}
+		}
+
 		xWhereAnd.push({
 			is_delete: 0
 		});

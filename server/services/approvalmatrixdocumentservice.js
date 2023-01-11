@@ -169,12 +169,15 @@ class ApprovalMatrixDocumentService {
 					}
 				}
 				if (pParam.hasOwnProperty('ecatalogue_fpb_category_item')) {
-					if (pParam.ecatalogue_fpb_category_item != '') {
+					if (pParam.ecatalogue_fpb_category_item == 7) {
 						xParamFilter.ecatalogue_fpb_category_item = pParam.ecatalogue_fpb_category_item;
+					} else {
+						xParamFilter.ecatalogue_fpb_category_item = null;
 					}
 				}
 				var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
-				console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
+				// console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
+				console.log(`>>> xParamFilter: ${JSON.stringify(xParamFilter)}`);
 
 				if (xApprovalMatrix.count > 0) {
 					var xRowsApprovalMatrix = xApprovalMatrix.rows;
