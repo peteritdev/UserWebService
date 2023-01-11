@@ -57,6 +57,12 @@
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
         }
       }
+    },
+
+    "lookupColumn":{
+      "approvalMatrix":{
+        "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
+      }
     }
 
   },
@@ -123,8 +129,12 @@
       "useUTC": false,
       "charset": "utf8mb4_unicode_ci"
     },
-    "timezone": "+07:00"
-
+    "timezone": "+07:00",
+    "lookupColumn":{
+      "approvalMatrix":{
+        "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
+      }
+    }
   },
 
   "staging": {
@@ -189,8 +199,12 @@
       "useUTC": false,
       "charset": "utf8mb4_unicode_ci"
     },
-    "timezone": "+07:00"
-
+    "timezone": "+07:00",
+    "lookupColumn":{
+      "approvalMatrix":{
+        "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
+      }
+    }
   },
 
   "production": {
@@ -255,7 +269,12 @@
       "useUTC": false,
       "charset": "utf8mb4_unicode_ci"
     },
-    "timezone": "+07:00"
+    "timezone": "+07:00",
+    "lookupColumn":{
+      "approvalMatrix":{
+        "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
+      }
+    }
 
   }
   
