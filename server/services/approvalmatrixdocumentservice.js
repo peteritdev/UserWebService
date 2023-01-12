@@ -49,6 +49,23 @@ class ApprovalMatrixDocumentService {
 		}
 
 		if (xFlagProcess) {
+			xFlagProcess = true;
+			if (pParam.hasOwnProperty('user_id')) {
+				if (pParam.user_id != '') {
+					if (pParam.user_id.length == 65) {
+						var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+						if (xDecId.status_code == '00') {
+							pParam.user_id = xDecId.decrypted;
+						} else {
+							xFlagProcess = false;
+							xJoResult = xDecId;
+						}
+					}
+				}
+			}
+		}
+
+		if (xFlagProcess) {
 			var xResultList = await _repoInstance.list(pParam);
 			if (xResultList.count > 0) {
 				xJoResult.status_code = '00';

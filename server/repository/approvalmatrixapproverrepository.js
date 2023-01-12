@@ -81,6 +81,14 @@ class ApprovalMatrixApproverRepository {
 			}
 		}
 
+		if (pParam.hasOwnProperty('user_id')) {
+			if (pParam.user_id != '') {
+				xWhereAnd.push({
+					'$approval_matrix_approver_user.user_id$': pParam.user_id
+				});
+			}
+		}
+
 		xWhereAnd.push({
 			is_delete: 0
 		});
