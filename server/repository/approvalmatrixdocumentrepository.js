@@ -92,9 +92,12 @@ class ApprovalMatrixDocumentRepository {
 		};
 
 		if (pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit')) {
-			if (pParam.offset != '' && pParam.limit != '') {
-				xParamQuery.offset = pParam.offset;
-				xParamQuery.limit = pParam.limit;
+			console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
+			if (pParam.limit != 'all') {
+				if (pParam.offset != '' && pParam.limit != '') {
+					xParamQuery.offset = pParam.offset;
+					xParamQuery.limit = pParam.limit;
+				}
 			}
 		}
 
