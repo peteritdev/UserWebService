@@ -411,7 +411,8 @@ class ApprovalMatrixDocumentRepository {
 
 			var xData = await _modelDb.findOne({
 				where: xWhere,
-				include: xInclude
+				include: xInclude,
+				subQuery: false
 			});
 
 			xJoResult = {
