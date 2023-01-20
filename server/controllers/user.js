@@ -32,7 +32,8 @@ module.exports = {
 	getUserByEmployeeId,
 	updateFCMToken,
 	deleteUserByEmployeeId,
-	nonActiveByEmployeeId
+	nonActiveByEmployeeId,
+	refreshToken
 };
 
 async function list(req, res) {
@@ -516,4 +517,35 @@ async function updateFCMToken(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
+}
+
+async function refreshToken(req, res) {
+	var joResult;
+
+	// Validate first
+	var errors = validationResult(req).array();
+	if (errors.length != 0) {
+		joResult = JSON.stringify({
+			status_code: '-99',
+			status_msg: 'Parameter has problem',
+			error_msg: errors
+		});
+	} else {
+		if (req.query.token != '' && req.query.method != '') {
+			joResult = await userServiceInstance.refreshToken({
+				token: req.body.token,
+				refresh_token: req.body.refresh_token,
+				method: req.body.method,
+				device: req.body.device
+			});
+		} else {
+			joResult = JSON.stringify({
+				status_code: '-99',
+				status_msg: 'Invalid parameter token and method'
+			});
+		}
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
 }
