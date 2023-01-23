@@ -37,7 +37,7 @@ class JwtUtil {
 					jsonResult = {
 						status_code: '00',
 						status_msg: `${err.name}`,
-						err_msg: err
+						result_verify: resultVerify
 					};
 				} else {
 					jsonResult = {
