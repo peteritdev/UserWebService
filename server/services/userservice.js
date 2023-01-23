@@ -1264,6 +1264,7 @@ class UserService {
 				if (pParam.token != '' && pParam.refresh_token != '') {
 					let xResultVerifyOriginToken = await jwt_utilInstance.verifyJWT(pParam.token);
 					let xResultVerifyRefreshToken = await jwt_utilInstance.verifyJWT(pParam.refresh_token);
+					console.log(`>>> xResultVerifyOriginToken: ${JSON.stringify(xResultVerifyOriginToken)}`);
 					if (xResultVerifyOriginToken.status_code == '00') {
 						if (xResultVerifyRefreshToken.status_code == '00') {
 							// Check the value of token

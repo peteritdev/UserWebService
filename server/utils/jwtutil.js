@@ -22,7 +22,9 @@ class JwtUtil {
 
 		if (pToken) {
 			try {
+				console.log(`>>> Before..`);
 				var resultVerify = await jwt.verify(pToken, xPublicKey, { algorithms: [ 'RS256' ] });
+				console.log(`>>> resultVerify: ${JSON.stringify(resultVerify)}`);
 				var xEncId = await utilInstance.encrypt(resultVerify.id);
 				resultVerify.id = xEncId;
 				jsonResult = {
