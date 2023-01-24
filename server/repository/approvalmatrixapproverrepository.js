@@ -181,19 +181,28 @@ class ApprovalMatrixApproverRepository {
 		}
 
 		if (pParam.hasOwnProperty('company_id') && pParam.hasOwnProperty('department_id')) {
-			if (pParam.company_id != '' && pParam.department_id != '') {
+			if (pParam.company_id != '' && typeof pParam.department_id === 'boolean') {
+				if (!pParam.department_id) {
+					xWhereAnd.push({
+						'$approval_matrix.company_id$': pParam.company_id,
+						'$approval_matrix.department_id$': {
+							[Op.eq]: null
+						}
+					});
+				}
+			} else {
 				xWhereAnd.push({
 					'$approval_matrix.company_id$': pParam.company_id,
 					'$approval_matrix.department_id$': pParam.department_id
 				});
 			}
-		}
-
-		if (pParam.hasOwnProperty('company_id')) {
-			if (pParam.company_id != '') {
-				xWhereAnd.push({
-					'$approval_matrix.company_id$': pParam.company_id
-				});
+		} else {
+			if (pParam.hasOwnProperty('company_id')) {
+				if (pParam.company_id != '') {
+					xWhereAnd.push({
+						'$approval_matrix.company_id$': pParam.company_id
+					});
+				}
 			}
 		}
 
