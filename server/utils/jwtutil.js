@@ -34,10 +34,19 @@ class JwtUtil {
 				};
 			} catch (err) {
 				if (err.name == 'TokenExpiredError') {
+					let xDecoded = await jwt.decode(pToken, { complete: true });
+					if (xDecoded.hasOwnProperty('payload')) {
+						if (xDecoded.payload.hasOwnProperty('id')) {
+							if (xDecoded.payload.id != '') {
+								var xEncId = await utilInstance.encrypt(xDecoded.payload.id);
+								xDecoded.payload.id = xEncId;
+							}
+						}
+					}
 					jsonResult = {
 						status_code: '00',
 						status_msg: `${err.name}`,
-						result_verify: resultVerify
+						result_verify: xDecoded.payload
 					};
 				} else {
 					jsonResult = {
