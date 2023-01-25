@@ -177,8 +177,8 @@ class ApprovalMatrixDocumentService {
 				};
 
 				// Filter for FPB Purpose
-				if (pParam.hasOwnProperty('logged_company_id')) {
-					if (pParam.logged_company_id == 6) {
+				if (pParam.hasOwnProperty('logged_company_id') && pParam.hasOwnProperty('company_id')) {
+					if (pParam.logged_company_id == 6 && pParam.company_id != 6) {
 						xParamFilter.department_id = false;
 					} else {
 						if (pParam.hasOwnProperty('department_id')) {
@@ -211,6 +211,7 @@ class ApprovalMatrixDocumentService {
 				var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
 				// console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
 				console.log(`>>> xParamFilter: ${JSON.stringify(xParamFilter)}`);
+				console.log(`>>> logged_company_id: ${pParam.logged_company_id}`);
 
 				if (xApprovalMatrix.count > 0) {
 					var xRowsApprovalMatrix = xApprovalMatrix.rows;
