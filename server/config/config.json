@@ -46,7 +46,7 @@
     "login":{
       "expireToken": {
         "web": "1h",
-        "mobile": "48h"
+        "mobile": "720h"
       },
       "expireRefreshToken": "336h",
       "oAuth2":{
@@ -255,7 +255,7 @@
     "login":{
       "expireToken": {
         "web": "24h",
-        "mobile": "168h"
+        "mobile": "720h"
       },
       "expireRefreshToken": "336h",
       "oAuth2":{
