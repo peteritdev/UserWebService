@@ -300,8 +300,20 @@ class UserRepository {
 		try {
 			transaction = await sequelize.transaction();
 
-			if (param.act == 'update' || param.act == 'update_from_employee' || param.act == 'add_from_employee') {
-				var joDataUpdate = {
+			let joDataUpdate = {};
+
+			if (param.act == 'update' || param.act == 'update_from_employee') {
+				joDataUpdate = {
+					email: param.email,
+					username: param.username
+					// status: param.status,
+					// sanqua_company_id: param.company_id,
+					// updated_by: param.user_id,
+					// employee_id: param.id,
+					// user_level_id: param.user_level_id
+				};
+			} else {
+				joDataUpdate = {
 					name: param.name,
 					email: param.email,
 					username: param.username
@@ -311,7 +323,9 @@ class UserRepository {
 					// employee_id: param.id,
 					// user_level_id: param.user_level_id
 				};
+			}
 
+			if (param.act == 'update' || param.act == 'update_from_employee' || param.act == 'add_from_employee') {
 				if (!param.is_sync_password) {
 					if (param.password != '' && param.hasOwnProperty('password')) {
 						hashedPassword = await utilSecureInstance.generateEncryptedPassword(param.password);
