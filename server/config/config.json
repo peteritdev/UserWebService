@@ -238,7 +238,7 @@
     "login":{
       "expireToken": {
         "web": "24h",
-        "mobile": "168h"
+        "mobile": "720h"
       },
       "oAuth2":{
         "google":{
