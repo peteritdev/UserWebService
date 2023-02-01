@@ -62,6 +62,7 @@ class ApplicationService {
 				xJoArrData.push({
 					id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
 					name: xRows[index].name,
+					app_code: xRows[index].app_code,
 					created_at: xRows[index].createdAt,
 					created_by_name: xRows[index].created_by_name,
 					updated_at: xRows[index].updatedAt,
