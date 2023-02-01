@@ -81,6 +81,14 @@ class ApprovalMatrixApproverRepository {
 			}
 		}
 
+		if (pParam.hasOwnProperty('user_id')) {
+			if (pParam.user_id != '') {
+				xWhereAnd.push({
+					'$approval_matrix_approver_user.user_id$': pParam.user_id
+				});
+			}
+		}
+
 		xWhereAnd.push({
 			is_delete: 0
 		});
@@ -173,18 +181,39 @@ class ApprovalMatrixApproverRepository {
 		}
 
 		if (pParam.hasOwnProperty('company_id') && pParam.hasOwnProperty('department_id')) {
-			if (pParam.company_id != '' && pParam.department_id != '') {
+			if (pParam.company_id != '' && typeof pParam.department_id === 'boolean') {
+				if (!pParam.department_id) {
+					xWhereAnd.push({
+						'$approval_matrix.company_id$': pParam.company_id,
+						'$approval_matrix.department_id$': {
+							[Op.eq]: null
+						}
+					});
+				}
+			} else {
 				xWhereAnd.push({
 					'$approval_matrix.company_id$': pParam.company_id,
 					'$approval_matrix.department_id$': pParam.department_id
 				});
 			}
+		} else {
+			if (pParam.hasOwnProperty('company_id')) {
+				if (pParam.company_id != '') {
+					xWhereAnd.push({
+						'$approval_matrix.company_id$': pParam.company_id
+					});
+				}
+			}
 		}
 
-		if (pParam.hasOwnProperty('company_id')) {
-			if (pParam.company_id != '') {
+		if (pParam.hasOwnProperty('ecatalogue_fpb_category_item')) {
+			if (pParam.ecatalogue_fpb_category_item != null) {
 				xWhereAnd.push({
-					'$approval_matrix.company_id$': pParam.company_id
+					'$approval_matrix.ecatalogue_fpb_category_item$': pParam.ecatalogue_fpb_category_item
+				});
+			} else {
+				xWhereAnd.push({
+					'$approval_matrix.ecatalogue_fpb_category_item$': pParam.ecatalogue_fpb_category_item
 				});
 			}
 		}

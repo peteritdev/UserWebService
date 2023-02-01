@@ -81,7 +81,8 @@ class UserUserLevelService {
 								: null,
 						user_level_id: xRows[index].user_level != null ? parseInt(xRows[index].user_level.id) : null,
 						user_level_name: xRows[index].user_level != null ? xRows[index].user_level.name : null,
-						is_admin: xRows[index].user_level != null ? parseInt(xRows[index].user_level.is_admin) : null
+						is_admin: xRows[index].user_level != null ? parseInt(xRows[index].user_level.is_admin) : null,
+						allowed_company: xRows[index].allowed_company
 					});
 				}
 				xJoResult = {

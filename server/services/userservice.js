@@ -430,12 +430,16 @@ class UserService {
 						if (true) {
 							// Generate JWT Token
 							let token = '';
+							let xTokenRefresh = '';
+							let xUUID = await _utilInstance.generateUUID4();
 							if (param.device == 'mobile' || param.device == 'web') {
 								token = jwt.sign(
 									{
 										email: param.email,
 										id: validateEmail.id,
-										device: param.device == '' ? 'web' : param.device
+										device: param.device == '' ? 'web' : param.device,
+										uuid: xUUID,
+										scope: 'access_token'
 									},
 									// config.secret,
 									xPrivateKey,
@@ -447,7 +451,23 @@ class UserService {
 										algorithm: 'RS256'
 									}
 								);
-								console.log(`>>> Token: ${token}`);
+
+								// Generate Refresh token
+								xTokenRefresh = jwt.sign(
+									{
+										email: param.email,
+										id: validateEmail.id,
+										device: param.device == '' ? 'web' : param.device,
+										uuid: xUUID,
+										scope: 'refresh_token'
+									},
+									// config.secret,
+									xPrivateKey,
+									{
+										expiresIn: config.login.expireRefreshToken,
+										algorithm: 'RS256'
+									}
+								);
 							}
 
 							// Get Employee Info
@@ -515,6 +535,7 @@ class UserService {
 									status_code: '00',
 									status_msg: 'Login successfully',
 									token: token,
+									refresh_token: xTokenRefresh,
 
 									user_id:
 										validateEmail.id != null
@@ -950,36 +971,48 @@ class UserService {
 					if (true) {
 						// This validation when all esanqua app ready to send  device
 						//if (joResult.result_verify.device == param.device_id) {
-						//Get User Detail by ID
-						var xDecId = await _utilInstance.decrypt(joResult.result_verify.id, config.cryptoKey.hashKey);
 
-						if (xDecId.status_code == '00') {
-							var xUserId = xDecId.decrypted;
-							var xObjUser = await userRepoInstance.getById(xUserId);
-							if (xObjUser != null) {
-								joResult.result_verify.name = xObjUser.name;
-								joResult.result_verify.user_level_id = xObjUser.user_level_id;
-								joResult.result_verify.user_level = xObjUser.user_level;
-								joResult.result_verify.company = xObjUser.company;
+						// Check if scope is access_token or refresh_token
+						if (joResult.result_verify.scope == 'access_token') {
+							//Get User Detail by ID
+							var xDecId = await _utilInstance.decrypt(
+								joResult.result_verify.id,
+								config.cryptoKey.hashKey
+							);
+
+							if (xDecId.status_code == '00') {
+								var xUserId = xDecId.decrypted;
+								var xObjUser = await userRepoInstance.getById(xUserId);
+								if (xObjUser != null) {
+									joResult.result_verify.name = xObjUser.name;
+									joResult.result_verify.user_level_id = xObjUser.user_level_id;
+									joResult.result_verify.user_level = xObjUser.user_level;
+									joResult.result_verify.company = xObjUser.company;
+								}
 							}
-						}
 
-						// Get Employee Info
-						var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-						var xUrlQuery =
-							'/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
-						var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
+							// Get Employee Info
+							var xUrlAPI = config.api.employeeService.getEmployeeInfo;
+							var xUrlQuery =
+								'/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
+							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
 
-						// console.log(`>>> token: ${param.token}`);
-						// console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
-						// console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
+							// console.log(`>>> token: ${param.token}`);
+							// console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
+							// console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
 
-						if (xEmployeeInfo != null) {
-							if (xEmployeeInfo.status_code == '00') {
-								joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
+							if (xEmployeeInfo != null) {
+								if (xEmployeeInfo.status_code == '00') {
+									joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
+								}
+							} else {
+								joResult.result_verify.employee_info = null;
 							}
 						} else {
-							joResult.result_verify.employee_info = null;
+							joResult = {
+								status_code: '-99',
+								status_msg: 'Token not valid'
+							};
 						}
 					} else {
 						joResult = {
@@ -1216,6 +1249,138 @@ class UserService {
 			xJoResult = {
 				status_code: '-99',
 				status_msg: `[UserService.doUpdateFCMToken] Exception: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async refreshToken(pParam) {
+		var xJoResult = {};
+		let xPrivateKey = fs.readFileSync(__dirname + '/../../private.pem');
+
+		try {
+			if (pParam.hasOwnProperty('token') && pParam.hasOwnProperty('refresh_token')) {
+				if (pParam.token != '' && pParam.refresh_token != '') {
+					let xResultVerifyOriginToken = await jwt_utilInstance.verifyJWT(pParam.token);
+					let xResultVerifyRefreshToken = await jwt_utilInstance.verifyJWT(pParam.refresh_token);
+					if (xResultVerifyOriginToken.status_code == '00') {
+						if (xResultVerifyRefreshToken.status_code == '00') {
+							// Check the value of token
+							if (
+								xResultVerifyOriginToken.result_verify.email ==
+									xResultVerifyRefreshToken.result_verify.email &&
+								xResultVerifyOriginToken.result_verify.device ==
+									xResultVerifyRefreshToken.result_verify.device &&
+								xResultVerifyOriginToken.result_verify.uuid ==
+									xResultVerifyRefreshToken.result_verify.uuid
+							) {
+								if (xResultVerifyRefreshToken.result_verify.scope == 'refresh_token') {
+									// Generate new access token
+									let xToken = '';
+									let xTokenRefresh = '';
+									let xUUID = await _utilInstance.generateUUID4();
+
+									if (
+										xResultVerifyOriginToken.result_verify.device == 'mobile' ||
+										xResultVerifyOriginToken.result_verify.device == 'web'
+									) {
+										var xDecId = await _utilInstance.decrypt(
+											xResultVerifyOriginToken.result_verify.id,
+											config.cryptoKey.hashKey
+										);
+										if (xDecId.status_code == '00') {
+											let xId = xDecId.decrypted;
+											xToken = jwt.sign(
+												{
+													email: xResultVerifyOriginToken.result_verify.email,
+													id: xId,
+													device:
+														xResultVerifyOriginToken.result_verify.device == ''
+															? 'web'
+															: xResultVerifyOriginToken.result_verify.device,
+													uuid: xUUID,
+													scope: 'access_token'
+												},
+												// config.secret,
+												xPrivateKey,
+												{
+													expiresIn:
+														xResultVerifyOriginToken.result_verify.device == 'mobile'
+															? config.login.expireToken.mobile
+															: config.login.expireToken.web,
+													algorithm: 'RS256'
+												}
+											);
+
+											// Generate Refresh token
+											xTokenRefresh = jwt.sign(
+												{
+													email: xResultVerifyOriginToken.result_verify.email,
+													id: xId,
+													device:
+														xResultVerifyOriginToken.result_verify.device == ''
+															? 'web'
+															: xResultVerifyOriginToken.result_verify.device,
+													uuid: xUUID,
+													scope: 'refresh_token'
+												},
+												// config.secret,
+												xPrivateKey,
+												{
+													expiresIn: config.login.expireRefreshToken,
+													algorithm: 'RS256'
+												}
+											);
+
+											xJoResult = {
+												status_code: '00',
+												status_msg: 'OK',
+												new_access_token: xToken,
+												refresh_token: xTokenRefresh
+											};
+										} else {
+											xJoResult = {
+												status_code: '-99',
+												status_msg: 'Invalid token element'
+											};
+										}
+									}
+								}
+							} else {
+								xJoResult = {
+									status_code: '-99',
+									status_msg: 'Invalid refresh token'
+								};
+							}
+						} else {
+							xJoResult = {
+								status_code: '-99',
+								status_msg: 'Invalid refresh token'
+							};
+						}
+					} else {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Origin token not valid'
+						};
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Parameter token or refresh_token can not be empty'
+					};
+				}
+			} else {
+				xJoResult = {
+					status_code: '-99',
+					status_msg: 'Please supply valid parameter'
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `[UserService.refreshToken] Exception: ${e.message}`
 			};
 		}
 

@@ -49,6 +49,23 @@ class ApprovalMatrixDocumentService {
 		}
 
 		if (xFlagProcess) {
+			xFlagProcess = true;
+			if (pParam.hasOwnProperty('user_id')) {
+				if (pParam.user_id != '') {
+					if (pParam.user_id.length == 65) {
+						var xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+						if (xDecId.status_code == '00') {
+							pParam.user_id = xDecId.decrypted;
+						} else {
+							xFlagProcess = false;
+							xJoResult = xDecId;
+						}
+					}
+				}
+			}
+		}
+
+		if (xFlagProcess) {
 			var xResultList = await _repoInstance.list(pParam);
 			if (xResultList.count > 0) {
 				xJoResult.status_code = '00';
@@ -70,6 +87,7 @@ class ApprovalMatrixDocumentService {
 						table_name: xRows[index].table_name,
 						approver_user: xRows[index].approval_matrix_document_user,
 						min_approver: xRows[index].min_approver,
+
 						created_at: moment(xRows[index].createdAt).format('DD-MM-YYYY HH:mm:ss'),
 						updated_at: moment(xRows[index].updatedAt).format('DD-MM-YYYY HH:mm:ss')
 					});
@@ -157,18 +175,43 @@ class ApprovalMatrixDocumentService {
 					application_id: pParam.application_id,
 					table_name: pParam.table_name
 				};
+
+				// Filter for FPB Purpose
+				if (pParam.hasOwnProperty('logged_company_id') && pParam.hasOwnProperty('company_id')) {
+					if (pParam.logged_company_id == 6 && pParam.company_id != 6) {
+						xParamFilter.department_id = false;
+					} else {
+						if (pParam.hasOwnProperty('department_id')) {
+							if (pParam.department_id != '') {
+								xParamFilter.department_id = pParam.department_id;
+							}
+						}
+					}
+				} else {
+					if (pParam.hasOwnProperty('department_id')) {
+						if (pParam.department_id != '') {
+							xParamFilter.department_id = pParam.department_id;
+						}
+					}
+				}
+
 				if (pParam.hasOwnProperty('company_id')) {
 					if (pParam.company_id != '') {
 						xParamFilter.company_id = pParam.company_id;
 					}
 				}
-				if (pParam.hasOwnProperty('department_id')) {
-					if (pParam.department_id != '') {
-						xParamFilter.department_id = pParam.department_id;
+
+				if (pParam.hasOwnProperty('ecatalogue_fpb_category_item')) {
+					if (pParam.ecatalogue_fpb_category_item == 7) {
+						xParamFilter.ecatalogue_fpb_category_item = pParam.ecatalogue_fpb_category_item;
+					} else {
+						xParamFilter.ecatalogue_fpb_category_item = null;
 					}
 				}
 				var xApprovalMatrix = await _approvalMatrixApproverRepoInstance.getById(xParamFilter);
-				console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
+				// console.log(`>>> xApprovalMatrix : ${JSON.stringify(xApprovalMatrix)}`);
+				console.log(`>>> xParamFilter: ${JSON.stringify(xParamFilter)}`);
+				console.log(`>>> logged_company_id: ${pParam.logged_company_id}`);
 
 				if (xApprovalMatrix.count > 0) {
 					var xRowsApprovalMatrix = xApprovalMatrix.rows;
@@ -210,6 +253,11 @@ class ApprovalMatrixDocumentService {
 						status_code: '00',
 						status_msg: 'Data has been successfully saved',
 						approvers: xResultApprover4Notification
+					};
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'Approval matrix not found.'
 					};
 				}
 			}

@@ -118,4 +118,10 @@ module.exports = (app) => {
 		check('fcm_token').not().isEmpty().withMessage('Parameter fcm_token can not be empty')
 	];
 	app.post(rootAPIPath + 'user/fcm_token', arrValidateFCMToken, userController.updateFCMToken);
+
+	var arrValidateLogin = [
+		check('token').not().isEmpty().withMessage('Origin token is required'),
+		check('refresh_token').not().isEmpty().withMessage('Refresh token is required')
+	];
+	app.post(rootAPIPath + 'user/refresh_token', arrValidateLogin, userController.refreshToken);
 };
