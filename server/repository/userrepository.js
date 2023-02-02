@@ -106,7 +106,9 @@ class UserRepository {
 						model: _modelUserLevel,
 						as: 'user_level',
 						through: {
-							attributes: [],
+							attributes: [ 'id', 'user_id', 'user_level_id', 'allowed_company' ],
+							model: _modelUserUserLevel,
+							as: 'user_user_level',
 							where: {
 								is_delete: 0
 							}
