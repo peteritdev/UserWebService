@@ -3,6 +3,7 @@ const jwtRefresh = require('jsonwebtoken-refresh');
 const env = process.env.NODE_ENV || 'localhost';
 const config = require(__dirname + '/../config/config.json')[env];
 const { json } = require('sequelize');
+const fs = require('fs');
 
 //Utility
 const Util = require('../utils/globalutility.js');
@@ -13,6 +14,7 @@ class JwtUtil {
 
 	async verifyJWT(pToken) {
 		var jsonResult;
+		let xPublicKey = fs.readFileSync(__dirname + '/../../public.pem');
 
 		if (pToken.startsWith('Bearer ')) {
 			pToken = pToken.slice(7, pToken.length);
@@ -20,7 +22,9 @@ class JwtUtil {
 
 		if (pToken) {
 			try {
-				var resultVerify = await jwt.verify(pToken, config.secret);
+				// console.log(`>>> Before..`);
+				var resultVerify = await jwt.verify(pToken, xPublicKey, { algorithms: [ 'RS256' ] });
+				// console.log(`>>> resultVerify: ${JSON.stringify(resultVerify)}`);
 				var xEncId = await utilInstance.encrypt(resultVerify.id);
 				resultVerify.id = xEncId;
 				jsonResult = {
@@ -29,11 +33,28 @@ class JwtUtil {
 					result_verify: resultVerify
 				};
 			} catch (err) {
-				jsonResult = {
-					status_code: '-99',
-					status_msg: 'Error',
-					err_msg: err
-				};
+				if (err.name == 'TokenExpiredError') {
+					let xDecoded = await jwt.decode(pToken, { complete: true });
+					if (xDecoded.hasOwnProperty('payload')) {
+						if (xDecoded.payload.hasOwnProperty('id')) {
+							if (xDecoded.payload.id != '') {
+								var xEncId = await utilInstance.encrypt(xDecoded.payload.id);
+								xDecoded.payload.id = xEncId;
+							}
+						}
+					}
+					jsonResult = {
+						status_code: '-99',
+						status_msg: `${err.name}`,
+						result_verify: xDecoded.payload
+					};
+				} else {
+					jsonResult = {
+						status_code: '-99',
+						status_msg: `Exception error: ${err.message}`,
+						err_msg: err
+					};
+				}
 			}
 		} else {
 			jsonResult = {

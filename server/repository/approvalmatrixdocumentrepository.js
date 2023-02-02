@@ -25,7 +25,7 @@ class ApprovalMatrixDocumentRepository {
 		var xOrder = [ 'id', 'ASC' ];
 		var xInclude = [
 			{
-				attributes: [ 'id', 'status' ],
+				attributes: [ 'id', 'status', 'user_id' ],
 				model: _modelApprovalMatrixDocumentUser,
 				as: 'approval_matrix_document_user',
 				include: [
@@ -62,6 +62,14 @@ class ApprovalMatrixDocumentRepository {
 			}
 		}
 
+		if (pParam.hasOwnProperty('user_id')) {
+			if (pParam.user_id != '') {
+				xWhereAnd.push({
+					'$approval_matrix_document_user.user_id$': pParam.user_id
+				});
+			}
+		}
+
 		xWhereAnd.push({
 			is_delete: 0
 		});
@@ -79,13 +87,17 @@ class ApprovalMatrixDocumentRepository {
 		var xParamQuery = {
 			where: xWhere,
 			include: xInclude,
-			order: [ xOrder ]
+			order: [ xOrder ],
+			subQuery: false
 		};
 
 		if (pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit')) {
-			if (pParam.offset != '' && pParam.limit != '') {
-				xParamQuery.offset = pParam.offset;
-				xParamQuery.limit = pParam.limit;
+			console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
+			if (pParam.limit != 'all') {
+				if (pParam.offset != '' && pParam.limit != '') {
+					xParamQuery.offset = pParam.offset;
+					xParamQuery.limit = pParam.limit;
+				}
 			}
 		}
 
@@ -399,7 +411,8 @@ class ApprovalMatrixDocumentRepository {
 
 			var xData = await _modelDb.findOne({
 				where: xWhere,
-				include: xInclude
+				include: xInclude,
+				subQuery: false
 			});
 
 			xJoResult = {

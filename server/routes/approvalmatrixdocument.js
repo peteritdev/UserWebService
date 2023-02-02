@@ -71,9 +71,8 @@ module.exports = (app) => {
 	// List
 	arrValidate = [];
 	arrValidate = [
-		check('offset', 'Parameter offset must be integer and cannot be empty').not().isEmpty().isInt(),
-		check('limit', 'Parameter limit must be integer and cannot be empty').not().isEmpty().isInt(),
-		check('document_id').not().isEmpty().withMessage('Parameter document_id cannot be empty'),
+		// check('offset', 'Parameter offset must be integer and cannot be empty').not().isEmpty().isInt(),
+		// check('limit', 'Parameter limit must be integer and cannot be empty').not().isEmpty().isInt(),
 		check('application_id', 'Parameter application_id must be integer and cannot be empty').not().isEmpty().isInt()
 	];
 	app.get(
