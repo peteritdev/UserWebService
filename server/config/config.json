@@ -183,7 +183,7 @@
   
     "login":{
       "expireToken": {
-        "web": "24h",
+        "web": "5m",
         "mobile": "168h"
       },
       "expireRefreshToken": "336h",
