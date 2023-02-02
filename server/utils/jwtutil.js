@@ -44,7 +44,7 @@ class JwtUtil {
 						}
 					}
 					jsonResult = {
-						status_code: '00',
+						status_code: '-99',
 						status_msg: `${err.name}`,
 						result_verify: xDecoded.payload
 					};
