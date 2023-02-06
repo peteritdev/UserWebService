@@ -324,7 +324,7 @@ class ApprovalMatrixDocumentRepository {
 			'                on amd_sub.id = amdu_sub.approval_matrix_document_id ' +
 			'            where amd_sub.document_id = :documentId ' +
 			'            and amd_sub.application_id = :applicationId ' +
-			'            and sequence = ( amd.sequence - 1 ) ' +
+			'            and sequence = ( amd.sequence - 1 ) LIMIT 1 ' +
 			'        ) ELSE 0 END ' +
 			'    ) AS "is_your_turn" ' +
 			' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' +
