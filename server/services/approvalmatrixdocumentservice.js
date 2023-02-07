@@ -178,13 +178,18 @@ class ApprovalMatrixDocumentService {
 
 				// Filter for FPB Purpose
 				if (pParam.hasOwnProperty('logged_company_id') && pParam.hasOwnProperty('company_id')) {
-					if (pParam.logged_company_id == 6 && pParam.company_id != 6) {
-						xParamFilter.department_id = false;
-					} else {
-						if (pParam.hasOwnProperty('department_id')) {
-							if (pParam.department_id != '') {
-								xParamFilter.department_id = pParam.department_id;
-							}
+					// if (pParam.logged_company_id == 6 && pParam.company_id != 6) {
+					// 	xParamFilter.department_id = false;
+					// } else {
+					// 	if (pParam.hasOwnProperty('department_id')) {
+					// 		if (pParam.department_id != '') {
+					// 			xParamFilter.department_id = pParam.department_id;
+					// 		}
+					// 	}
+					// }
+					if (pParam.hasOwnProperty('department_id')) {
+						if (pParam.department_id != '') {
+							xParamFilter.department_id = pParam.department_id;
 						}
 					}
 				} else {
