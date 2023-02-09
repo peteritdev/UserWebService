@@ -324,7 +324,13 @@ class ApprovalMatrixDocumentRepository {
 			'                on amd_sub.id = amdu_sub.approval_matrix_document_id ' +
 			'            where amd_sub.document_id = :documentId ' +
 			'            and amd_sub.application_id = :applicationId ' +
-			'            and sequence = ( amd.sequence - 1 ) LIMIT 1 ' +
+			'            -- and sequence = ( amd.sequence - 1 ) LIMIT 1 ' +
+			'			 order by "sequence" asc' +
+			/* Peter: Above line im remark to support approval matrix based on sequence ordering not by number sequence.
+					For example if i set sequence 1,2,3 so it run normally because it check the next sequence is valid or not
+					If i set 1,3 it can not allow the sequence number 3 to approve, because after 1, it must be 2 not 3 but in matrix i set 1 and 3
+					Why i set 1,3 for this example? Because it support positioning qrcode on FPB
+			*/
 			'        ) ELSE 0 END ' +
 			'    ) AS "is_your_turn" ' +
 			' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' +
