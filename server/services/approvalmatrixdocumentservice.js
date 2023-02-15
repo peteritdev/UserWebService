@@ -227,6 +227,8 @@ class ApprovalMatrixDocumentService {
 							for (var j = 0; j < xRowsApprovalMatrix[index].approval_matrix_approver_user.length; j++) {
 								xApproverUser.push({
 									user_id: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.id,
+									employee_id:
+										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.employee_id,
 									user_name: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.name,
 									email: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.email,
 									status: 0

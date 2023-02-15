@@ -156,7 +156,7 @@ class ApprovalMatrixApproverRepository {
 				as: 'approval_matrix_approver_user',
 				include: [
 					{
-						attributes: [ 'id', 'name', 'email' ],
+						attributes: [ 'id', 'name', 'email', 'employee_id' ],
 						model: _modelUser,
 						as: 'user'
 					}
