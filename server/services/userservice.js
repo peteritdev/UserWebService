@@ -992,6 +992,12 @@ class UserService {
 									joResult.result_verify.user_level_id = xObjUser.user_level_id;
 									joResult.result_verify.user_level = xObjUser.user_level;
 									joResult.result_verify.company = xObjUser.company;
+
+									joResult.result_verify.notification_via_fcm = xObjUser.notification_via_fcm;
+									joResult.result_verify.notification_via_email = xObjUser.notification_via_email;
+									joResult.result_verify.notification_via_wa = xObjUser.notification_via_wa;
+									joResult.result_verify.notification_via_telegram =
+										xObjUser.notification_via_telegram;
 								}
 							}
 
