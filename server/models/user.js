@@ -26,6 +26,12 @@ module.exports = (sequelize, DataTypes) => {
 		fcm_token: DataTypes.STRING,
 		fcm_token_web: DataTypes.STRING,
 		fcm_token_expedition: DataTypes.STRING,
+
+		notification_via_fcm: DataTypes.BOOLEAN,
+		notification_via_email: DataTypes.BOOLEAN,
+		notification_via_wa: DataTypes.BOOLEAN,
+		notification_via_telegram: DataTypes.BOOLEAN,
+
 		createdAt: {
 			type: DataTypes.DATE,
 			defaultValue: sequelize.literal('NOW()'),
