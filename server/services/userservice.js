@@ -561,7 +561,11 @@ class UserService {
 											: '',
 									username: validateEmail.name,
 									employee_id: xEmployeeId,
-									employee: xEmployeeDetail
+									employee: xEmployeeDetail,
+									notification_via_fcm: validateEmail.notification_via_fcm,
+									notification_via_email: validateEmail.notification_via_email,
+									notification_via_wa: validateEmail.notification_via_wa,
+									notification_via_telegram: validateEmail.notification_via_telegram
 								});
 							} else {
 								return JSON.stringify(xJoResult);
@@ -988,6 +992,12 @@ class UserService {
 									joResult.result_verify.user_level_id = xObjUser.user_level_id;
 									joResult.result_verify.user_level = xObjUser.user_level;
 									joResult.result_verify.company = xObjUser.company;
+
+									joResult.result_verify.notification_via_fcm = xObjUser.notification_via_fcm;
+									joResult.result_verify.notification_via_email = xObjUser.notification_via_email;
+									joResult.result_verify.notification_via_wa = xObjUser.notification_via_wa;
+									joResult.result_verify.notification_via_telegram =
+										xObjUser.notification_via_telegram;
 								}
 							}
 
@@ -1380,6 +1390,57 @@ class UserService {
 			xJoResult = {
 				status_code: '-99',
 				status_msg: `[UserService.refreshToken] Exception: ${e.message}`
+			};
+		}
+
+		return xJoResult;
+	}
+
+	async generateEncryptedPassword(pParam) {
+		let xPassword = await utilSecureInstance.generateEncryptedPassword(pParam.password);
+		return {
+			status_code: '00',
+			status_msg: 'OK',
+			password: xPassword
+		};
+	}
+
+	async doUpdateNotificationSetting(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = false;
+		var xDecId = null;
+		var xParamUpdate = {};
+
+		try {
+			if (pParam.hasOwnProperty('user_id')) {
+				if (pParam.user_id != '') {
+					xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+					if (xDecId.status_code == '00') {
+						pParam.user_id = xDecId.decrypted;
+						xFlagProcess = true;
+					} else {
+						xJoResult = xDecId;
+					}
+				}
+			}
+
+			if (xFlagProcess) {
+				xParamUpdate.id = pParam.user_id;
+				if (pParam.type_notification == 'fcm') {
+					xParamUpdate.notification_via_fcm = pParam.flag;
+				} else if (pParam.type_notification == 'email') {
+					xParamUpdate.notification_via_email = pParam.flag;
+				} else if (pParam.type_notification == 'wa') {
+					xParamUpdate.notification_via_wa = pParam.flag;
+				} else if (pParam.type_notification == 'telegram') {
+					xParamUpdate.notification_via_telegram = pParam.flag;
+				}
+				xJoResult = await userRepoInstance.saveGeneral(xParamUpdate, 'update');
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `[UserService.doUpdateNotification] Exception: ${e.message}`
 			};
 		}
 
