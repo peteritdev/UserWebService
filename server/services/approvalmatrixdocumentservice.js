@@ -231,6 +231,18 @@ class ApprovalMatrixDocumentService {
 										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.employee_id,
 									user_name: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.name,
 									email: xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user.email,
+									notification_via_fcm:
+										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user
+											.notification_via_fcm,
+									notification_via_email:
+										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user
+											.notification_via_email,
+									notification_via_wa:
+										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user
+											.notification_via_wa,
+									notification_via_telegram:
+										xRowsApprovalMatrix[index].approval_matrix_approver_user[j].user
+											.notification_via_telegram,
 									status: 0
 								});
 							}

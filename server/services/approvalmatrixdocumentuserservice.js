@@ -102,7 +102,11 @@ class ApprovalMatrixDocumentUserService {
 										user_id: xJaDataApproverUser[j].user.id,
 										user_name: xJaDataApproverUser[j].user.name,
 										email: xJaDataApproverUser[j].user.email,
-										status: xJaDataApproverUser[j].status
+										status: xJaDataApproverUser[j].status,
+										notification_via_fcm: xJaDataApproverUser[j].user.notification_via_fcm,
+										notification_via_email: xJaDataApproverUser[j].user.notification_via_email,
+										notification_via_wa: xJaDataApproverUser[j].user.notification_via_wa,
+										notification_via_telegram: xJaDataApproverUser[j].user.notification_via_telegram
 									});
 								}
 
