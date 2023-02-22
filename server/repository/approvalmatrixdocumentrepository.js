@@ -30,7 +30,16 @@ class ApprovalMatrixDocumentRepository {
 				as: 'approval_matrix_document_user',
 				include: [
 					{
-						attributes: [ 'id', 'name', 'email' ],
+						attributes: [
+							'id',
+							'name',
+							'email',
+							'employee_id',
+							'notification_via_fcm',
+							'notification_via_email',
+							'notification_via_wa',
+							'notification_via_telegram'
+						],
 						model: _modelUser,
 						as: 'user'
 					}
@@ -66,6 +75,16 @@ class ApprovalMatrixDocumentRepository {
 			if (pParam.user_id != '') {
 				xWhereAnd.push({
 					'$approval_matrix_document_user.user_id$': pParam.user_id
+				});
+			}
+		}
+
+		if (pParam.hasOwnProperty('mode')) {
+			if (pParam.mode == 'not_approve_yet') {
+				xWhereAnd.push({
+					total_approved: {
+						[Op.lt]: sequelize.col('min_approver')
+					}
 				});
 			}
 		}

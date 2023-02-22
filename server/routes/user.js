@@ -124,4 +124,13 @@ module.exports = (app) => {
 		check('refresh_token').not().isEmpty().withMessage('Refresh token is required')
 	];
 	app.post(rootAPIPath + 'user/refresh_token', arrValidateLogin, userController.refreshToken);
+
+	var arrValidateLogin = [ check('password').not().isEmpty().withMessage('Password is required') ];
+	app.post(rootAPIPath + 'user/generate_password', arrValidateLogin, userController.generateEncryptedPassword);
+
+	var arrValidateFCMToken = [
+		check('type_notification').not().isEmpty().withMessage('Parameter type_notification can not be empty'),
+		check('flag', 'Status must be boolean type').not().isEmpty().isBoolean()
+	];
+	app.post(rootAPIPath + 'user/notification_setting', arrValidateFCMToken, userController.updateNotificationSetting);
 };

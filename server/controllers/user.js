@@ -33,7 +33,9 @@ module.exports = {
 	updateFCMToken,
 	deleteUserByEmployeeId,
 	nonActiveByEmployeeId,
-	refreshToken
+	refreshToken,
+	generateEncryptedPassword,
+	updateNotificationSetting
 };
 
 async function list(req, res) {
@@ -548,4 +550,46 @@ async function refreshToken(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(joResult);
+}
+
+async function generateEncryptedPassword(req, res) {
+	var joResult;
+
+	// Validate first
+	var errors = validationResult(req).array();
+	if (errors.length != 0) {
+		joResult = JSON.stringify({
+			status_code: '-99',
+			status_msg: 'Parameter has problem',
+			error_msg: errors
+		});
+	} else {
+		joResult = await userServiceInstance.generateEncryptedPassword(req.body);
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(joResult);
+}
+
+async function updateNotificationSetting(req, res) {
+	var xJoResult;
+	var errors = null;
+
+	var xOAuthResult = await userServiceInstance.verifyToken({
+		token: req.headers['x-token'],
+		method: req.headers['x-method']
+	});
+
+	xOAuthResult = JSON.parse(xOAuthResult);
+
+	if (xOAuthResult.status_code == '00') {
+		req.body.user_id = xOAuthResult.result_verify.id;
+		xJoResult = await userServiceInstance.doUpdateNotificationSetting(req.body);
+		xJoResult = JSON.stringify(xJoResult);
+	} else {
+		xJoResult = xOAuthResult;
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(xJoResult);
 }

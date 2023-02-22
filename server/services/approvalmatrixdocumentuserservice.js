@@ -8,9 +8,8 @@ const Op = sequelize.Op;
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-
-const env         = process.env.NODE_ENV || 'localhost';
-const config      = require(__dirname + '/../config/config.json')[env];
+const env = process.env.NODE_ENV || 'localhost';
+const config = require(__dirname + '/../config/config.json')[env];
 
 //Repository
 const ApplicationMatrixDocumentRepository = require('../repository/approvalmatrixdocumentrepository.js');
@@ -25,210 +24,226 @@ const { jobs } = require('googleapis/build/src/apis/jobs');
 const _utilInstance = new Utility();
 
 class ApprovalMatrixDocumentUserService {
-    constructor(){}    
+	constructor() {}
 
-    async confirmDocument(pParam){
+	async confirmDocument(pParam) {
+		var xJoResult = {};
+		var xAct = pParam.act;
+		delete pParam.xAct;
+		var xFlagProcess = true;
+		var xDecId = null;
 
-        var xJoResult = {};
-        var xAct = pParam.act;
-        delete pParam.xAct;
-        var xFlagProcess = true;
-        var xDecId = null;
+		if (pParam.hasOwnProperty('document_id') && pParam.hasOwnProperty('user_id')) {
+			if (pParam.document_id != '' && pParam.user_id != '') {
+				xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
+				if (xDecId.status_code == '00') {
+					pParam.document_id = xDecId.decrypted;
+					xDecId = await _utilInstance.decrypt(pParam.user_id, config.cryptoKey.hashKey);
+					if (xDecId.status_code == '00') {
+						pParam.user_id = xDecId.decrypted;
+					} else {
+						xJoResult = xDecId;
+						xFlagProcess = false;
+					}
+				} else {
+					xJoResult = xDecId;
+					xFlagProcess = false;
+				}
+			}
+		}
 
-        if( pParam.hasOwnProperty( 'document_id' ) && pParam.hasOwnProperty('user_id') ){
-            if( pParam.document_id != '' && pParam.user_id != '' ){
-                xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
-                if( xDecId.status_code == '00' ){
-                    pParam.document_id = xDecId.decrypted;
-                    xDecId = await _utilInstance.decrypt( pParam.user_id, config.cryptoKey.hashKey );
-                    if( xDecId.status_code == '00' ){
-                        pParam.user_id = xDecId.decrypted;
-                    }else{
-                        xJoResult = xDecId;
-                        xFlagProcess = false;
-                    }
-                }else{
-                    xJoResult = xDecId;
-                    xFlagProcess = false;
-                }
-            }
-        }
+		if (xFlagProcess) {
+			// Check if this user allow to approve or not
+			// console.log(">>> HERE : " + JSON.stringify(pParam));
+			var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove({
+				document_id: pParam.document_id,
+				user_id: pParam.user_id,
+				application_id: pParam.application_id
+			});
+			if (xJoIsAllow.status_code == '00') {
+				if (xJoIsAllow.is_allow_approve == 1) {
+					pParam.updated_by = pParam.user_id;
+					pParam.updated_by_name = pParam.user_name;
 
-        if( xFlagProcess ){
+					var xResultConfirm = await _repoInstance.confirmDocument(pParam);
+					// Check if document already approve all or not
+					var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved({
+						document_id: pParam.document_id,
+						table_name: pParam.table_name,
+						application_id: pParam.application_id
+					});
 
-            // Check if this user allow to approve or not
-            // console.log(">>> HERE : " + JSON.stringify(pParam));
-            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id, application_id: pParam.application_id } );
-            if( xJoIsAllow.status_code == '00' ){
-                if( xJoIsAllow.is_allow_approve == 1 ){
-                    pParam.updated_by = pParam.user_id;
-                    pParam.updated_by_name = pParam.user_name;
+					console.log('>>> xJoAlreadyApproveAll: ' + JSON.stringify(xJoAlreadyApproveAll));
 
-                    var xResultConfirm = await _repoInstance.confirmDocument( pParam );
-                    // Check if document already approve all or not
-                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { 
-                        document_id: pParam.document_id,
-                        table_name: pParam.table_name,
-                        application_id: pParam.application_id,
-                    } );
+					if (xJoAlreadyApproveAll.status_code == '00') {
+						var xDocumentApproved = false;
+						if (xJoAlreadyApproveAll.total == 0) {
+							xDocumentApproved = true;
+						}
+						xJoResult = xResultConfirm;
+						xJoResult.status_document_approved = xDocumentApproved;
 
-                    console.log(">>> xJoAlreadyApproveAll: " + JSON.stringify(xJoAlreadyApproveAll))
+						// Get Approver User with the status
+						var xJaApprovalMatrixDocument = [];
+						var xResultApprovalMatrixDocument = await _documentRepoInstance.list({
+							document_id: pParam.document_id,
+							table_name: pParam.table_name,
+							application_id: pParam.application_id,
+							mode: 'not_approve_yet'
+						});
+						if (xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0) {
+							var xRows = xResultApprovalMatrixDocument.rows;
+							for (var i in xRows) {
+								var xJaApproverUser = [];
+								var xJaDataApproverUser = xRows[i].approval_matrix_document_user;
+								for (var j in xJaDataApproverUser) {
+									xJaApproverUser.push({
+										employee_id: xJaDataApproverUser[j].user.employee_id,
+										user_id: xJaDataApproverUser[j].user.id,
+										user_name: xJaDataApproverUser[j].user.name,
+										email: xJaDataApproverUser[j].user.email,
+										status: xJaDataApproverUser[j].status,
+										notification_via_fcm: xJaDataApproverUser[j].user.notification_via_fcm,
+										notification_via_email: xJaDataApproverUser[j].user.notification_via_email,
+										notification_via_wa: xJaDataApproverUser[j].user.notification_via_wa,
+										notification_via_telegram: xJaDataApproverUser[j].user.notification_via_telegram
+									});
+								}
 
-                    if( xJoAlreadyApproveAll.status_code == '00' ){
-                        var xDocumentApproved = false;
-                        if( xJoAlreadyApproveAll.total == 0 ){
-                            xDocumentApproved = true;
-                        }
-                        xJoResult = xResultConfirm;
-                        xJoResult.status_document_approved = xDocumentApproved;
+								xJaApprovalMatrixDocument.push({
+									sequence: xRows[i].sequence,
+									approver_user: xJaApproverUser
+								});
+							}
+						}
 
-                        // Get Approver User with the status
-                        var xJaApprovalMatrixDocument = [];
-                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id, table_name: pParam.table_name, application_id: pParam.application_id} );
-                        if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
-                            var xRows = xResultApprovalMatrixDocument.rows;
-                            for( var i in xRows ){
+						xJoResult.approvers = xJaApprovalMatrixDocument;
+					} else {
+						xJoResult = xJoAlreadyApproveAll;
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'You not allow to approve this document.'
+					};
+				}
+			} else {
+				xJoResult = xJoIsAllow;
+			}
+		}
 
-                                var xJaApproverUser = [];
-                                var xJaDataApproverUser = xRows[i].approval_matrix_document_user;
-                                for( var j in xJaDataApproverUser ){
-                                    xJaApproverUser.push({
-                                        user_id: xJaDataApproverUser[j].user.id,
-                                        user_name: xJaDataApproverUser[j].user.name,
-                                        email: xJaDataApproverUser[j].user.email,
-                                        status: xJaDataApproverUser[j].status,
-                                    })
-                                }
+		return xJoResult;
+	}
 
-                                xJaApprovalMatrixDocument.push({
-                                    sequence: xRows[i].sequence,
-                                    approver_user: xJaApproverUser,
-                                });
-                            }
-                        }
+	async confirmDocumentViaEmail(pParam) {
+		var xJoResult = {};
+		var xFlagProcess = true;
+		var xDecId = null;
 
-                        xJoResult.approvers = xJaApprovalMatrixDocument;
+		// if( pParam.hasOwnProperty( 'document_id' ) && pParam.hasOwnProperty('user_id') ){
+		//     if( pParam.document_id != '' && pParam.user_id != '' ){
+		//         xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
+		//         if( xDecId.status_code == '00' ){
+		//             pParam.document_id = xDecId.decrypted;
+		//         }else{
+		//             xJoResult = xDecId;
+		//             xFlagProcess = false;
+		//         }
+		//     }
+		// }
 
-                    }else{
-                        xJoResult = xJoAlreadyApproveAll;
-                    }
-                }else{
-                    xJoResult = {
-                        status_code: '-99',
-                        status_msg: 'You not allow to approve this document.',
-                    }
-                }
-            }else{
-                xJoResult = xJoIsAllow;
-            }
-            
-        }
+		if (xFlagProcess) {
+			// Check if this user allow to approve or not
+			// console.log(">>> HERE : " + JSON.stringify(pParam));
+			var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove({
+				document_id: pParam.document_id,
+				user_id: pParam.user_id,
+				application_id: pParam.application_id,
+				table_name: pParam.table_name
+			});
+			if (xJoIsAllow.status_code == '00') {
+				if (xJoIsAllow.is_allow_approve == 1) {
+					pParam.updated_by = pParam.user_id;
+					// pParam.updated_by_name = pParam.user_name;
 
-        return xJoResult;
-    }
+					var xResultConfirm = await _repoInstance.confirmDocument(pParam);
+					// Check if document already approve all or not
+					var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved({
+						document_id: pParam.document_id,
+						application_id: pParam.application_id,
+						table_name: pParam.table_name
+					});
+					if (xJoAlreadyApproveAll.status_code == '00') {
+						var xDocumentApproved = false;
+						if (xJoAlreadyApproveAll.total == 0) {
+							xDocumentApproved = true;
+						}
+						xJoResult = xResultConfirm;
+						xJoResult.status_document_approved = xDocumentApproved;
 
-    async confirmDocumentViaEmail(pParam){
+						// Get Approver User with the status
+						var xJaApprovalMatrixDocument = [];
+						var xResultApprovalMatrixDocument = await _documentRepoInstance.list({
+							document_id: pParam.document_id,
+							application_id: pParam.application_id,
+							table_name: pParam.table_name
+						});
+						if (xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0) {
+							var xRows = xResultApprovalMatrixDocument.rows;
+							for (var i in xRows) {
+								var xJaApproverUser = [];
+								var xJaDataApproverUser = xRows[i].approval_matrix_document_user;
+								for (var j in xJaDataApproverUser) {
+									xJaApproverUser.push({
+										user_id: xJaDataApproverUser[j].user.id,
+										user_name: xJaDataApproverUser[j].user.name,
+										email: xJaDataApproverUser[j].user.email,
+										status: xJaDataApproverUser[j].status
+									});
+								}
 
-        var xJoResult = {};
-        var xFlagProcess = true;
-        var xDecId = null;
+								xJaApprovalMatrixDocument.push({
+									sequence: xRows[i].sequence,
+									approver_user: xJaApproverUser
+								});
+							}
+						}
 
-        // if( pParam.hasOwnProperty( 'document_id' ) && pParam.hasOwnProperty('user_id') ){
-        //     if( pParam.document_id != '' && pParam.user_id != '' ){
-        //         xDecId = await _utilInstance.decrypt( pParam.document_id, config.cryptoKey.hashKey );
-        //         if( xDecId.status_code == '00' ){
-        //             pParam.document_id = xDecId.decrypted;                    
-        //         }else{
-        //             xJoResult = xDecId;
-        //             xFlagProcess = false;
-        //         }
-        //     }
-        // }
+						xJoResult.approvers = xJaApprovalMatrixDocument;
+					} else {
+						xJoResult = xJoAlreadyApproveAll;
+					}
+				} else {
+					xJoResult = {
+						status_code: '-99',
+						status_msg: 'You not allow to approve this document.'
+					};
+				}
+			} else {
+				xJoResult = xJoIsAllow;
+			}
+		}
 
-        if( xFlagProcess ){
+		return xJoResult;
+	}
 
-            // Check if this user allow to approve or not
-            // console.log(">>> HERE : " + JSON.stringify(pParam));
-            var xJoIsAllow = await _documentRepoInstance.isUserAllowApprove( { document_id: pParam.document_id, user_id: pParam.user_id, application_id: pParam.application_id, table_name: pParam.table_name } );
-            if( xJoIsAllow.status_code == '00' ){
-                if( xJoIsAllow.is_allow_approve == 1 ){
-                    pParam.updated_by = pParam.user_id;
-                    // pParam.updated_by_name = pParam.user_name;
+	async delete(pParam) {
+		var xJoResult;
+		var xFlagProcess = true;
 
-                    var xResultConfirm = await _repoInstance.confirmDocument( pParam );
-                    // Check if document already approve all or not
-                    var xJoAlreadyApproveAll = await _repoInstance.isDocumentAlreadyApproved( { document_id: pParam.document_id, application_id: pParam.application_id, table_name: pParam.table_name } );
-                    if( xJoAlreadyApproveAll.status_code == '00' ){
-                        var xDocumentApproved = false;
-                        if( xJoAlreadyApproveAll.total == 0 ){
-                            xDocumentApproved = true;
-                        }
-                        xJoResult = xResultConfirm;
-                        xJoResult.status_document_approved = xDocumentApproved;
+		var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
+		if (xDecId.status_code == '00') {
+			pParam.document_id = xDecId.decrypted;
+		} else {
+			xFlagProcess = false;
+			xJoResult = xDecId;
+		}
 
-                        // Get Approver User with the status
-                        var xJaApprovalMatrixDocument = [];
-                        var xResultApprovalMatrixDocument = await _documentRepoInstance.list( {document_id: pParam.document_id, application_id: pParam.application_id, table_name: pParam.table_name} );
-                        if( xResultApprovalMatrixDocument != null && xResultApprovalMatrixDocument.count > 0 ){
-                            var xRows = xResultApprovalMatrixDocument.rows;
-                            for( var i in xRows ){
+		var xDeleteResult = await _repoInstance.deletePermanent(pParam);
+		xJoResult = xDeleteResult;
 
-                                var xJaApproverUser = [];
-                                var xJaDataApproverUser = xRows[i].approval_matrix_document_user;
-                                for( var j in xJaDataApproverUser ){
-                                    xJaApproverUser.push({
-                                        user_id: xJaDataApproverUser[j].user.id,
-                                        user_name: xJaDataApproverUser[j].user.name,
-                                        email: xJaDataApproverUser[j].user.email,
-                                        status: xJaDataApproverUser[j].status,
-                                    })
-                                }
-
-                                xJaApprovalMatrixDocument.push({
-                                    sequence: xRows[i].sequence,
-                                    approver_user: xJaApproverUser,
-                                });
-                            }
-                        }
-
-                        xJoResult.approvers = xJaApprovalMatrixDocument;
-
-                    }else{
-                        xJoResult = xJoAlreadyApproveAll;
-                    }
-                }else{
-                    xJoResult = {
-                        status_code: '-99',
-                        status_msg: 'You not allow to approve this document.',
-                    }
-                }
-            }else{
-                xJoResult = xJoIsAllow;
-            }
-            
-        }
-
-        return xJoResult;
-    }
-
-    async delete( pParam ){
-        var xJoResult;
-        var xFlagProcess = true;  
-
-        var xDecId = await _utilInstance.decrypt(pParam.document_id, config.cryptoKey.hashKey);
-        if( xDecId.status_code == "00" ){
-            pParam.document_id = xDecId.decrypted;                               
-        }else{
-            xFlagProcess = false;
-            xJoResult = xDecId;
-        }
-
-        var xDeleteResult = await _repoInstance.deletePermanent( pParam );
-        xJoResult = xDeleteResult;
-
-        return xJoResult;
-    }
-
+		return xJoResult;
+	}
 }
 
 module.exports = ApprovalMatrixDocumentUserService;
