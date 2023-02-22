@@ -12,7 +12,7 @@ const utilInstance = new Util();
 class JwtUtil {
 	constructor() {}
 
-	async verifyJWT(pToken) {
+	async verifyJWT(pToken, pScope = null) {
 		var jsonResult;
 		let xPublicKey = fs.readFileSync(__dirname + '/../../public.pem');
 
@@ -33,6 +33,7 @@ class JwtUtil {
 					result_verify: resultVerify
 				};
 			} catch (err) {
+				// console.log(`>>> err: ${err.name}`);
 				if (err.name == 'TokenExpiredError') {
 					let xDecoded = await jwt.decode(pToken, { complete: true });
 					if (xDecoded.hasOwnProperty('payload')) {
@@ -43,8 +44,17 @@ class JwtUtil {
 							}
 						}
 					}
+
+					let xStatusCode = '';
+					if (pScope == null) {
+						xStatusCode = '-99';
+					} else {
+						if (pScope == 'refresh_token') {
+							xStatusCode = '00';
+						}
+					}
 					jsonResult = {
-						status_code: '-99',
+						status_code: xStatusCode,
 						status_msg: `${err.name}`,
 						result_verify: xDecoded.payload
 					};
