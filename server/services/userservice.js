@@ -1272,8 +1272,11 @@ class UserService {
 		try {
 			if (pParam.hasOwnProperty('token') && pParam.hasOwnProperty('refresh_token')) {
 				if (pParam.token != '' && pParam.refresh_token != '') {
-					let xResultVerifyOriginToken = await jwt_utilInstance.verifyJWT(pParam.token);
-					let xResultVerifyRefreshToken = await jwt_utilInstance.verifyJWT(pParam.refresh_token);
+					let xResultVerifyOriginToken = await jwt_utilInstance.verifyJWT(pParam.token, 'refresh_token');
+					let xResultVerifyRefreshToken = await jwt_utilInstance.verifyJWT(
+						pParam.refresh_token,
+						'refresh_token'
+					);
 					if (xResultVerifyOriginToken.status_code == '00') {
 						if (xResultVerifyRefreshToken.status_code == '00') {
 							// Check the value of token
