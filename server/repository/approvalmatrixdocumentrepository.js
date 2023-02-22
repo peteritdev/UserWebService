@@ -331,31 +331,53 @@ class ApprovalMatrixDocumentRepository {
 
 		// console.log(">>> HERE : "+  JSON.stringify(xObjJsonWhere));
 
-		xSql =
-			' SELECT amd.min_approver, amd.total_approved, ' +
-			'    ( ' +
-			'        CASE WHEN sequence = 1 THEN ( ' +
-			'               CASE WHEN total_approved < min_approver  then 1 else 0 end ' +
-			'        ) ' +
-			'        WHEN sequence > 1 THEN ( ' +
-			'            select case when total_approved < min_approver then 0 else 1 end ' +
-			'            from tr_approvalmatrixdocuments amd_sub inner join tr_approvalmatrixdocumentusers amdu_sub ' +
-			'                on amd_sub.id = amdu_sub.approval_matrix_document_id ' +
-			'            where amd_sub.document_id = :documentId ' +
-			'            and amd_sub.application_id = :applicationId ' +
-			// '            -- and sequence = ( amd.sequence - 1 ) LIMIT 1 ' +
-			'			 order by "sequence" asc LIMIT 1 ' +
-			/* Peter: Above line im remark to support approval matrix based on sequence ordering not by number sequence.
-					For example if i set sequence 1,2,3 so it run normally because it check the next sequence is valid or not
-					If i set 1,3 it can not allow the sequence number 3 to approve, because after 1, it must be 2 not 3 but in matrix i set 1 and 3
-					Why i set 1,3 for this example? Because it support positioning qrcode on FPB
-			*/
-			'        ) ELSE 0 END ' +
-			'    ) AS "is_your_turn" ' +
-			' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' +
-			'  ON amd.id = amdu.approval_matrix_document_id ' +
-			' WHERE amd.document_id = :documentId and amd.application_id = :applicationId and amd.total_approved < min_approver ' +
-			'    AND amdu.user_id = :userId';
+		// xSql =
+		// 	' SELECT amd.min_approver, amd.total_approved, ' +
+		// 	'    ( ' +
+		// 	'        CASE WHEN sequence = 1 THEN ( ' +
+		// 	'               CASE WHEN total_approved < min_approver  then 1 else 0 end ' +
+		// 	'        ) ' +
+		// 	'        WHEN sequence > 1 THEN ( ' +
+		// 	'            select case when total_approved < min_approver then 0 else 1 end ' +
+		// 	'            from tr_approvalmatrixdocuments amd_sub inner join tr_approvalmatrixdocumentusers amdu_sub ' +
+		// 	'                on amd_sub.id = amdu_sub.approval_matrix_document_id ' +
+		// 	'            where amd_sub.document_id = :documentId ' +
+		// 	'            and amd_sub.application_id = :applicationId ' +
+		// 	// '            -- and sequence = ( amd.sequence - 1 ) LIMIT 1 ' +
+		// 	'			 order by "sequence" asc LIMIT 1 ' +
+		// 	/* Peter: Above line im remark to support approval matrix based on sequence ordering not by number sequence.
+		// 			For example if i set sequence 1,2,3 so it run normally because it check the next sequence is valid or not
+		// 			If i set 1,3 it can not allow the sequence number 3 to approve, because after 1, it must be 2 not 3 but in matrix i set 1 and 3
+		// 			Why i set 1,3 for this example? Because it support positioning qrcode on FPB
+		// 	*/
+		// 	'        ) ELSE 0 END ' +
+		// 	'    ) AS "is_your_turn" ' +
+		// 	' FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu ' +
+		// 	'  ON amd.id = amdu.approval_matrix_document_id ' +
+		// 	' WHERE amd.document_id = :documentId and amd.application_id = :applicationId and amd.total_approved < min_approver ' +
+		// 	'    AND amdu.user_id = :userId';
+
+		xSql = `SELECT amd.min_approver, amd.total_approved, amdu.user_id, amdu.user_name,
+						CASE WHEN sequence = 1 THEN (
+						CASE WHEN total_approved < min_approver  then 1 else 0 end
+						)	
+						WHEN sequence > 1 THEN (
+						CASE WHEN amdu.user_id IN (
+							SELECT user_id
+							FROM tr_approvalmatrixdocumentusers b INNER JOIN (
+								select id, document_id
+								from tr_approvalmatrixdocuments 
+								where document_id = :documentId AND application_id = :applicationId AND total_approved < min_approver 
+								order by sequence LIMIT 1
+							) a ON a.id = b.approval_matrix_document_id
+						) THEN 1 ELSE 0 END
+						)ELSE 0 END AS "is_your_turn"
+				FROM tr_approvalmatrixdocuments amd inner join tr_approvalmatrixdocumentusers amdu  
+				ON amd.id = amdu.approval_matrix_document_id 
+				WHERE amd.document_id = :documentId 
+				and amd.application_id = :applicationId
+				and amd.total_approved < min_approver  
+				AND amdu.user_id = :userId`;
 
 		var xDtQuery = await sequelize.query(xSql, {
 			replacements: xObjJsonWhere,
