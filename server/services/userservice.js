@@ -159,9 +159,9 @@ class UserService {
 							password: xClearPassword
 						};
 						// This line used for notify to user that his/her account already created and inform them the login information
-						// xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
-						// 	xParamNotif
-						// );
+						xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
+							xParamNotif
+						);
 					} else if (param.type == 2) {
 						var notifyParam = {
 							email: param.email,
