@@ -141,7 +141,7 @@ class UserService {
 
 		if (result == null) {
 			console.log(`>>> param: ${JSON.stringify(param)}`);
-			await _utilInstance.writeLog(`UserService.doRegister`, `>>> param: ${JSON.stringify(param)}`, 'error');
+			// await _utilInstance.writeLog(`UserService.doRegister`, `>>> param: ${JSON.stringify(param)}`, 'error');
 			joResult = await userRepoInstance.registerUser(param);
 
 			if (joResult.status_code == '00') {
