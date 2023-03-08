@@ -559,10 +559,12 @@ class UserService {
 											: 0,
 									user_type: validateEmail.type,
 									sanqua_company_id:
-										validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
+										xEmployeeInfo.token_data.data.company != null
+											? xEmployeeInfo.token_data.data.company.id
+											: null,
 									sanqua_company_name:
-										validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
-											? validateEmail.company.alias
+										xEmployeeInfo.token_data.data.company != null
+											? xEmployeeInfo.token_data.data.company.alias
 											: '',
 									username: validateEmail.name,
 									employee_id: xEmployeeId,
