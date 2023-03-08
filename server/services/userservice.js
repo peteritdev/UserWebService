@@ -493,7 +493,11 @@ class UserService {
 								}
 							});
 
-							console.log(`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`);
+							await _utilInstance.writeLog(
+								'xEmployeeInfo',
+								`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`,
+								'debug'
+							);
 
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {
