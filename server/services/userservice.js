@@ -379,7 +379,8 @@ class UserService {
 		// console.log('>>> IP : ' + config.host);
 		// console.log('>>> Port : ' + config.port);
 		// console.log('>>> Param : ' + JSON.stringify(param));
-		console.log(__dirname);
+		// console.log(__dirname);
+		console.log(`>>> Param Login : ${JSON.stringify(param)}`);
 		let xPrivateKey = fs.readFileSync(__dirname + '/../../private.pem');
 
 		if (param.device == 'mobile' || param.device == 'web') {
@@ -492,6 +493,8 @@ class UserService {
 									'x-device': param.device
 								}
 							});
+
+							console.log(`>>> Employee Info : ${JSON.stringify(xEmployeeInfo)}`);
 
 							await _utilInstance.writeLog(
 								'xEmployeeInfo',
