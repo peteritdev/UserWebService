@@ -141,6 +141,7 @@ class UserService {
 
 		if (result == null) {
 			console.log(`>>> param: ${JSON.stringify(param)}`);
+			// await _utilInstance.writeLog(`UserService.doRegister`, `>>> param: ${JSON.stringify(param)}`, 'error');
 			joResult = await userRepoInstance.registerUser(param);
 
 			if (joResult.status_code == '00') {
@@ -159,9 +160,9 @@ class UserService {
 							password: xClearPassword
 						};
 						// This line used for notify to user that his/her account already created and inform them the login information
-						// xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
-						// 	xParamNotif
-						// );
+						xNotificationRegistration = await _notificationServiceInstance.sendNotification_NewEmployeeRegister(
+							xParamNotif
+						);
 					} else if (param.type == 2) {
 						var notifyParam = {
 							email: param.email,
@@ -378,7 +379,8 @@ class UserService {
 		// console.log('>>> IP : ' + config.host);
 		// console.log('>>> Port : ' + config.port);
 		// console.log('>>> Param : ' + JSON.stringify(param));
-		console.log(__dirname);
+		// console.log(__dirname);
+		console.log(`>>> Param Login : ${JSON.stringify(param)}`);
 		let xPrivateKey = fs.readFileSync(__dirname + '/../../private.pem');
 
 		if (param.device == 'mobile' || param.device == 'web') {
@@ -492,16 +494,35 @@ class UserService {
 								}
 							});
 
-							console.log(`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`);
+							// console.log(`>>> Employee Info : ${JSON.stringify(xEmployeeInfo)}`);
+
+							await _utilInstance.writeLog(
+								'xEmployeeInfo',
+								`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`,
+								'debug'
+							);
 
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {
 									// console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
 									if (xEmployeeInfo.token_data.status_code == '00') {
-										if (xEmployeeInfo.token_data.data.app_status == 1) {
-											if (param.device == 'mobile') {
-												//if (param.hasOwnProperty('device_id')) {
-												if (param.device_id != '' && param.device_id != null) {
+										console.log(
+											`>>> xEmployeeInfo.token_data.data.app_status: ${xEmployeeInfo.token_data
+												.data.app_status}`
+										);
+
+										//if (xEmployeeInfo.token_data.data.app_status == 1) {
+										if (param.device == 'mobile') {
+											//if (param.hasOwnProperty('device_id')) {
+
+											console.log(`>>> param.device_id: ${param.device_id}`);
+											console.log(
+												`>>> xEmployeeInfo.token_data.data.device_id : ${xEmployeeInfo
+													.token_data.data.device_id}`
+											);
+
+											if (param.device_id != '' && param.device_id != null) {
+												if (xEmployeeInfo.token_data.data.app_status == 1) {
 													if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
 														xJoResult = {
 															status_code: '-99',
@@ -511,17 +532,45 @@ class UserService {
 														xFlagProcess = true;
 													}
 												} else {
-													xFlagProcess = true;
+													// Check if device_id already use or not
+													var xUrlQuery = `${config.api.employeeService
+														.baseUrl}/info?device_id=${param.device_id}`;
+													console.log(`>>> URL : ${xUrlQuery}`);
+													var xEmployeeInfoByDevice = await _utilInstance.axiosRequest(
+														xUrlQuery,
+														{
+															headers: {
+																'x-token': token,
+																'x-method': 'conventional',
+																'x-device': param.device
+															}
+														}
+													);
+
+													if (xEmployeeInfoByDevice.status_code == '00') {
+														if (xEmployeeInfoByDevice.token_data.status_code == '00') {
+															xJoResult = {
+																status_code: '-99',
+																status_msg:
+																	'You not allowed to login using current device.'
+															};
+														} else {
+															xFlagProcess = true;
+														}
+													}
 												}
-												// } else {
-												// 	xFlagProcess = true;
-												// }
 											} else {
 												xFlagProcess = true;
 											}
+											// } else {
+											// 	xFlagProcess = true;
+											// }
 										} else {
 											xFlagProcess = true;
 										}
+										// } else {
+										// 	xFlagProcess = true;
+										// }
 									}
 								}
 							}
@@ -554,10 +603,12 @@ class UserService {
 											: 0,
 									user_type: validateEmail.type,
 									sanqua_company_id:
-										validateEmail.sanqua_company_id != null ? validateEmail.sanqua_company_id : 0,
+										xEmployeeInfo.token_data.data.company != null
+											? xEmployeeInfo.token_data.data.company.id
+											: null,
 									sanqua_company_name:
-										validateEmail.sanqua_company_id != null && validateEmail.sanqua_company_id != 0
-											? validateEmail.company.alias
+										xEmployeeInfo.token_data.data.company != null
+											? xEmployeeInfo.token_data.data.company.alias
 											: '',
 									username: validateEmail.name,
 									employee_id: xEmployeeId,
