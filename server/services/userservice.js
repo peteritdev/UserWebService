@@ -494,7 +494,7 @@ class UserService {
 								}
 							});
 
-							console.log(`>>> Employee Info : ${JSON.stringify(xEmployeeInfo)}`);
+							// console.log(`>>> Employee Info : ${JSON.stringify(xEmployeeInfo)}`);
 
 							await _utilInstance.writeLog(
 								'xEmployeeInfo',
@@ -506,10 +506,23 @@ class UserService {
 								if (xEmployeeInfo.status_code == '00') {
 									// console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
 									if (xEmployeeInfo.token_data.status_code == '00') {
-										if (xEmployeeInfo.token_data.data.app_status == 1) {
-											if (param.device == 'mobile') {
-												//if (param.hasOwnProperty('device_id')) {
-												if (param.device_id != '' && param.device_id != null) {
+										console.log(
+											`>>> xEmployeeInfo.token_data.data.app_status: ${xEmployeeInfo.token_data
+												.data.app_status}`
+										);
+
+										//if (xEmployeeInfo.token_data.data.app_status == 1) {
+										if (param.device == 'mobile') {
+											//if (param.hasOwnProperty('device_id')) {
+
+											console.log(`>>> param.device_id: ${param.device_id}`);
+											console.log(
+												`>>> xEmployeeInfo.token_data.data.device_id : ${xEmployeeInfo
+													.token_data.data.device_id}`
+											);
+
+											if (param.device_id != '' && param.device_id != null) {
+												if (xEmployeeInfo.token_data.data.app_status == 1) {
 													if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
 														xJoResult = {
 															status_code: '-99',
@@ -519,17 +532,45 @@ class UserService {
 														xFlagProcess = true;
 													}
 												} else {
-													xFlagProcess = true;
+													// Check if device_id already use or not
+													var xUrlQuery = `${config.api.employeeService
+														.baseUrl}/info?device_id=${param.device_id}`;
+													console.log(`>>> URL : ${xUrlQuery}`);
+													var xEmployeeInfoByDevice = await _utilInstance.axiosRequest(
+														xUrlQuery,
+														{
+															headers: {
+																'x-token': token,
+																'x-method': 'conventional',
+																'x-device': param.device
+															}
+														}
+													);
+
+													if (xEmployeeInfoByDevice.status_code == '00') {
+														if (xEmployeeInfoByDevice.token_data.status_code == '00') {
+															xJoResult = {
+																status_code: '-99',
+																status_msg:
+																	'You not allowed to login using current device.'
+															};
+														} else {
+															xFlagProcess = true;
+														}
+													}
 												}
-												// } else {
-												// 	xFlagProcess = true;
-												// }
 											} else {
 												xFlagProcess = true;
 											}
+											// } else {
+											// 	xFlagProcess = true;
+											// }
 										} else {
 											xFlagProcess = true;
 										}
+										// } else {
+										// 	xFlagProcess = true;
+										// }
 									}
 								}
 							}
