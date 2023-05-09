@@ -451,7 +451,7 @@ class UserRepository {
 					user_level_id: param.user_level_id
 				};
 
-				if (pParam.act == 'add_from_employee') {
+				if (param.act == 'add_from_employee') {
 					joDataUpdate.employee_id = param.employee_id;
 				}
 
