@@ -452,7 +452,7 @@ class UserRepository {
 				};
 
 				if (pParam.act == 'add_from_employee') {
-					joDataUpdate.employee_id = pParam.employee_id;
+					joDataUpdate.employee_id = param.employee_id;
 				}
 
 				console.log('>>> Update REpo Param : ');
