@@ -312,6 +312,7 @@ class UserService {
 					if (param.act == 'update_from_employee' && xCheckEmployeeId == null) {
 						// Jika ada update employee di attendance system dan di oAuth tidak ada maka insert manual
 						param.act = 'add_from_employee';
+						param.employee_id = xDec.decrypted;
 					} else {
 						if (param.hasOwnProperty('user_id')) {
 							var xDecUserId = await _utilInstance.decrypt(param.user_id, config.cryptoKey.hashKey);
