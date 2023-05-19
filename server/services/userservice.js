@@ -505,7 +505,7 @@ class UserService {
 
 							if (xEmployeeInfo) {
 								if (xEmployeeInfo.status_code == '00') {
-									// console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
+									console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
 									if (xEmployeeInfo.token_data.status_code == '00') {
 										console.log(
 											`>>> xEmployeeInfo.token_data.data.app_status: ${xEmployeeInfo.token_data
