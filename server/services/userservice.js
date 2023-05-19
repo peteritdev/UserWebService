@@ -572,9 +572,17 @@ class UserService {
 										// } else {
 										// 	xFlagProcess = true;
 										// }
+									} else {
+										console.log(`>>> Stuck Here 1...`);
 									}
+								} else {
+									console.log(`>>> Stuck Here 2 : ${JSON.stringify(xEmployeeInfo)}`);
 								}
+							} else {
+								console.log(`>>> Stuck Here 3...`);
 							}
+
+							console.log(`>>> xFlagProcess : ${xFlagProcess}`);
 
 							// if (xFlagProcess) {
 							if (xFlagProcess) {
