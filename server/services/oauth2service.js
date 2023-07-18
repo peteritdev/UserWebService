@@ -61,7 +61,7 @@ class OAuth2Service {
 								// Generate authorization code
 								let xAuthCode = crypto.randomBytes(16).toString('hex');
 
-								let xExpireTime = moment().add(config.login.oAuth2.simpeg.expireToken, 'hours').unix();
+								let xExpireTime = moment().add(config.login.oAuth2.sanqua.expireToken, 'hours').unix();
 
 								console.log(`>>> Scope : ${pParam.scope}`);
 
@@ -165,7 +165,7 @@ class OAuth2Service {
 			});
 			if (xLogAuthorization.status_code == '00') {
 				if (pParam.scope == xLogAuthorization.data.scope) {
-					let xExpireTokenIn = moment().add(config.login.oAuth2.simpeg.expireAccessToken, 'hours').unix();
+					let xExpireTokenIn = moment().add(config.login.oAuth2.sanqua.expireAccessToken, 'hours').unix();
 					let xToken = jwt.sign(
 						{
 							issued_to: pParam.client_id,
@@ -176,9 +176,9 @@ class OAuth2Service {
 							email: xLogAuthorization.data.email,
 							iat: moment().unix()
 						},
-						config.login.oAuth2.simpeg.secret,
+						config.login.oAuth2.sanqua.secret,
 						{
-							expiresIn: config.login.oAuth2.simpeg.expireAccessToken
+							expiresIn: config.login.oAuth2.sanqua.expireAccessToken
 						}
 					);
 
@@ -233,7 +233,7 @@ class OAuth2Service {
 		try {
 			if (pParam.hasOwnProperty('access_token')) {
 				if (pParam.access_token != '') {
-					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.simpeg.secret);
+					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.sanqua.secret);
 					xJoResult = {
 						status_code: '00',
 						status_msg: 'OK',
@@ -267,7 +267,7 @@ class OAuth2Service {
 		try {
 			if (pParam.hasOwnProperty('access_token')) {
 				if (pParam.access_token != '') {
-					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.simpeg.secret);
+					let xResultVerify = await jwt.verify(pParam.access_token, config.login.oAuth2.sanqua.secret);
 					if (xResultVerify) {
 						let xUserDetail = await userServiceInstance.isEmailExists({
 							email: xResultVerify.email
