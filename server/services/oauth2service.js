@@ -33,7 +33,7 @@ class OAuth2Service {
 		var xJoResult = {};
 
 		try {
-			var xValidateEmail = await userRepoInstance.isEmailExists(pParam);
+			var xValidateEmail = await userRepoInstance.isEmailExists(pParam.email);
 			var xFlagProcess = true;
 
 			if (xValidateEmail != null) {
