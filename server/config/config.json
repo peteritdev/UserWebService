@@ -7,7 +7,7 @@
     "database": "staging_sanqua_oauthdb",
     "host": "10.10.20.5",
     "port":5432,
-    "dialect": "postgres123",
+    "dialect": "postgres",
     "dialectOptions": {
       "dateStrings": true,
       "typeCast": true,

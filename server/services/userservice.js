@@ -487,6 +487,7 @@ class UserService {
 
 							// Version 2:
 							var xUrlQuery = '/' + xEmployeeId;
+							console.log(`>>> xUrlAPI: ${xUrlAPI}`);
 							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
 								headers: {
 									'x-token': token,

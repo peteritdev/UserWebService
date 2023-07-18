@@ -10,6 +10,7 @@ const approvalMatrixApprover = require('./approvalmatrixapprover');
 const approvalMatrixApproverUser = require('./approvalmatrixapproveruser');
 const approvalMatrixDocument = require('./approvalmatrixdocument');
 const notificationTemplate = require('./notificationtemplate');
+const oAuth2 = require('./oauth2');
 const test = require('./test');
 
 module.exports = {
@@ -25,5 +26,6 @@ module.exports = {
 	approvalMatrixApproverUser,
 	approvalMatrixDocument,
 	notificationTemplate,
+	oAuth2,
 	test
 };
