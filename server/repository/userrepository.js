@@ -451,6 +451,10 @@ class UserRepository {
 					user_level_id: param.user_level_id
 				};
 
+				if (param.act == 'add_from_employee') {
+					joDataUpdate.employee_id = param.employee_id;
+				}
+
 				console.log('>>> Update REpo Param : ');
 				console.log('>>> param.act : ' + JSON.stringify(param));
 				console.log(JSON.stringify(joDataUpdate));

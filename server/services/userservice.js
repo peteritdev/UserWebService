@@ -312,6 +312,7 @@ class UserService {
 					if (param.act == 'update_from_employee' && xCheckEmployeeId == null) {
 						// Jika ada update employee di attendance system dan di oAuth tidak ada maka insert manual
 						param.act = 'add_from_employee';
+						param.employee_id = xDec.decrypted;
 					} else {
 						if (param.hasOwnProperty('user_id')) {
 							var xDecUserId = await _utilInstance.decrypt(param.user_id, config.cryptoKey.hashKey);
@@ -486,6 +487,7 @@ class UserService {
 
 							// Version 2:
 							var xUrlQuery = '/' + xEmployeeId;
+							console.log(`>>> xUrlAPI: ${xUrlAPI}`);
 							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
 								headers: {
 									'x-token': token,
@@ -571,9 +573,17 @@ class UserService {
 										// } else {
 										// 	xFlagProcess = true;
 										// }
+									} else {
+										console.log(`>>> Stuck Here 1...: ${JSON.stringify(xEmployeeInfo)}`);
 									}
+								} else {
+									console.log(`>>> Stuck Here 2 : ${JSON.stringify(xEmployeeInfo)}`);
 								}
+							} else {
+								console.log(`>>> Stuck Here 3...`);
 							}
+
+							console.log(`>>> xFlagProcess : ${xFlagProcess}`);
 
 							// if (xFlagProcess) {
 							if (xFlagProcess) {
