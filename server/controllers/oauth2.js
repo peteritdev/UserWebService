@@ -64,7 +64,7 @@ async function tokenInfo(req, res) {
 		xJoResult = await _oAuthService.tokenInfo(req.query);
 	}
 
-	console.log(`>>> req <tokenInfo> : ${JSON.stringify(req)}`);
+	console.log(`>>> req.query <tokenInfo> : ${JSON.stringify(req.query)}`);
 	console.log(`>>> xJoResult <tokenInfo> : ${JSON.stringify(xJoResult)}`);
 
 	res.setHeader('Content-Type', 'application/json');
