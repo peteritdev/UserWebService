@@ -61,7 +61,7 @@ async function tokenInfo(req, res) {
 			error_msg: errors
 		});
 	} else {
-		xJoResult = await _oAuthService.tokenInfo(req.query);
+		xJoResult = await _oAuthService.verifyTokenOAuth2(req.headers);
 	}
 
 	console.log(`>>> req.headers <tokenInfo> : ${JSON.stringify(req.headers)}`);
