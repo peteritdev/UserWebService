@@ -25,6 +25,9 @@ const _clientApplicationServiceInstance = new ClientApplicationService();
 const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 
+const Security = require('../utils/security.js');
+const _utilSecurity = new Security();
+
 class OAuth2Service {
 	constructor() {}
 
@@ -120,6 +123,7 @@ class OAuth2Service {
 		console.log(`>>> pParam oauth2service.token: ${JSON.stringify(pParam)}`);
 
 		try {
+			// console.log(`>>> Client Id : ${pParam.client_id}`);
 			// Validate Client ID and Client Secret
 			let xClientDetail = await _clientApplicationServiceInstance.getByClientId({
 				client_id: pParam.client_id
@@ -128,20 +132,23 @@ class OAuth2Service {
 				xJoResult = xClientDetail;
 				xJoResult.status_msg = 'Invalid client_id value. Please make sure use valid client_id';
 			} else {
-				if (pParam.client_secret != xClientDetail.data.client_secret) {
-					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Invalid client_secret value. Please make sure use valid client_secret'
-					};
-				} else if (pParam.redirect_uri != xClientDetail.data.redirect_uri) {
-					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Invalid redirect_uri value. Please make sure use valid redirect_uri'
-					};
-				} else {
-					if (pParam.grant_type == 'authorization_code') {
+				if (pParam.grant_type == 'authorization_code') {
+					if (pParam.client_secret != xClientDetail.data.client_secret) {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Invalid client_secret value. Please make sure use valid client_secret'
+						};
+					} else if (pParam.redirect_uri != xClientDetail.data.redirect_uri) {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Invalid redirect_uri value. Please make sure use valid redirect_uri'
+						};
+					} else {
 						xJoResult = await this.generateAccessTokenByAuthCode(pParam);
 					}
+				} else if (pParam.grant_type == 'client_credentials') {
+					pParam.client_detail = xClientDetail.data;
+					xJoResult = await this.generateAccessTokenByClientCredential(pParam);
 				}
 			}
 		} catch (e) {
@@ -152,6 +159,44 @@ class OAuth2Service {
 		}
 
 		// console.log(`>>> xJoResult oauth2service.token: ${JSON.stringify(xJoResult)}`);
+
+		return xJoResult;
+	}
+
+	async generateAccessTokenByClientCredential(pParam) {
+		var xJoResult = {};
+
+		try {
+			if (pParam.client_detail != null) {
+				let xExpireTokenIn = moment().add(config.login.oAuth2.bca.expireAccessToken, 'hours').unix();
+				let xToken = jwt.sign(
+					{
+						issued_to: pParam.client_detail.client_id,
+						audience: pParam.client_detail.client_id,
+						user_id: pParam.client_detail.id,
+						email: pParam.client_detail.host,
+						iat: moment().unix()
+					},
+					config.login.oAuth2.bca.secret,
+					{
+						expiresIn: config.login.oAuth2.bca.expireAccessToken
+					}
+				);
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Accepted',
+					token_type: 'Bearer',
+					expires_in: xExpireTokenIn,
+					access_token: xToken,
+					client_id: pParam.client_detail.client_id
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <OAuth2Service.generateAccessTokenByClientCredential>: ${e.message}`
+			};
+		}
 
 		return xJoResult;
 	}
@@ -222,7 +267,7 @@ class OAuth2Service {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <OAuth2Service.generateAccessToken>: ${e.message}`
+				status_msg: `Exception error <OAuth2Service.generateAccessTokenByAuthCode>: ${e.message}`
 			};
 		}
 
@@ -234,9 +279,21 @@ class OAuth2Service {
 			if (pHeaders['authorization'] != '') {
 				var xToken = pHeaders['authorization'].split(' ');
 				if (xToken[0] == 'Bearer') {
-					return this.tokenInfo({
+					let xResultVerifyToken = await this.tokenInfo({
 						access_token: xToken[1]
 					});
+					console.log(`>>> xResultVerifyToken: ${JSON.stringify(xResultVerifyToken)}`);
+					if (xResultVerifyToken.status_code == '00') {
+						let xUserDetail = await userServiceInstance.isEmailExists(xResultVerifyToken.verify.email);
+						if (xUserDetail != null) {
+							return {
+								status_code: '00',
+								status_msg: 'OK',
+								email: xUserDetail.email,
+								name: xUserDetail.name
+							};
+						}
+					}
 				} else {
 					return {
 						status_code: '-99',
@@ -344,6 +401,11 @@ class OAuth2Service {
 		}
 
 		return xJoResult;
+	}
+
+	// BCA Open API Service for Notification
+	async verifyBCASignature(pParam) {
+		return await _utilSecurity.verifyBCASignature(pParam);
 	}
 }
 

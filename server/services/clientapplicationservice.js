@@ -114,7 +114,7 @@ class ClientApplicationService {
 
 		try {
 			let xDetail = await _repoInstance.getByClientID(pParam);
-			console.log(`>>> xDetail :${JSON.stringify(xDetail)}`);
+			// console.log(`>>> xDetail :${JSON.stringify(xDetail)}`);
 
 			if (xDetail) {
 				if (xDetail.status_code == '00') {
@@ -139,7 +139,7 @@ class ClientApplicationService {
 
 					if (xFlagProcess) {
 						xJoData = {
-							id: xDetail.data.id,
+							id: await _utilInstance.encrypt(xDetail.data.id.toString(), config.cryptoKey.hashKey),
 							name: xDetail.data.name,
 							host: xDetail.data.host,
 							redirect_uri: xDetail.data.redirect_uri,
@@ -170,7 +170,7 @@ class ClientApplicationService {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <ClientApplicationService.getById>: ${e.message}`
+				status_msg: `Exception error <ClientApplicationService.getByClientId>: ${e.message}`
 			};
 		}
 
@@ -448,19 +448,30 @@ class ClientApplicationService {
 		var xJoResult = {};
 
 		try {
-			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
-				if (pParam.client_id != '' && pParam.code != '') {
-					let xLogResult = await _repoInstance.getLogByClientIdAndCode({
-						client_id: pParam.client_id,
-						code: pParam.code
-					});
-					xJoResult = xLogResult;
+			if (pParam.grant_type == 'authorization_code') {
+				if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
+					if (pParam.client_id != '' && pParam.code != '') {
+						let xLogResult = await _repoInstance.getLogByClientIdAndCode({
+							client_id: pParam.client_id,
+							code: pParam.code
+						});
+						xJoResult = xLogResult;
+					}
+				}
+			} else if (pParam.grant_type == 'client_credentials') {
+				if (pParam.hasOwnProperty('client_id')) {
+					if (pParam.client_id != '' && pParam.code != '') {
+						let xLogResult = await _repoInstance.getLogByClientIdAndCode({
+							client_id: pParam.client_id
+						});
+						xJoResult = xLogResult;
+					}
 				}
 			}
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <ClientApplicationService.getByClientIdAndState>: ${e.message}`
+				status_msg: `Exception error <ClientApplicationService.getLogByClientIdAndCode>: ${e.message}`
 			};
 		}
 

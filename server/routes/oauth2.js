@@ -1,6 +1,7 @@
 const _oAuthController = require('../controllers').oAuth2;
 
-const { check, validationResult } = require('express-validator');
+const { check, validationResult, body, header } = require('express-validator');
+const { head } = require('request');
 
 var _rootAPIPath = '/api/oauth2/v1/';
 
@@ -41,6 +42,15 @@ module.exports = (app) => {
 		// check('scope').not().isEmpty().withMessage('Parameter scope is required')
 	];
 	app.post(_rootAPIPath + 'access_token', arrValidate, _oAuthController.token);
+
+	arrValidate = [];
+	arrValidate = [
+		body('grantType').not().isEmpty().withMessage('Invalid mandatory field [grantType]'),
+		header('X-TIMESTAMP').not().isEmpty().withMessage('Invalid mandatory field [X-TIMESTAMP]'),
+		header('X-CLIENTKEY').not().isEmpty().withMessage('Invalid mandatory field [X-CLIENTKEY]'),
+		header('X-SIGNATURE').not().isEmpty().withMessage('Invalid mandatory field [X-SIGNATURE]')
+	];
+	app.post(_rootAPIPath + 'bca/access_token', arrValidate, _oAuthController.accessTokenBCA);
 
 	arrValidate = [];
 	app.get(_rootAPIPath + 'userinfo', arrValidate, _oAuthController.tokenInfo);

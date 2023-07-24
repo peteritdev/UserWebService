@@ -2,12 +2,32 @@
 const NotificationService = require('../services/notificationservice.js');
 const _serviceInstance = new NotificationService();
 
+// Test Service
+const TestService = require('../services/testservice.js');
+const _testService = new TestService();
+
 // Validation Parameter
 const { check, validationResult } = require('express-validator');
 
 module.exports = {
-	testSendNewRegister
+	testSendNewRegister,
+	generateBCASignature,
+	verifyBCASignature
 };
+
+async function verifyBCASignature(req, res) {
+	let xJoResult = await _testService.verifyBCASignature(req.body);
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(xJoResult);
+}
+
+async function generateBCASignature(req, res) {
+	// req.body.time_stamp = req.headers['X-TIMESTAMP'];
+	// req.body.client_id = req.headers['X-CLIENTKEY'];
+	let xJoResult = await _testService.generateBCASignature(req.body);
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(xJoResult);
+}
 
 async function testSendNewRegister(req, res) {
 	var joResult;
