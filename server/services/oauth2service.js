@@ -229,6 +229,34 @@ class OAuth2Service {
 		return xJoResult;
 	}
 
+	async verifyTokenOAuth2(pHeaders) {
+		if (pHeaders.hasOwnProperty('authorization')) {
+			if (pHeaders['authorization'] != '') {
+				var xToken = pHeaders['authorization'].split(' ');
+				if (xToken[0] == 'Bearer') {
+					return this.tokenInfo({
+						access_token: xToken[1]
+					});
+				} else {
+					return {
+						status_code: '-99',
+						status_msg: 'Authorization type not valid'
+					};
+				}
+			} else {
+				return {
+					status_code: '-99',
+					status_msg: 'Authorization can not empty'
+				};
+			}
+		} else {
+			return {
+				status_code: '-99',
+				status_msg: 'Parameter not valid'
+			};
+		}
+	}
+
 	async tokenInfo(pParam) {
 		var xJoResult = {};
 
