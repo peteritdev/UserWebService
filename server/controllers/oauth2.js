@@ -64,6 +64,7 @@ async function tokenInfo(req, res) {
 		xJoResult = await _oAuthService.tokenInfo(req.query);
 	}
 
+	console.log(`>>> req.headers <tokenInfo> : ${JSON.stringify(req.headers)}`);
 	console.log(`>>> req.query <tokenInfo> : ${JSON.stringify(req.query)}`);
 	console.log(`>>> xJoResult <tokenInfo> : ${JSON.stringify(xJoResult)}`);
 

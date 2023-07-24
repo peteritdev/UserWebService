@@ -43,7 +43,7 @@ module.exports = (app) => {
 	app.post(_rootAPIPath + 'access_token', arrValidate, _oAuthController.token);
 
 	arrValidate = [];
-	app.get(_rootAPIPath + 'tokeninfo', arrValidate, _oAuthController.tokenInfo);
+	app.get(_rootAPIPath + 'userinfo', arrValidate, _oAuthController.tokenInfo);
 	app.get(_rootAPIPath + 'tokenprofile', arrValidate, _oAuthController.tokenProfile);
 
 	var arrValidate = [
