@@ -40,7 +40,7 @@ module.exports = (app) => {
 		check('code').not().isEmpty().withMessage('Parameter code is required'),
 		check('scope').not().isEmpty().withMessage('Parameter scope is required')
 	];
-	app.post(_rootAPIPath + 'token', arrValidate, _oAuthController.token);
+	app.post(_rootAPIPath + 'access_token', arrValidate, _oAuthController.token);
 
 	arrValidate = [];
 	app.get(_rootAPIPath + 'tokeninfo', arrValidate, _oAuthController.tokenInfo);
