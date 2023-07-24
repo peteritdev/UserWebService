@@ -43,7 +43,7 @@ async function token(req, res) {
 		xJoResult = await _oAuthService.token(req.body);
 	}
 
-	console.log(`>>> xJoResult : ${JSON.stringify(xJoResult)}`);
+	console.log(`>>> xJoResult <token> : ${JSON.stringify(xJoResult)}`);
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
@@ -63,6 +63,9 @@ async function tokenInfo(req, res) {
 	} else {
 		xJoResult = await _oAuthService.tokenInfo(req.query);
 	}
+
+	console.log(`>>> req <tokenInfo> : ${JSON.stringify(req)}`);
+	console.log(`>>> xJoResult <tokenInfo> : ${JSON.stringify(xJoResult)}`);
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
