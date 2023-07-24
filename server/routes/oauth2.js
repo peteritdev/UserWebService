@@ -37,8 +37,8 @@ module.exports = (app) => {
 		check('client_id').not().isEmpty().withMessage('Parameter client_id is required'),
 		check('client_secret').not().isEmpty().withMessage('Parameter client_secret is required'),
 		check('redirect_uri').not().isEmpty().withMessage('Parameter redirect_uri is required'),
-		check('code').not().isEmpty().withMessage('Parameter code is required'),
-		check('scope').not().isEmpty().withMessage('Parameter scope is required')
+		check('code').not().isEmpty().withMessage('Parameter code is required')
+		// check('scope').not().isEmpty().withMessage('Parameter scope is required')
 	];
 	app.post(_rootAPIPath + 'access_token', arrValidate, _oAuthController.token);
 

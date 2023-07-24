@@ -166,53 +166,53 @@ class OAuth2Service {
 				code: pParam.code
 			});
 			if (xLogAuthorization.status_code == '00') {
-				if (pParam.scope == xLogAuthorization.data.scope) {
-					let xExpireTokenIn = moment().add(config.login.oAuth2.sanqua.expireAccessToken, 'hours').unix();
-					let xToken = jwt.sign(
-						{
-							issued_to: pParam.client_id,
-							audience: pParam.client_id,
-							code: pParam.code,
-							scope: pParam.scope,
-							user_id: xLogAuthorization.data.email,
-							email: xLogAuthorization.data.email,
-							iat: moment().unix()
-						},
-						config.login.oAuth2.sanqua.secret,
-						{
-							expiresIn: config.login.oAuth2.sanqua.expireAccessToken
-						}
-					);
-
-					// Update token into database
-					let xParamUpdate = {
+				//if (pParam.scope == xLogAuthorization.data.scope) {
+				let xExpireTokenIn = moment().add(config.login.oAuth2.sanqua.expireAccessToken, 'hours').unix();
+				let xToken = jwt.sign(
+					{
+						issued_to: pParam.client_id,
+						audience: pParam.client_id,
 						code: pParam.code,
-						client_id: pParam.client_id,
-						token: xToken,
-						act: 'update_by_client_id_and_code'
-					};
-					let xResultUpdate = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
-						xParamUpdate
-					);
-					if (xResultUpdate.status_code == '00') {
-						xJoResult = {
-							status_code: '00',
-							status_msg: 'Accepted',
-							token_type: 'Bearer',
-							expires_in: xExpireTokenIn,
-							access_token: xToken,
-							scope: pParam.scope,
-							email: xLogAuthorization.data.email
-						};
-					} else {
-						xJoResult = xResultUpdate;
+						// scope: pParam.scope,
+						user_id: xLogAuthorization.data.email,
+						email: xLogAuthorization.data.email,
+						iat: moment().unix()
+					},
+					config.login.oAuth2.sanqua.secret,
+					{
+						expiresIn: config.login.oAuth2.sanqua.expireAccessToken
 					}
-				} else {
+				);
+
+				// Update token into database
+				let xParamUpdate = {
+					code: pParam.code,
+					client_id: pParam.client_id,
+					token: xToken,
+					act: 'update_by_client_id_and_code'
+				};
+				let xResultUpdate = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
+					xParamUpdate
+				);
+				if (xResultUpdate.status_code == '00') {
 					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Authorization code not valid for this scope'
+						status_code: '00',
+						status_msg: 'Accepted',
+						token_type: 'Bearer',
+						expires_in: xExpireTokenIn,
+						access_token: xToken,
+						// scope: pParam.scope,
+						email: xLogAuthorization.data.email
 					};
+				} else {
+					xJoResult = xResultUpdate;
 				}
+				// } else {
+				// 	xJoResult = {
+				// 		status_code: '-99',
+				// 		status_msg: 'Authorization code not valid for this scope'
+				// 	};
+				// }
 			} else {
 				xJoResult = {
 					status_code: '-99',
