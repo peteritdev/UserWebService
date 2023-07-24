@@ -151,7 +151,7 @@ class OAuth2Service {
 			};
 		}
 
-		console.log(`>>> xJoResult oauth2service.token: ${JSON.stringify(xJoResult)}`);
+		// console.log(`>>> xJoResult oauth2service.token: ${JSON.stringify(xJoResult)}`);
 
 		return xJoResult;
 	}

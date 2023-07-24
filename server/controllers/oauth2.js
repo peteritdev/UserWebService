@@ -43,6 +43,8 @@ async function token(req, res) {
 		xJoResult = await _oAuthService.token(req.body);
 	}
 
+	console.log(`>>> xJoResult : ${JSON.stringify(xJoResult)}`);
+
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
 }
