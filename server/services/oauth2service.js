@@ -234,9 +234,21 @@ class OAuth2Service {
 			if (pHeaders['authorization'] != '') {
 				var xToken = pHeaders['authorization'].split(' ');
 				if (xToken[0] == 'Bearer') {
-					return this.tokenInfo({
+					let xResultVerifyToken = await this.tokenInfo({
 						access_token: xToken[1]
 					});
+					console.log(`>>> xResultVerifyToken: ${JSON.stringify(xResultVerifyToken)}`);
+					if (xResultVerifyToken.status_code == '00') {
+						let xUserDetail = await userServiceInstance.isEmailExists(xResultVerifyToken.verify.email);
+						if (xUserDetail != null) {
+							return {
+								status_code: '00',
+								status_msg: 'OK',
+								email: xUserDetail.email,
+								name: xUserDetail.name
+							};
+						}
+					}
 				} else {
 					return {
 						status_code: '-99',

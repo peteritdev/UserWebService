@@ -1510,6 +1510,10 @@ class UserService {
 
 		return xJoResult;
 	}
+
+	async isEmailExists(pEmail) {
+		return userRepoInstance.isEmailExists(pEmail);
+	}
 }
 
 module.exports = UserService;
