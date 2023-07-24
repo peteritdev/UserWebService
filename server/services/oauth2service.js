@@ -117,7 +117,7 @@ class OAuth2Service {
 
 	async token(pParam) {
 		var xJoResult = {};
-		console.log(`>>> pParam: ${JSON.stringify(pParam)}`);
+		console.log(`>>> pParam oauth2service.token: ${JSON.stringify(pParam)}`);
 
 		try {
 			// Validate Client ID and Client Secret
@@ -150,6 +150,8 @@ class OAuth2Service {
 				status_msg: `Exception error <OAuth2Service.token>: ${e.message}`
 			};
 		}
+
+		console.log(`>>> xJoResult oauth2service.token: ${JSON.stringify(xJoResult)}`);
 
 		return xJoResult;
 	}
