@@ -75,8 +75,8 @@ class ApprovalMatrixDocumentService {
 				var xRows = xResultList.rows;
 
 				for (var index in xRows) {
+					let xApproverUser = [];
 					for (var i in xRows[index].approval_matrix_document_user) {
-						let xApproverUser = [];
 						let xUser = {};
 						if (xRows[index].approval_matrix_document_user[i].user == null) {
 							xUser = {
