@@ -487,6 +487,7 @@ class UserService {
 
 							// Version 2:
 							var xUrlQuery = '/' + xEmployeeId;
+							console.log(`>>> xUrlAPI: ${xUrlAPI}`);
 							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {
 								headers: {
 									'x-token': token,
@@ -1022,7 +1023,7 @@ class UserService {
 			param.token != 'undefined' &&
 			param.method != 'undefined'
 		) {
-			if (param.method == 'conventional') {
+			if (param.method == 'conventional' || param.method == 'oauth2') {
 				console.log(`>>> Verify Token : ${param.token}`);
 				joResult = await jwt_utilInstance.verifyJWT(param.token);
 
@@ -1509,6 +1510,10 @@ class UserService {
 		}
 
 		return xJoResult;
+	}
+
+	async isEmailExists(pEmail) {
+		return userRepoInstance.isEmailExists(pEmail);
 	}
 }
 
