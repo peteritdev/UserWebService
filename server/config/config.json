@@ -283,7 +283,12 @@
           "redirect": "http://sanquawater.co.id",
           "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo",
           "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
-        }
+        },
+        "sanqua": {
+          "expireToken": 1,
+          "secret": "NSB3TLi6WJcF58DLTeGZe6YpMusm9ccH",
+          "expireAccessToken": "24h"
+        },
       }
     },
   
