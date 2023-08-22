@@ -37,7 +37,7 @@ class OAuth2Service {
 
 		try {
 			var xValidateEmail = await userRepoInstance.isEmailExists(pParam.email);
-			var xFlagProcess = true;
+			var xFlagProcess = false;
 
 			if (xValidateEmail != null) {
 				let xValidatePassword = await bcrypt.compare(pParam.password, xValidateEmail.password);
@@ -66,32 +66,46 @@ class OAuth2Service {
 
 								let xExpireTime = moment().add(config.login.oAuth2.sanqua.expireToken, 'hours').unix();
 
-								console.log(`>>> Scope : ${pParam.scope}`);
+								// console.log(`>>> Scope : ${pParam.scope}`);
 
-								let xResultSave = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
-									{
-										client_application_id: xClientDetail.data.id,
-										client_id: pParam.client_id,
-										state: pParam.state,
-										code: xAuthCode,
-										scope: pParam.scope,
-										code_expire_in: xExpireTime,
-										email: xValidateEmail.email,
-										act: 'add'
-									}
+								let xDecId = await _utilInstance.decrypt(
+									xClientDetail.data.id,
+									config.cryptoKey.hashKey
 								);
-
-								if (xResultSave.status_code == '00') {
-									xJoResult = {
-										status_code: '00',
-										status_msg:
-											'Login successfully. Please use this authotirization code to get access token',
-										authorization_code: xAuthCode,
-										state: pParam.state,
-										scope: pParam.scope
-									};
+								let xClientId = null;
+								if (xDecId.status_code == '00') {
+									xClientId = xDecId.decrypted;
+									xFlagProcess = true;
 								} else {
-									xJoResult = xResultSave;
+									xJoResult = xDecId;
+								}
+
+								if (xFlagProcess) {
+									let xResultSave = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
+										{
+											client_application_id: xClientId,
+											client_id: pParam.client_id,
+											state: pParam.state,
+											code: xAuthCode,
+											scope: pParam.scope,
+											code_expire_in: xExpireTime,
+											email: xValidateEmail.email,
+											act: 'add'
+										}
+									);
+
+									if (xResultSave.status_code == '00') {
+										xJoResult = {
+											status_code: '00',
+											status_msg:
+												'Login successfully. Please use this authotirization code to get access token',
+											authorization_code: xAuthCode,
+											state: pParam.state,
+											scope: pParam.scope
+										};
+									} else {
+										xJoResult = xResultSave;
+									}
 								}
 							}
 						}
