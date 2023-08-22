@@ -288,7 +288,11 @@
           "expireToken": 1,
           "secret": "NSB3TLi6WJcF58DLTeGZe6YpMusm9ccH",
           "expireAccessToken": "24h"
+<<<<<<< HEAD
         }
+=======
+        },
+>>>>>>> 8cdae2f99e337de4af1bcc10223a44b5a8a1759a
       }
     },
   
