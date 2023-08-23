@@ -225,6 +225,7 @@ class OAuth2Service {
 				client_id: pParam.client_id,
 				code: pParam.code
 			});
+			console.log(`>>> xLogAuthorization: ${JSON.stringify(xLogAuthorization)}`);
 			if (xLogAuthorization.status_code == '00') {
 				//if (pParam.scope == xLogAuthorization.data.scope) {
 				let xExpireTokenIn = moment().add(config.login.oAuth2.sanqua.expireAccessToken, 'hours').unix();
