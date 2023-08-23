@@ -223,7 +223,8 @@ class OAuth2Service {
 			console.log(`>>> pParam <generateAccessTokenByAuthCode>: ${JSON.stringify(pParam)}`);
 			let xLogAuthorization = await _clientApplicationServiceInstance.getLogByClientIdAndCode({
 				client_id: pParam.client_id,
-				code: pParam.code
+				code: pParam.code,
+				grant_type: pParam.grant_type
 			});
 			console.log(`>>> xLogAuthorization: ${JSON.stringify(xLogAuthorization)}`);
 			if (xLogAuthorization.status_code == '00') {
