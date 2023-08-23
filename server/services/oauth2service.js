@@ -276,7 +276,7 @@ class OAuth2Service {
 			} else {
 				xJoResult = {
 					status_code: '-99',
-					status_msg: 'Invalid authorization_code value. Please make sure use valid value'
+					status_msg: 'Invalid authorization_code value. Please make sure use valid value 123'
 				};
 			}
 		} catch (e) {
