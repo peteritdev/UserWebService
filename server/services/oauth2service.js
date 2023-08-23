@@ -220,7 +220,7 @@ class OAuth2Service {
 
 		try {
 			// Validate authorization_code with client_id
-			console.log(`>>> pParam : ${JSON.stringify(pParam)}`);
+			console.log(`>>> pParam <generateAccessTokenByAuthCode>: ${JSON.stringify(pParam)}`);
 			let xLogAuthorization = await _clientApplicationServiceInstance.getLogByClientIdAndCode({
 				client_id: pParam.client_id,
 				code: pParam.code
