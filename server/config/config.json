@@ -230,6 +230,7 @@
 
   "production": {
     "appPort": 9189,
+    "logging": true,
 
     "username": "eSanqua",
     "password": "eS@nQu4189*123#2022",
