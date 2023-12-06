@@ -24,7 +24,7 @@ class NotificationService {
 
 	async sendNotification_NewEmployeeRegister(pParam) {
 		var xJoResult = {};
-		var xNotifTemplate = await _notificationTemplateServiceInstance.getByCode({ code: 'ESANQUA_REGISTRATION' });
+		var xNotifTemplate = await _notificationTemplateServiceInstance.getByCode({ code: 'AWK_REGISTRATION' });
 
 		if (xNotifTemplate != null) {
 			var xSubject = await this.eSanqua_NewEmployeeRegister_ReplaceWithVariable(

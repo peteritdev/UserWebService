@@ -239,8 +239,7 @@ class UserRepository {
 						status: param.status,
 						register_with: param.method,
 						type: param.type,
-						sanqua_company_id: param.company_id,
-						employee_id: param.employee_id,
+						member_id: param.member_id,
 						user_user_level: param.user_user_level
 					},
 					xJoinedTable,

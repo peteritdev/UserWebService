@@ -496,100 +496,10 @@ class UserService {
 								}
 							});
 
-							// console.log(`>>> Employee Info : ${JSON.stringify(xEmployeeInfo)}`);
-
-							await _utilInstance.writeLog(
-								'xEmployeeInfo',
-								`>>> xEmployeeInfo : ${JSON.stringify(xEmployeeInfo)}`,
-								'debug'
-							);
-
-							if (xEmployeeInfo) {
-								if (xEmployeeInfo.status_code == '00') {
-									// console.log(`>>> xEmployeeInfo: ${JSON.stringify(xEmployeeInfo)}`);
-									if (xEmployeeInfo.token_data.status_code == '00') {
-										console.log(
-											`>>> xEmployeeInfo.token_data.data.app_status: ${xEmployeeInfo.token_data
-												.data.app_status}`
-										);
-
-										//if (xEmployeeInfo.token_data.data.app_status == 1) {
-										if (param.device == 'mobile') {
-											//if (param.hasOwnProperty('device_id')) {
-
-											console.log(`>>> param.device_id: ${param.device_id}`);
-											console.log(
-												`>>> xEmployeeInfo.token_data.data.device_id : ${xEmployeeInfo
-													.token_data.data.device_id}`
-											);
-
-											if (param.device_id != '' && param.device_id != null) {
-												if (xEmployeeInfo.token_data.data.app_status == 1) {
-													if (xEmployeeInfo.token_data.data.device_id != param.device_id) {
-														xJoResult = {
-															status_code: '-99',
-															status_msg: 'You not allowed to login using current device.'
-														};
-													} else {
-														xFlagProcess = true;
-													}
-												} else {
-													// Check if device_id already use or not
-													var xUrlQuery = `${config.api.employeeService
-														.baseUrl}/info?device_id=${param.device_id}`;
-													console.log(`>>> URL : ${xUrlQuery}`);
-													var xEmployeeInfoByDevice = await _utilInstance.axiosRequest(
-														xUrlQuery,
-														{
-															headers: {
-																'x-token': token,
-																'x-method': 'conventional',
-																'x-device': param.device
-															}
-														}
-													);
-
-													if (xEmployeeInfoByDevice.status_code == '00') {
-														if (xEmployeeInfoByDevice.token_data.status_code == '00') {
-															xJoResult = {
-																status_code: '-99',
-																status_msg:
-																	'You not allowed to login using current device.'
-															};
-														} else {
-															xFlagProcess = true;
-														}
-													}
-												}
-											} else {
-												xFlagProcess = true;
-											}
-											// } else {
-											// 	xFlagProcess = true;
-											// }
-										} else {
-											xFlagProcess = true;
-										}
-										// } else {
-										// 	xFlagProcess = true;
-										// }
-									} else {
-										console.log(`>>> Stuck Here 1...: ${JSON.stringify(xEmployeeInfo)}`);
-									}
-								} else {
-									console.log(`>>> Stuck Here 2 : ${JSON.stringify(xEmployeeInfo)}`);
-								}
-							} else {
-								console.log(`>>> Stuck Here 3...`);
-							}
-
-							console.log(`>>> xFlagProcess : ${xFlagProcess}`);
+							xFlagProcess = true;
 
 							// if (xFlagProcess) {
 							if (xFlagProcess) {
-								let xEmployeeDetail =
-									xEmployeeInfo.status_code == '00' ? xEmployeeInfo.token_data.data : null;
-								delete xEmployeeInfo.token_data.data.enc_key;
 								return JSON.stringify({
 									status_code: '00',
 									status_msg: 'Login successfully',
@@ -604,25 +514,10 @@ class UserService {
 												)
 											: 0,
 									level: validateEmail.user_level,
-									vendor_id:
-										validateEmail.vendor_id != null
-											? await _utilInstance.encrypt(
-													validateEmail.vendor_id.toString(),
-													config.cryptoKey.hashKey
-												)
-											: 0,
+
 									user_type: validateEmail.type,
-									sanqua_company_id:
-										xEmployeeInfo.token_data.data.company != null
-											? xEmployeeInfo.token_data.data.company.id
-											: null,
-									sanqua_company_name:
-										xEmployeeInfo.token_data.data.company != null
-											? xEmployeeInfo.token_data.data.company.alias
-											: '',
 									username: validateEmail.name,
-									employee_id: xEmployeeId,
-									employee: xEmployeeDetail,
+									member_id: validateEmail.member_id,
 									notification_via_fcm: validateEmail.notification_via_fcm,
 									notification_via_email: validateEmail.notification_via_email,
 									notification_via_wa: validateEmail.notification_via_wa,
@@ -1053,6 +948,7 @@ class UserService {
 									joResult.result_verify.user_level_id = xObjUser.user_level_id;
 									joResult.result_verify.user_level = xObjUser.user_level;
 									joResult.result_verify.company = xObjUser.company;
+									joResult.result_verify.member_id = xObjUser.member_id;
 
 									joResult.result_verify.notification_via_fcm = xObjUser.notification_via_fcm;
 									joResult.result_verify.notification_via_email = xObjUser.notification_via_email;
@@ -1060,24 +956,6 @@ class UserService {
 									joResult.result_verify.notification_via_telegram =
 										xObjUser.notification_via_telegram;
 								}
-							}
-
-							// Get Employee Info
-							var xUrlAPI = config.api.employeeService.getEmployeeInfo;
-							var xUrlQuery =
-								'/' + (await _utilInstance.encrypt(xObjUser.employee_id, config.cryptoKey.hashKey));
-							var xEmployeeInfo = await _utilInstance.axiosRequest(xUrlAPI + xUrlQuery, {});
-
-							// console.log(`>>> token: ${param.token}`);
-							// console.log(`>>> url: ${xUrlAPI + xUrlQuery}`);
-							// console.log(`>>> tokxEmployeeInfoen: ${JSON.stringify(xEmployeeInfo)}`);
-
-							if (xEmployeeInfo != null) {
-								if (xEmployeeInfo.status_code == '00') {
-									joResult.result_verify.employee_info = xEmployeeInfo.token_data.data;
-								}
-							} else {
-								joResult.result_verify.employee_info = null;
 							}
 						} else {
 							joResult = {

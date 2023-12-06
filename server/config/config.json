@@ -1,10 +1,10 @@
 {
   "localhost": {
-    "appPort": 9189,
+    "appPort": 7777,
     "logging": true,
     "username": "postgres",
     "password": "P455uu0rd^^ok",
-    "database": "staging_sanqua_oauthdb",
+    "database": "staging2_sanqua_oauthdb",
     "host": "10.10.20.5",
     "port":5432,
     "dialect": "postgres",
@@ -77,6 +77,16 @@
       "approvalMatrix":{
         "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
       }
+    },
+
+    "autoAssign": {
+      "userUserLevel": [
+        {
+          "user_level_id": 42,
+          "status": 1,
+          "is_delete": 0
+        }
+      ]
     }
 
   },

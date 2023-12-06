@@ -14,7 +14,7 @@ const oAuth2 = require('./oauth2');
 const clientApplication = require('./clientapplication');
 const test = require('./test');
 
-module.exports = {
+module.exports = {	
 	user,
 	userLevel,
 	menu,
