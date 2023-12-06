@@ -75,9 +75,6 @@ class ApprovalMatrixDocumentService {
 				var xRows = xResultList.rows;
 
 				for (var index in xRows) {
-
-					
-
 					xJoArrData.push({
 						id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
 						document_id: await _utilInstance.encrypt(
