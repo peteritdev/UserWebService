@@ -75,6 +75,18 @@ class ApprovalMatrixDocumentService {
 				var xRows = xResultList.rows;
 
 				for (var index in xRows) {
+					let xApprovalMatrixDocumentUser = [];
+					for (var index2 in xRows[index].approval_matrix_document_user) {
+						xApprovalMatrixDocumentUser.push({
+							id: xRows[index].approval_matrix_document_user[index2].id,
+							status: xRows[index].approval_matrix_document_user[index2].status,
+							user_id: xRows[index].approval_matrix_document_user[index2].user_id,
+							updated_at: moment(xRows[index].approval_matrix_document_user[index2].updatedAt).format(
+								'DD-MM-YYYY HH:mm:ss'
+							),
+							user: xRows[index].approval_matrix_document_user[index2].user
+						});
+					}
 					xJoArrData.push({
 						id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
 						document_id: await _utilInstance.encrypt(
@@ -85,15 +97,7 @@ class ApprovalMatrixDocumentService {
 						sequence: xRows[index].sequence,
 						application_name: xRows[index].application_name,
 						table_name: xRows[index].table_name,
-						approver_user: {
-							id: xRows[index].approval_matrix_document_user.id,
-							status: xRows[index].approval_matrix_document_user.status,
-							user_id: xRows[index].approval_matrix_document_user.user_id,
-							updated_at: moment(xRows[index].approval_matrix_document_user.updatedAt).format(
-								'DD-MM-YYYY HH:mm:ss'
-							),
-							user: xRows[index].approval_matrix_document_user.user
-						},
+						approver_user: xApprovalMatrixDocumentUser,
 						min_approver: xRows[index].min_approver,
 
 						created_at: moment(xRows[index].createdAt).format('DD-MM-YYYY HH:mm:ss'),
