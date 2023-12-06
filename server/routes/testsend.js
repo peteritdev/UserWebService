@@ -21,4 +21,8 @@ module.exports = (app) => {
 	});
 
 	app.post(rootAPIPath + 'send_notif_after_register', _testController.testSendNewRegister);
+
+	app.post(rootAPIPath + 'bca/generate_signature', _testController.generateBCASignature);
+
+	app.post(rootAPIPath + 'bca/verify_signature', _testController.verifyBCASignature);
 };

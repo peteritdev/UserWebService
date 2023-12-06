@@ -7,7 +7,7 @@ const _clientApplicationService = new ClientApplicationService();
 
 const { check, validationResult } = require('express-validator');
 
-module.exports = { doLogin, token, tokenInfo, tokenProfile, checkClientCredential };
+module.exports = { doLogin, token, tokenInfo, tokenProfile, checkClientCredential, accessTokenBCA };
 
 async function doLogin(req, res) {
 	var xJoResult = {};
@@ -47,6 +47,56 @@ async function token(req, res) {
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
+}
+
+async function accessTokenBCA(req, res) {
+	var xJoResult = {};
+	var xHttpCode = 200;
+
+	// Validate Header
+	var errors = validationResult(req).array();
+	if (errors.length != 0) {
+		xHttpCode = 400;
+		xJoResult = JSON.stringify({
+			responseCode: '4007302',
+			responseMessage: errors[0].msg
+		});
+	} else {
+		// Verify signature
+		let xParamVerify = {
+			signature: req.headers['x-signature'],
+			client_id: req.headers['x-clientkey'],
+			time_stamp: req.headers['x-timestamp']
+		};
+		let xIsVerified = await _oAuthService.verifyBCASignature(xParamVerify);
+		if (xIsVerified.is_verified) {
+			xJoResult = await _oAuthService.token({
+				client_id: req.headers['x-clientkey'],
+				grant_type: req.body.grantType
+			});
+			if (xJoResult.status_code == '00') {
+				xHttpCode = 200;
+				xJoResult = {
+					responseCode: `${xHttpCode}7300`,
+					responseMessage: 'Successfull',
+					accessToken: xJoResult.access_token,
+					tokenType: xJoResult.token_type,
+					expiresIn: xJoResult.expires_in
+				};
+			}
+		} else {
+			xHttpCode = 401;
+			xJoResult = {
+				responseCode: `${xHttpCode}7300`,
+				responseMessage: 'Unauthorize.[Signature]'
+			};
+		}
+
+		//xJoResult = await _oAuthService.token(req.body);
+	}
+
+	res.setHeader('Content-Type', 'application/json');
+	res.status(xHttpCode).send(xJoResult);
 }
 
 async function tokenInfo(req, res) {

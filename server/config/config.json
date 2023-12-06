@@ -61,6 +61,14 @@
           "expireToken": 1,
           "secret": "NSB3TLi6WJcF58DLTeGZe6YpMusm9ccH",
           "expireAccessToken": "24h"
+        },
+        "bca":{
+          "rsaKey":{
+            "private": "C:\\MIS-PETER\\SanQuaApp\\oAuth\\UserWebService\\pem\\bca\\dev\\private.pem",
+            "public": "C:\\MIS-PETER\\SanQuaApp\\oAuth\\UserWebService\\pem\\bca\\dev\\public.pem"
+          },
+          "secret": "y0lRRMZuPUqcruUDYvgTMLDFK1nvcr2X",
+          "expireAccessToken": "900s"
         }
       }
     },

@@ -265,43 +265,52 @@ class ClientApplicationRepository {
 	}
 
 	async getLogByClientIdAndCode(pParam) {
+		var xInclude = [];
+		var xWhereOr = [];
+		var xWhereAnd = [];
+		var xWhere = [];
+		var xAttributes = [];
 		var xJoResult = {};
-		var xWhere = {};
 
 		try {
-			if (pParam.hasOwnProperty('client_id') && pParam.hasOwnProperty('code')) {
-				if (pParam.client_id != '' && pParam.code != '') {
-					xWhere = {
-						client_id: pParam.client_id,
-						code: pParam.code
-					};
-
-					var xData = await _modelApplicationAuthorization.findOne({
-						where: xWhere
+			if (pParam.hasOwnProperty('client_id')) {
+				if (pParam.client_id != '') {
+					xWhereAnd.push({
+						client_id: pParam.client_id
 					});
-
-					if (xData != null) {
-						xJoResult = {
-							status_code: '00',
-							status_msg: 'OK',
-							data: xData
-						};
-					} else {
-						xJoResult = {
-							status_code: '-99',
-							status_msg: 'Data not found'
-						};
-					}
-				} else {
-					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Param not valid'
-					};
 				}
+			}
+
+			if (pParam.hasOwnProperty('code')) {
+				if (pParam.code != '') {
+					xWhereAnd.push({
+						code: pParam.code
+					});
+				}
+			}
+
+			if (xWhereAnd.length > 0) {
+				xWhere.push({
+					[Op.and]: xWhereAnd
+				});
+			}
+
+			var xData = await _modelApplicationAuthorization.findOne({
+				where: xWhere,
+				include: xInclude,
+				subQuery: false
+			});
+
+			if (xData != null) {
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'OK',
+					data: xData
+				};
 			} else {
 				xJoResult = {
 					status_code: '-99',
-					status_msg: 'Param not valid'
+					status_msg: 'Data not found'
 				};
 			}
 		} catch (e) {

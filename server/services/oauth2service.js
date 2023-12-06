@@ -25,6 +25,9 @@ const _clientApplicationServiceInstance = new ClientApplicationService();
 const Util = require('peters-globallib-v2');
 const _utilInstance = new Util();
 
+const Security = require('../utils/security.js');
+const _utilSecurity = new Security();
+
 class OAuth2Service {
 	constructor() {}
 
@@ -34,7 +37,7 @@ class OAuth2Service {
 
 		try {
 			var xValidateEmail = await userRepoInstance.isEmailExists(pParam.email);
-			var xFlagProcess = true;
+			var xFlagProcess = false;
 
 			if (xValidateEmail != null) {
 				let xValidatePassword = await bcrypt.compare(pParam.password, xValidateEmail.password);
@@ -63,32 +66,46 @@ class OAuth2Service {
 
 								let xExpireTime = moment().add(config.login.oAuth2.sanqua.expireToken, 'hours').unix();
 
-								console.log(`>>> Scope : ${pParam.scope}`);
+								// console.log(`>>> Scope : ${pParam.scope}`);
 
-								let xResultSave = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
-									{
-										client_application_id: xClientDetail.data.id,
-										client_id: pParam.client_id,
-										state: pParam.state,
-										code: xAuthCode,
-										scope: pParam.scope,
-										code_expire_in: xExpireTime,
-										email: xValidateEmail.email,
-										act: 'add'
-									}
+								let xDecId = await _utilInstance.decrypt(
+									xClientDetail.data.id,
+									config.cryptoKey.hashKey
 								);
-
-								if (xResultSave.status_code == '00') {
-									xJoResult = {
-										status_code: '00',
-										status_msg:
-											'Login successfully. Please use this authotirization code to get access token',
-										authorization_code: xAuthCode,
-										state: pParam.state,
-										scope: pParam.scope
-									};
+								let xClientId = null;
+								if (xDecId.status_code == '00') {
+									xClientId = xDecId.decrypted;
+									xFlagProcess = true;
 								} else {
-									xJoResult = xResultSave;
+									xJoResult = xDecId;
+								}
+
+								if (xFlagProcess) {
+									let xResultSave = await _clientApplicationServiceInstance.saveClientApplicationAuthorization(
+										{
+											client_application_id: xClientId,
+											client_id: pParam.client_id,
+											state: pParam.state,
+											code: xAuthCode,
+											scope: pParam.scope,
+											code_expire_in: xExpireTime,
+											email: xValidateEmail.email,
+											act: 'add'
+										}
+									);
+
+									if (xResultSave.status_code == '00') {
+										xJoResult = {
+											status_code: '00',
+											status_msg:
+												'Login successfully. Please use this authotirization code to get access token',
+											authorization_code: xAuthCode,
+											state: pParam.state,
+											scope: pParam.scope
+										};
+									} else {
+										xJoResult = xResultSave;
+									}
 								}
 							}
 						}
@@ -120,6 +137,7 @@ class OAuth2Service {
 		console.log(`>>> pParam oauth2service.token: ${JSON.stringify(pParam)}`);
 
 		try {
+			// console.log(`>>> Client Id : ${pParam.client_id}`);
 			// Validate Client ID and Client Secret
 			let xClientDetail = await _clientApplicationServiceInstance.getByClientId({
 				client_id: pParam.client_id
@@ -128,20 +146,23 @@ class OAuth2Service {
 				xJoResult = xClientDetail;
 				xJoResult.status_msg = 'Invalid client_id value. Please make sure use valid client_id';
 			} else {
-				if (pParam.client_secret != xClientDetail.data.client_secret) {
-					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Invalid client_secret value. Please make sure use valid client_secret'
-					};
-				} else if (pParam.redirect_uri != xClientDetail.data.redirect_uri) {
-					xJoResult = {
-						status_code: '-99',
-						status_msg: 'Invalid redirect_uri value. Please make sure use valid redirect_uri'
-					};
-				} else {
-					if (pParam.grant_type == 'authorization_code') {
+				if (pParam.grant_type == 'authorization_code') {
+					if (pParam.client_secret != xClientDetail.data.client_secret) {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Invalid client_secret value. Please make sure use valid client_secret'
+						};
+					} else if (pParam.redirect_uri != xClientDetail.data.redirect_uri) {
+						xJoResult = {
+							status_code: '-99',
+							status_msg: 'Invalid redirect_uri value. Please make sure use valid redirect_uri'
+						};
+					} else {
 						xJoResult = await this.generateAccessTokenByAuthCode(pParam);
 					}
+				} else if (pParam.grant_type == 'client_credentials') {
+					pParam.client_detail = xClientDetail.data;
+					xJoResult = await this.generateAccessTokenByClientCredential(pParam);
 				}
 			}
 		} catch (e) {
@@ -152,6 +173,44 @@ class OAuth2Service {
 		}
 
 		// console.log(`>>> xJoResult oauth2service.token: ${JSON.stringify(xJoResult)}`);
+
+		return xJoResult;
+	}
+
+	async generateAccessTokenByClientCredential(pParam) {
+		var xJoResult = {};
+
+		try {
+			if (pParam.client_detail != null) {
+				let xExpireTokenIn = moment().add(config.login.oAuth2.bca.expireAccessToken, 'hours').unix();
+				let xToken = jwt.sign(
+					{
+						issued_to: pParam.client_detail.client_id,
+						audience: pParam.client_detail.client_id,
+						user_id: pParam.client_detail.id,
+						email: pParam.client_detail.host,
+						iat: moment().unix()
+					},
+					config.login.oAuth2.bca.secret,
+					{
+						expiresIn: config.login.oAuth2.bca.expireAccessToken
+					}
+				);
+				xJoResult = {
+					status_code: '00',
+					status_msg: 'Accepted',
+					token_type: 'Bearer',
+					expires_in: xExpireTokenIn,
+					access_token: xToken,
+					client_id: pParam.client_detail.client_id
+				};
+			}
+		} catch (e) {
+			xJoResult = {
+				status_code: '-99',
+				status_msg: `Exception error <OAuth2Service.generateAccessTokenByClientCredential>: ${e.message}`
+			};
+		}
 
 		return xJoResult;
 	}
@@ -222,7 +281,7 @@ class OAuth2Service {
 		} catch (e) {
 			xJoResult = {
 				status_code: '-99',
-				status_msg: `Exception error <OAuth2Service.generateAccessToken>: ${e.message}`
+				status_msg: `Exception error <OAuth2Service.generateAccessTokenByAuthCode>: ${e.message}`
 			};
 		}
 
@@ -356,6 +415,11 @@ class OAuth2Service {
 		}
 
 		return xJoResult;
+	}
+
+	// BCA Open API Service for Notification
+	async verifyBCASignature(pParam) {
+		return await _utilSecurity.verifyBCASignature(pParam);
 	}
 }
 
