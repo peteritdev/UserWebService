@@ -26,7 +26,7 @@ class ApprovalMatrixDocumentUserRepository {
 			xTransaction = await sequelize.transaction();
 
 			xSql =
-				' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' +
+				' UPDATE tr_approvalmatrixdocumentusers SET status = :status, updated_at = NOW() ' +
 				' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' +
 				' AND tr_approvalmatrixdocuments.document_id = :documentId ' +
 				' AND tr_approvalmatrixdocumentusers.user_id = :userId ';
@@ -39,7 +39,7 @@ class ApprovalMatrixDocumentUserRepository {
 			if (pParam.hasOwnProperty('application_id') && pParam.hasOwnProperty('table_name')) {
 				if (pParam.application_id != '' && pParam.table_name != '') {
 					xSql =
-						' UPDATE tr_approvalmatrixdocumentusers SET status = :status ' +
+						' UPDATE tr_approvalmatrixdocumentusers SET status = :status, updated_at = NOW() ' +
 						' FROM tr_approvalmatrixdocuments WHERE tr_approvalmatrixdocuments.id = tr_approvalmatrixdocumentusers.approval_matrix_document_id ' +
 						' AND tr_approvalmatrixdocuments.document_id = :documentId ' +
 						' AND tr_approvalmatrixdocumentusers.user_id = :userId ' +
