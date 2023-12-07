@@ -81,9 +81,12 @@ class ApprovalMatrixDocumentService {
 							id: xRows[index].approval_matrix_document_user[index2].id,
 							status: xRows[index].approval_matrix_document_user[index2].status,
 							user_id: xRows[index].approval_matrix_document_user[index2].user_id,
-							updated_at: moment(xRows[index].approval_matrix_document_user[index2].updatedAt).format(
-								'DD-MM-YYYY HH:mm:ss'
-							),
+							updated_at:
+								xRows[index].approval_matrix_document_user[index2].updatedAt != null
+									? moment(xRows[index].approval_matrix_document_user[index2].updatedAt).format(
+											'DD-MM-YYYY HH:mm:ss'
+										)
+									: null,
 							user: xRows[index].approval_matrix_document_user[index2].user
 						});
 					}
