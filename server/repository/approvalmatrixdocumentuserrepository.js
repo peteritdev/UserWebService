@@ -22,7 +22,7 @@ class ApprovalMatrixDocumentUserRepository {
 		var xJsonReplacement = {};
 
 		try {
-			var xSaved = null;
+			var xSaved = null; 
 			xTransaction = await sequelize.transaction();
 
 			xSql =
