@@ -75,32 +75,21 @@ class ApprovalMatrixDocumentService {
 				var xRows = xResultList.rows;
 
 				for (var index in xRows) {
-					let xApproverUser = [];
-					for (var i in xRows[index].approval_matrix_document_user) {
-						let xUser = {};
-						if (xRows[index].approval_matrix_document_user[i].user == null) {
-							xUser = {
-								id: xRows[index].approval_matrix_document_user[i].user_id,
-								name: xRows[index].approval_matrix_document_user[i].user_name,
-								email: '',
-								employee_id: null,
-								notification_via_fcm: null,
-								notification_via_email: null,
-								notification_via_wa: null,
-								notification_via_telegram: null
-							};
-						} else {
-							xUser = xRows[index].approval_matrix_document_user[i].user;
-						}
-
-						xApproverUser.push({
-							id: xRows[index].approval_matrix_document_user[i].id,
-							status: xRows[index].approval_matrix_document_user[i].status,
-							user_id: xRows[index].approval_matrix_document_user[i].user_id,
-							user: xUser
+					let xApprovalMatrixDocumentUser = [];
+					for (var index2 in xRows[index].approval_matrix_document_user) {
+						xApprovalMatrixDocumentUser.push({
+							id: xRows[index].approval_matrix_document_user[index2].id,
+							status: xRows[index].approval_matrix_document_user[index2].status,
+							user_id: xRows[index].approval_matrix_document_user[index2].user_id,
+							updated_at:
+								xRows[index].approval_matrix_document_user[index2].updatedAt != null
+									? moment(xRows[index].approval_matrix_document_user[index2].updatedAt).format(
+											'DD-MM-YYYY HH:mm:ss'
+										)
+									: null,
+							user: xRows[index].approval_matrix_document_user[index2].user
 						});
 					}
-
 					xJoArrData.push({
 						id: await _utilInstance.encrypt(xRows[index].id.toString(), config.cryptoKey.hashKey),
 						document_id: await _utilInstance.encrypt(
@@ -111,7 +100,7 @@ class ApprovalMatrixDocumentService {
 						sequence: xRows[index].sequence,
 						application_name: xRows[index].application_name,
 						table_name: xRows[index].table_name,
-						approver_user: xApproverUser, //xRows[index].approval_matrix_document_user,
+						approver_user: xApprovalMatrixDocumentUser,
 						min_approver: xRows[index].min_approver,
 
 						created_at: moment(xRows[index].createdAt).format('DD-MM-YYYY HH:mm:ss'),
