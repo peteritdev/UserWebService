@@ -228,6 +228,82 @@
     }
   },
 
+  "staging2": {
+    "appPort": 9199,
+
+    "username": "postgres",
+    "password": "P455uu0rd^^ok",
+    "database": "staging_sanqua_oauthdb",
+    "host": "localhost",
+    "port":5432,
+    "dialect": "postgres",
+    "dialectOptions": {
+      "dateStrings": true,
+      "typeCast": true
+    },
+    "timezone": "Asia/Jakarta",
+
+    "cryptoKey":{
+      "md5Key": "4B1C9E44D769C429",
+      "hashKey": "51beba089ef1612152be4933ea6a9a48"
+    },
+
+    "token_expire":"1",
+    "token_expire_unit":"hour",
+    "secret": "yZh7fv62xLshZmt8LuSlI9RmstrdQ0nE",
+
+    "frontParam":{
+      "separatorData": "Þ", 
+      "forgotPasswordLink": "http://localhost:8080/reset-password/#VERIFICATION_CODE#"
+    },  
+  
+    "api":{
+      "notification": {
+        "emailVerification": "http://localhost:1190/api/notification/v1/email_verification",
+        "forgotPassword": "http://localhost:1190/api/notification/v1/forgot_password"
+      },
+  
+      "employeeService":{
+        "getEmployeeInfo": "http://localhost:8190/api/esanqua/hr/v1/employee/detail_wo_auth",
+        "baseUrl": "http://localhost:8190/api/esanqua/hr/v1/employee"
+      }
+      
+    },
+  
+    "login":{
+      "expireToken": {
+        "web": "48h",
+        "mobile": "168h"
+      },
+      "expireRefreshToken": "336h",
+      "oAuth2":{
+        "google":{
+          "clientId": "166708906762-uel1grlnqjsqv47k8dvdk0htsh765lhq.apps.googleusercontent.com",
+          "clientSecret": "6KAAGWF11bpB-JgWi2CvDjKr",
+          "redirect": "http://sanquawater.co.id",
+          "urlUserInfo": "https://www.googleapis.com/oauth2/v2/userinfo",
+          "urlVerifyToken": "https://oauth2.googleapis.com/tokeninfo?access_token="
+        },
+        "sanqua": {
+          "expireToken": 1,
+          "secret": "NSB3TLi6WJcF58DLTeGZe6YpMusm9ccH",
+          "expireAccessToken": "24h"
+        }
+      }
+    },
+  
+    "dialectOptions": {
+      "useUTC": false,
+      "charset": "utf8mb4_unicode_ci"
+    },
+    "timezone": "+07:00",
+    "lookupColumn":{
+      "approvalMatrix":{
+        "eCatalogueFpbCategoryItem": ["","Raw Material", "Factory Supply", "Office Supply", "Sparepart", "Jasa", "Maintenance Repair", "Investment/Asset"]
+      }
+    }
+  },
+
   "production": {
     "appPort": 9189,
 
