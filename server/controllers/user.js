@@ -453,6 +453,8 @@ async function verifyToken(req, res) {
 		}
 	}
 
+	console.log(`>>> joResult: ${JSON.stringify(joResult)}`);
+
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(joResult);
 }
