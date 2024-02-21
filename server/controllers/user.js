@@ -287,10 +287,10 @@ async function login(req, res) {
 		req.body.application_id = req.headers['x-application-id'];
 		req.body.device = req.headers['x-device'] == null ? 'web' : req.headers['x-device'];
 		req.body.device_id = req.headers['x-device-id'];
-		console.log(`>>> PARAM : ${JSON.stringify(req.body)}`);
 		joResult = await userServiceInstance.doLogin(req.body);
 	}
 
+	console.log(`>>> joResult : ${JSON.stringify(joResult)}`);
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(joResult);
 }
@@ -452,8 +452,6 @@ async function verifyToken(req, res) {
 			});
 		}
 	}
-
-	console.log(`>>> joResult: ${JSON.stringify(joResult)}`);
 
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(joResult);

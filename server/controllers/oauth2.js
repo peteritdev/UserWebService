@@ -24,6 +24,8 @@ async function doLogin(req, res) {
 		xJoResult = await _oAuthService.doLogin(req.body);
 	}
 
+	console.log(`>>> joResult: ${JSON.stringify(joResult)}`);
+
 	res.setHeader('Content-Type', 'application/json');
 	res.status(200).send(xJoResult);
 }
