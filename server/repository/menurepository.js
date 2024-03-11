@@ -27,19 +27,11 @@ class MenuRepository {
 	}
 
 	async list(pParam) {
-		var xOrder = [ 'name', 'ASC' ];
-		var xWhereApp = {};
+		var xOrder = [];
 		var xInclude = [];
-
-		if (pParam.hasOwnProperty('order_by') && pParam.order_by != '') {
-			xOrder = [ pParam.order_by, pParam.order_type == 'desc' ? 'DESC' : 'ASC' ];
-		}
-
-		if (pParam.hasOwnProperty('application_id') && pParam.application_id != '') {
-			xWhereApp = {
-				application_id: pParam.application_id
-			};
-		}
+		var xWhere = [];
+		var xWhereAnd = [];
+		var xWhereOr = [];
 
 		xInclude = [
 			{
@@ -49,15 +41,35 @@ class MenuRepository {
 			}
 		];
 
-		var xParam = {
-			where: {
-				[Op.and]: [
-					{
-						is_delete: 0
-					},
-					xWhereApp
-				],
-				[Op.or]: [
+		if (pParam.order_by != '' && pParam.hasOwnProperty('order_by')) {
+			xOrder = [ pParam.order_by, pParam.order_type == 'desc' ? 'DESC' : 'ASC' ];
+		} else {
+			xOrder = [ 'id', 'ASC' ];
+		}
+
+		if (pParam.hasOwnProperty('application_id')) {
+			if (pParam.application_id != '') {
+				xWhereAnd.push({
+					application_id: pParam.application_id
+				});
+			}
+		}
+
+		if (pParam.hasOwnProperty('filter')) {
+			if (pParam.filter != null && pParam.filter != undefined && pParam.filter != '') {
+				var xFilter = JSON.parse(pParam.filter);
+				if (xFilter.length > 0) {
+					// xWhereAnd.push( pParam.filter );
+					for (var index in xFilter) {
+						xWhereAnd.push(xFilter[index]);
+					}
+				}
+			}
+		}
+
+		if (pParam.hasOwnProperty('keyword')) {
+			if (pParam.keyword != '' && pParam.keyword != null) {
+				xWhereOr.push(
 					{
 						name: {
 							[Op.iLike]: '%' + pParam.keyword + '%'
@@ -67,21 +79,61 @@ class MenuRepository {
 						app: {
 							[Op.iLike]: '%' + pParam.keyword + '%'
 						}
-					}
-				]
-			},
+					},
+				);
+			}
+		}
+
+		if (xWhereAnd.length > 0) {
+			xWhere.push({
+				[Op.and]: xWhereAnd
+			});
+		}
+
+		if (xWhereOr.length > 0) {
+			xWhere.push({
+				[Op.or]: xWhereOr
+			});
+		}
+		// var xParam = {
+		// 	where: {
+		// 		[Op.and]: [
+		// 			{
+		// 				is_delete: 0
+		// 			},
+		// 			xWhereApp
+		// 		],
+		// 		[Op.or]: [
+		// 			{
+		// 				name: {
+		// 					[Op.iLike]: '%' + pParam.keyword + '%'
+		// 				}
+		// 			},
+		// 			{
+		// 				app: {
+		// 					[Op.iLike]: '%' + pParam.keyword + '%'
+		// 				}
+		// 			}
+		// 		]
+		// 	},
+		// 	include: xInclude,
+		// 	order: [ xOrder ]
+		// };
+		
+		var xParamQuery = {
+			where: xWhere,
 			include: xInclude,
 			order: [ xOrder ]
 		};
 
 		if (pParam.hasOwnProperty('offset') && pParam.hasOwnProperty('limit')) {
 			if (pParam.offset != '' && pParam.limit != '') {
-				xParam.offset = pParam.offset;
-				xParam.limit = pParam.limit;
+				xParamQuery.offset = pParam.offset;
+				xParamQuery.limit = pParam.limit;
 			}
 		}
 
-		var xData = await _modelDb.findAndCountAll(xParam);
+		var xData = await _modelDb.findAndCountAll(xParamQuery);
 
 		return xData;
 	}

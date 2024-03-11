@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 		is_admin: DataTypes.INTEGER, // 1: admin, 0: user
 
 		is_delete: DataTypes.INTEGER,
+		is_support: DataTypes.BOOLEAN,
 		deleted_at: DataTypes.DATE,
 		deleted_by: DataTypes.INTEGER,
 		deleted_by_name: DataTypes.STRING,

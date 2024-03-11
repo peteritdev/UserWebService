@@ -102,7 +102,7 @@ class UserRepository {
 						as: 'company'
 					},
 					{
-						attributes: [ 'id', 'name', 'is_admin' ],
+						attributes: [ 'id', 'name', 'is_admin', 'is_support' ],
 						model: _modelUserLevel,
 						as: 'user_level',
 						through: {
