@@ -406,12 +406,6 @@ class UserService {
 								(x) => x.application.id == 1
 							);
 							if (xTempFilterAdministrator.length == 0) {
-								// Check if non administrator
-
-								console.log(`>>> Non Administrator :`);
-								console.log(`>>> validateEmail : ${JSON.stringify(validateEmail)}`);
-								console.log(`>>> param.application_id : ${param.application_id}`);
-
 								var xTempFilter = validateEmail.user_level.filter(
 									(x) => x.application.id == param.application_id
 								);
